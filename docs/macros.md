@@ -1,7 +1,31 @@
-### Scala 3 macros
+# Scala 3 macros
+
+## Inline and macros
+
+### Compilation vs interpretation
+<!-- Same project but no cyclic dependencies -->
+
+## Simple Expressions
+
+### Expr
+### Const
+### Lambda
+### VarArgs
+
+## Simple quotes
+
+## Simple patterns
 
 ## Quotes and splices
-**Coming soon**
+<!-- teaser / ref to other doc -->
 
-## Pattern matching
-**Coming soon**
+## Types
+
+## Reporting
+
+## The QuoteContext
+
+## Utils
+
+### ExprMap
+### Var
