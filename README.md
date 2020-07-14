@@ -14,7 +14,7 @@ Other
  
 [inline]: docs/inline.md
 [macros]: docs/macros.md
-[quotes]: docs/quotes-and-splices.md
+[quotes]: docs/quotes.md
 [tasty]: docs/tasty-reflection.md
 [FAQ]: docs/faq.md
 [best-practices]: docs/best-practices.md
