@@ -10,9 +10,7 @@
 * [Scala Days - Metaprogramming in Dotty](https://www.youtube.com/watch?v=ZfDS_gJyPTc)
 
 ## Projects and examples
-* [dotty-macro-examples](https://github.com/lampepfl/
-* *More Coming soon*
-dotty-macro-examples)
+* [dotty-macro-examples](https://github.com/lampepfl/dotty-macro-examples)
 * [XML Interpolator](https://github.com/dotty-staging/xml-interpolator/tree/master)
 * [Shapeless 3](https://github.com/dotty-staging/shapeless/tree/shapeless-3)
 * *More Coming soon*
