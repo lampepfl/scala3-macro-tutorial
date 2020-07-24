@@ -1,6 +1,6 @@
 # Inline
 
-`inline` is a [new soft][soft-modifier] modifier that guarantees that a definition will be inlined at the point of use.
+`inline` is a new [soft modifier][soft-modifier] that guarantees that a definition will be inlined at the point of use.
 
 ## Inline values
 
@@ -178,16 +178,21 @@ inline def power(x: Double, inline n: Int): Double =
   else power(x * x, n / 2)
 ```
 
+  ```scala
+  power(2, 2)
+  // first inlines as
+  val x = 2
+  if (2 == 0) 1.0 // dead branch
+  else if (2 % 2 == 1) x * power(x, 2 - 1) // dead branch
+  else power(x * x, 2 / 2)
+  // partially evaluated to
+  val x = 2
+  power(x * x, 1)
+  ```
+<details>
+  <summary> See rest of inlining steps</summary>
+
 ```scala
-power(2, 2)
-// first inlines as
-val x = 2
-if (2 == 0) 1.0 // dead branch
-else if (2 % 2 == 1) x * power(x, 2 - 1) // dead branch
-else power(x * x, 2 / 2)
-// partially evaluated to
-val x = 2
-power(x * x, 1)
 // then inlined as
 val x = 2
 val x2 = x * x
@@ -211,10 +216,18 @@ val x = 2
 val x2 = x * x
 x2 * 1.0
 ```
+</details>
+
 
 Now imagine if we do not know the value of `n`
+
 ```scala
 power(2, unkownNumber)
+```
+<details>
+  <summary>See inlining steps</summary>
+
+```scala
 // first inlines as
 val x = 2
 if (unkownNumber == 0) 1.0
@@ -235,7 +248,9 @@ else {
   else power(x2 * x2, unkownNumber / 2 / 2)
 }
 // Oops this will never finish compiling
+...
 ```
+</details>
 
 Instead, we can use the `inline if` variant of `if` that ensure that the branching desition is performed at compiletime.
 It will always remove the if after inlining and keep a single branch before inlining the contents of the branch.
