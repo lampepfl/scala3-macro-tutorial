@@ -1,12 +1,16 @@
 # Scala 3 Macro Cookbook
 
-Tutorial
+## Tutorial
+⮕ [Start tutorial][inline]
+
+Chapters
  * [Inline Tutorial][inline]
+ * [scala.compiletime][compiletime] (optional)
  * [Macros and Expr Tutorial][macros]
  * [Quotes and splices Tutorial][quotes]
  * [TASTy Reflection Tutorial][tasty]
-
-Other
+ 
+## Other
  * [Best practices][best-practices]
  * [FAQ][faq]
  * [Other references][references]
