@@ -29,3 +29,18 @@
 
 ### ExprMap
 ### Var
+
+
+⮕ [Continue to Quoted Code][quotes]
+
+
+[best-practices]: /docs/best-practices.md
+[compiletime]: /docs/compiletime.md
+[cross-compilation]: /docs/cross-compilation.md
+[faq]: /docs/faq.md
+[inline]: /docs/inline.md
+[macros]: /docs/macros.md
+[migration-status]: /docs/migration-status.md
+[quotes]: /docs/quotes.md
+[references]: /docs/references.md
+[tasty]: /docs/tasty-reflection.md

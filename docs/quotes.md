@@ -1,7 +1,4 @@
-# Quotes and splices
-*Coming soon*
-
-## Quoted code
+# Quoted Code
 *Coming soon*
 
 ## Phase consistency
@@ -18,3 +15,18 @@
 
 ## Types
 *Coming soon*
+
+
+
+⮕ [Continue to TASTy Reflection][tasty]
+
+[best-practices]: /docs/best-practices.md
+[compiletime]: /docs/compiletime.md
+[cross-compilation]: /docs/cross-compilation.md
+[faq]: /docs/faq.md
+[inline]: /docs/inline.md
+[macros]: /docs/macros.md
+[migration-status]: /docs/migration-status.md
+[quotes]: /docs/quotes.md
+[references]: /docs/references.md
+[tasty]: /docs/tasty-reflection.md
