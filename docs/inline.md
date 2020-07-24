@@ -278,16 +278,10 @@ inline def power(x: Double, inline n: Int) = ${ powerCode('x, 'n)  }
 private def powerCode(using QuoteContext)(x: Expr[Double], n: Expr[Int]): Expr[Double] = ...
 ```
 
-Continue to [Scala 3 macros][macros].
+⮕ Continue to [Scala 3 macros][macros]
 
 [best-practices]: /docs/best-practices.md
 [compiletime]: /docs/compiletime.md
-[cross-compilation]: /docs/cross-compilation.md
-[faq]: /docs/faq.md
-[inline]: /docs/inline.md
 [macros]: /docs/macros.md
-[migration-status]: docs/migration-status.md
-[quotes]: /docs/quotes.md
 [references]: /docs/references.md
 [soft-modifier]: https://dotty.epfl.ch/docs/reference/soft-modifier.html
-[tasty]: /docs/tasty-reflection.md
