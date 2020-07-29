@@ -1,4 +1,4 @@
-# Scala 3 Macro Cookbook
+# Scala 3 Macro Tutorial
 
 ## Tutorial
 ⮕ [Start tutorial][inline]
