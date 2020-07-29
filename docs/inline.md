@@ -268,6 +268,8 @@ power(2, 2) // Ok
 power(2, unkownNumber) // error
 ```
 
+We will come back to this example later and see how we can get more control on how code is generated.
+
 ## Inline Methods
 When combining `inline def` with overriding and interfaces we will have some restrictions to ensure the correct behavior of the methods.
 
