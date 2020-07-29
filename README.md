@@ -1,9 +1,15 @@
 # Scala 3 Macro Tutorial
 
-## Tutorial
+This tutorial covers all the features involved in writing macros in Scala 3.
+We will start with the new `inline` feature which is the entry point of all macros.
+We also cover some meetaprogramming features that can be used with `inline`.
+Then we learn how to create a macro using `inline` and quoted expressions.
+We will have a look at the quoted expressions API and how to use them.
+Finally, for those macros that need a bit more than expression, we will learn how to access thier typed AST.
+
 ⮕ [Start tutorial][inline]
 
-Chapters
+## Chapters
  * [Inline Tutorial][inline]
  * [scala.compiletime][compiletime] (optional)
  * [Macros and Expr Tutorial][macros]
