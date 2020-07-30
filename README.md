@@ -11,7 +11,7 @@ Finally, for those macros that need a bit more than expression, we will learn ho
 
 ## Chapters
  * [Inline Tutorial][inline]
- * [scala.compiletime][compiletime] (optional)
+   * [scala.compiletime][compiletime] (optional)
  * [Macros][macros]
  * [Quoted expressions Tutorial][quotes]
  * [TASTy Reflection Tutorial][tasty]
