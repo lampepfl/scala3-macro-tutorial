@@ -15,4 +15,5 @@ Here is an incomplete list of libraries that use Scala 2 macros and their migrat
 * [munit](https://github.com/dotty-staging/munit) - ported to Scala 3 in the Dotty community build but not merged to upstream
 * [scalatest](https://github.com/dotty-staging/scalatest) - ported to Scala 3 in the Dotty community build but not merged to upstream
 * [scodec-bits](https://github.com/dotty-staging/scodec) - ported to Scala 3 in the Dotty community build but not merged to upstream
+* [SoundProcesses](https://github.com/Sciss/SoundProcesses/blob/main/compiler/src/main/scala/de/sciss/synth/proc/impl/Macros.scala), [Patterns](https://github.com/Sciss/Patterns/blob/master/macros/src/main/scala/de/sciss/patterns/lucre/impl/Macros.scala), [FScape](https://github.com/Sciss/FScape-next/blob/main/macros/src/main/scala/de/sciss/fscape/lucre/impl/Macros.scala) - not migrated (impossible?), need to invoke compiler API
 * *More coming soon*
