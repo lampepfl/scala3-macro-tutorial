@@ -368,7 +368,36 @@ This implies that the body plays a part in the binary and source compatibility o
 
 
 ### Inline Matches
-*Coming soon*
+
+Inline matches behave differently than normal matches.
+This variant provides a way to match on the static type of some expression.
+It ensures that only one branch is kept.
+In the following example, the scrutinee, x, is an inline parameter that we can pattern match on at compile time.
+
+```scala
+transparent inline def half(x: Any): Any =
+  inline x match
+    case x: Int => x / 2
+    case x: String => x.substring(0, x.length / 2)
+
+half(6)
+// expands to:
+// val x = 6
+// x / 2
+
+half("hello world")
+// expands to:
+// val x = "hello world"
+// x.substring(0, x.length / 2)
+```
+
+As we match on the static type of an expression, the following would fail to compile because at compile time there is not enough information to decide which branch to take.
+
+```scala
+val n: Any = 3
+half(n) // error: n is not statically known to be an Int or a Double
+```
+
 
 ## scala.compiletime
 The package `scala.compiletime` provides useful metaprogramming abstractions that can be used within `inline` functions to provide custom semantics.
