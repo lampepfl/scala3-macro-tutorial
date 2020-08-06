@@ -410,9 +410,10 @@ Macros provide a way to control the code generation and analysis after the call 
 
 
 ```scala
-inline def power(x: Double, inline n: Int) = ${ powerCode('x, 'n)  }
+inline def power(x: Double, inline n: Int) = 
+  ${ powerCode('x, 'n)  }
 
-private def powerCode(using QuoteContext)(x: Expr[Double], n: Expr[Int]): Expr[Double] = ...
+def powerCode(x: Expr[Double], n: Expr[Int])(using QuoteContext): Expr[Double] = ...
 ```
 
 ⮕ [Continue to Scala 3 macros][macros]
