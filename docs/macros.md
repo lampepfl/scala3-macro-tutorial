@@ -58,10 +58,16 @@ def evalPowerCode(x: Expr[Double], n: Expr[Int])(using QuoteContext): Expr[Doubl
 The `pow` operation simply computes the value of `xⁿ`.
 The interesting part is how we create and look into the `Expr`s.
 
+### Creating expression with `Expr.apply`
+
 Lets first look at `Expr(value)`.
 This will return an expression containing the code representing that value.
-This will work for all primitive types, tuples of any arity, `Class`, `Array`, `Seq`, `Set`, `List`, `Map`, `Option`, `Either`, `BigInt`, `BigDecimal`.
+Here the value is computed at compile-time, at runtime we only need to instasiate this value.
+
+This will work for all _primitive types_, _tuples_ of any arity, `Class`, `Array`, `Seq`, `Set`, `List`, `Map`, `Option`, `Either`, `BigInt`, `BigDecimal`, `StringContext`.
 Other types can also work if a `Liftable` is implemented for it, we will [see this later](#Liftables).
+
+### Extracting vaues out of expressions
 
 The second operation we used if the `unliftOrError` on and `Expr[T]` which will do the opposite operation.
 If the expression contains the code of value it will return this value, otherwise, it will throw a special exception that will stop the macro expansion and report an error saying that the code did not correspond to value.
@@ -87,15 +93,27 @@ Alternatively, we can also use the `Unlifted` extractor
     case _ => ...
 ```
 
-`unlift`, `unliftOrError`, and `Unlifted` will work for all primitive types, tuples of any arity, `StringContext`, `Seq`, and `Option`.
+`unlift`, `unliftOrError`, and `Unlifted` will work for all _primitive types_, _tuples_ of any arity, , `Option` `Seq`, `Set`, `Map`, `Either` and `StringContext`.
 Other types can also work if an `Unliftable` is implemented for it, we will [see this later](#Unliftables).
 
 
-### Const
+### Working with varargs
 
-### Lambda
+Varargs in are represented with `Seq`, hence when we write a macro and we pass a vararg we will pass it as an `Expr[Seq[T]]`
 
-### VarArgs
+```scala
+import scala.quoted._
+
+inline def sumNow(inline numbers: Int*): Int = 
+  ${ evalSumCode('numbers)  }
+
+def evalSumCode(numbersExpr: Expr[Seq[Int]])(using QuoteContext): Expr[Int] = 
+  numbersExpr match
+    case  Varargs(numberExprs) => // numberExprs: Seq[Expr[Int]]
+      val numbers: Seq[Int] = numberExprs.map(_.unliftOrError)
+      Expr(numbers.sum)
+    case _ => report.error("Expected explicit agument. Notation `agrs: _*` is not supported.", numbersExpr)
+```
 
 ## Simple quotes
 
