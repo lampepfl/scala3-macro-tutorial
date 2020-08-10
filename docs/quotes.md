@@ -1,5 +1,5 @@
 # Quoted Code
-*Coming soon*
+
 
 ## Phase consistency
 *Coming soon*
@@ -12,6 +12,12 @@
 
 ## Unliftables
 *Coming soon*
+
+## Beta-reduction
+
+## Expr.summon
+
+## The QuoteContext
 
 ## Types
 *Coming soon*

@@ -97,6 +97,22 @@ Alternatively, we can also use the `Unlifted` extractor
 Other types can also work if an `Unliftable` is implemented for it, we will [see this later](#Unliftables).
 
 
+### Showing expressions
+
+Expression `Expr` can be converted to a string representation of the source using `.show` method.
+This might be useful for example to debug some code:
+```scala
+def debugEvalPowerCode(x: Expr[Double], n: Expr[Int])(using QuoteContext): Expr[Double] =
+  println(
+    s"""evalPowerCode
+       |  x := ${x.show}
+       |  n := ${n.show}""".stripMargin)
+  val code = evalPowerCode(x, n)
+  println(s"  code := ${code.show}")
+  code
+```
+
+
 ### Working with varargs
 
 Varargs in are represented with `Seq`, hence when we write a macro with a _vararg_ we will pass it as an `Expr[Seq[T]]`.
@@ -122,9 +138,6 @@ But, if we try to match the argument of the call `sumNow(nums: _*)`, the extract
 `Varargs` can also be used as a constructor, `Varargs(Expr(1), Expr(2), Expr(3))` will return a `Expr[Seq[Int]]`.
 We will see how this can be useful later.
 
-## Generics
-
-<!-- TODO write text -->
 
 ## Constucting complex expressions
 
@@ -139,25 +152,27 @@ We mentioned that `Varargs.apply` can do this for sequences, but other methods a
 * `Expr.ofTupleFromSeq`: Transform a `Seq[Expr[T]]` into `Expr[Tuple]`
 * `Expr.ofTuple`: Transform a `(Expr[T1], ..., Expr[Tn])` into `Expr[(T1, ..., Tn)]`
 
-### Bloks
+### Simple Blocks
 
-<!-- TODO write text -->
+`Expr.block` provides a simple way to create a block of code `{ stat1; ...; statn; expr }`.
+Its first arguments is a list with all the statements and the second argument is the expession at the ind of the block.
 
 ```scala
-inline def test(inline ignore: Boolean, computation: => Unit): Unit =
+inline def test(inline ignore: Boolean, computation: => Unit): Boolean =
   ${ testCode('ignore, 'computation) }
 
-def testCode(ignore: Expr[Boolean], computation: Expr[Unit]): Expr[Unit] = {
-  val code: List[Expr[Unit]] =
-    if ignore.unliftOrError then Nil
-    else List(computation)
-  Expr.block(code, Expr.unitExpr)
-}
+def testCode(ignore: Expr[Boolean], computation: Expr[Unit]): Expr[Boolean] =
+  if ignore.unliftOrError then Expr(false)
+  else Expr.block(List(computation), Expr(true))
 ```
+
+This is useful when we whant to generate code contatining several side effects.
 
 ### Arbitrary expresions
 
-<!-- TODO write text -->
+Last but not least, it is possible to create an `Expr[T]` arbirtary code in it using quotes.
+The quote syntax `'{ ... }`  provides a way to write an arbirtaty `Expr[T]`.
+For exmaple `'{ doSomething(); getIntResult() }` will generate an `Expr[Int]` that will contain the code that is with the quoted block.
 
 
 ⮕ [Continue to Quoted Code][quotes]
