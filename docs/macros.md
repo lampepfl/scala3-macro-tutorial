@@ -7,7 +7,7 @@ Let us start simple, we will define a macro that will compute `xⁿ` for a known
 ```scala
 import scala.quoted._
 
-inline def power(inline x: Double, inline n: Int) = 
+inline def power(inline x: Double, inline n: Int) =
   ${ evalPowerCode('x, 'n)  }
 
 def evalPowerCode(x: Expr[Double], n: Expr[Int])(using QuoteContext): Expr[Double] = ...
@@ -22,7 +22,7 @@ If the macro has type parameters, the implementation will also need to know abou
 This is done with a contextual `scala.quoted.Type[T]`.
 
 ```scala
-inline def logged[T](inline x: T): T = 
+inline def logged[T](inline x: T): T =
   ${ loggedCode('x)  }
 
 def loggedCode[T](x: Expr[T])(using Type[T])(using QuoteContext): Expr[T] = ...
@@ -99,15 +99,16 @@ Other types can also work if an `Unliftable` is implemented for it, we will [see
 
 ### Working with varargs
 
-Varargs in are represented with `Seq`, hence when we write a macro and we pass a vararg we will pass it as an `Expr[Seq[T]]`
+Varargs in are represented with `Seq`, hence when we write a macro with a _vararg_ we will pass it as an `Expr[Seq[T]]`.
+It is possible to recover each individual argument using the `scala.quoted.Varargs` extractor.
 
 ```scala
 import scala.quoted._
 
-inline def sumNow(inline numbers: Int*): Int = 
+inline def sumNow(inline numbers: Int*): Int =
   ${ evalSumCode('numbers)  }
 
-def evalSumCode(numbersExpr: Expr[Seq[Int]])(using QuoteContext): Expr[Int] = 
+def evalSumCode(numbersExpr: Expr[Seq[Int]])(using QuoteContext): Expr[Int] =
   numbersExpr match
     case  Varargs(numberExprs) => // numberExprs: Seq[Expr[Int]]
       val numbers: Seq[Int] = numberExprs.map(_.unliftOrError)
@@ -115,27 +116,48 @@ def evalSumCode(numbersExpr: Expr[Seq[Int]])(using QuoteContext): Expr[Int] =
     case _ => report.error("Expected explicit agument. Notation `agrs: _*` is not supported.", numbersExpr)
 ```
 
-## Simple quotes
+The extractor will match a call to `sumNow(1, 2, 3)` and extract a `Seq[Expr[Int]]` containing the code of each parameter.
+But, if we try to match the argument of the call `sumNow(nums: _*)`, the extractor will not match.
 
-## Simple patterns
+`Varargs` can also be used as a constructor, `Varargs(Expr(1), Expr(2), Expr(3))` will return a `Expr[Seq[Int]]`.
+We will see how this can be useful later.
 
-## Quotes and splices
-<!-- teaser / ref to other doc -->
+## Generics
 
-### Liftables
+<!-- TODO write text -->
 
-### Unliftables
+## Constucting complex expressions
 
-## Types
+### Collections
 
-## Reporting
+We have seen how to convert a `List[Int]` into an `Expr[List[Int]]` using `Expr.apply`.
+How about converting a `List[Expr[Int]]` into `Expr[List[Int]]`?
+We mentioned that `Varargs.apply` can do this for sequences, but other methods are available.
 
-## The QuoteContext
+* `Expr.ofList`: Transform a `List[Expr[T]]` into `Expr[List[T]]`
+* `Expr.ofSeq`: Transform a `List[Expr[T]]` into `Expr[List[T]]` (just like `Varargs`)
+* `Expr.ofTupleFromSeq`: Transform a `Seq[Expr[T]]` into `Expr[Tuple]`
+* `Expr.ofTuple`: Transform a `(Expr[T1], ..., Expr[Tn])` into `Expr[(T1, ..., Tn)]`
 
-## Utils
+### Bloks
 
-### ExprMap
-### Var
+<!-- TODO write text -->
+
+```scala
+inline def test(inline ignore: Boolean, computation: => Unit): Unit =
+  ${ testCode('ignore, 'computation) }
+
+def testCode(ignore: Expr[Boolean], computation: Expr[Unit]): Expr[Unit] = {
+  val code: List[Expr[Unit]] =
+    if ignore.unliftOrError then Nil
+    else List(computation)
+  Expr.block(code, Expr.unitExpr)
+}
+```
+
+### Arbitrary expresions
+
+<!-- TODO write text -->
 
 
 ⮕ [Continue to Quoted Code][quotes]
