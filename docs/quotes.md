@@ -91,13 +91,146 @@ given Liftable[StringContext] = new Liftable[StringContext] {
     '{ StringContext($parts: _*) }
 }
 ```
-
+The `Varargs` constructor just creates an `Expr[Seq[T]]` which we can efficiently splice as a varargs.
+In general any sequence can be spliced with `$mySeq: _*` to splice it a varargs.
 
 ## Quoted patterns
+Quotes can also be used to check if an expression is equivalent to another or deconstruct an expression into it parts.
+
+
+### Matching exact expression
+
+The simples thing we can do is to check if an expression matches another know expression.
+Bellow we show how we can match some expressions using `case '{...} =>`
+
+```scala
+def valueOfBoolean(x: Expr[Boolean])(using QuoteContext): Option[Boolean] =
+  x match
+    case '{ true } => Some(true)
+    case '{ false } => Some(false)
+    case _ => None
+
+def valueOfBooleanOption(x: Expr[Option[Boolean]])(using QuoteContext): Option[Option[Boolean]] =
+  x match
+    case '{ Some(true) } => Some(Some(true))
+    case '{ Some(false) } => Some(Some(false))
+    case '{ None } => Some(None)
+    case _ => None
+```
+
+### Matching partial expression
+
+To make thing more compact, we can also match patially the expression using a `$` to match arbitrarry code and extract it.
+
+```scala
+def valueOfBooleanOption(x: Expr[Option[Boolean]])(using QuoteContext): Option[Option[Boolean]] =
+  x match
+    case '{ Some($boolExpr) } => Some(valueOfBoolean(boolExpr))
+    case '{ None } => Some(None)
+    case _ => None
+```
+
+### Matching types of expression
+
+We can also match agains code of an arbitrarry type `T`.
+Bellow we match agains `$x` of type `T` and we get out an `x` of type `Expr[T]`.
+
+```scala
+def exprOfOption[T: Type](x: Expr[Option[T]])(using QuoteContext): Option[Expr[T]] =
+  x match
+    case '{ Some($x) } => Some(x) // x: Expr[T]
+    case '{ None } => Some(None)
+    case _ => None
+```
+
+We can also check for the type of an expression
+
+```scala
+def valueOf(x: Expr[Any])(using QuoteContext): Option[Any] =
+  x match
+    case '{ $x: Boolean } => valueOfBoolean(x) // x: Expr[Boolean]
+    case '{ $x: Option[Boolean] }  => valueOfBooleanOption(x) // x: Expr[Option[Boolean]]
+    case _ => None
+```
+Or similarly for an some subexpression
+
+```scala
+case '{ Some($x: Boolean) } => // x: Expr[Boolean]
+```
+
+### Matching reciver of methods
+
+When we want to match the reciver of a method we need to explicitly state its type
+
+```scala
+case '{ ($ls: List[Int]).sum } =>
+```
+
+If we would have written `$ls.sum` we would not have been able to know the type of `ls` and which `sum` method we are calling.
+
+Another common case where we need type annotations is for infix operations.
+```scala
+case '{ ($x: Int) + ($y: Int) } =>
+case '{ ($x: Double) + ($y: Double) } =>
+case ...
+```
+
+### Matching function expressions
+
+*Coming soon*
+
+### Matching types
+
 *Coming soon*
 
 ## Unliftables
-*Coming soon*
+
+The `Expr.unlift`, `Expr.unlift.orError` `Unlifted.unapply` method uses intances of `Unliftable` to perform the unlifting.
+```scala
+extension [T](expr: Expr[T]):
+  def unlift(using QuoteContext)(using unlift: Unliftable[T]): Option[T] =
+    unlift(expr)
+
+  def unliftOrError(using QuoteContext)(using unlift: Unliftable[T]): T =
+    unlift(expr).getOrElse(eport.throwError("...", expr))
+end extension
+
+object Unlifted:
+  def unapply[T](expr: Expr[T])(using QuoteContext)(using unlift: Unliftable[T]): Option[T] =
+    unlift(expr)
+```
+
+`Unliftable` is defined as follows:
+```scala
+trait Unliftable[T]:
+  def apply(x: Expr[T])(using QuoteContext): Option[T]
+```
+
+The `toExpr` method will take a value `T` and generate code that will construct a copy of this value at runtime.
+
+We can define our own `Uniftable`s like:
+```scala
+given Unliftable[Boolean] = new Unliftable[Boolean] {
+  def apply(x: Expr[Boolean])(using QuoteContext): Option[Boolean] =
+    x match
+      case '{ true } => Some(true)
+      case '{ false } => Some(false)
+      case _ => None
+}
+
+given Unliftable[StringContext] = new Unliftable[StringContext] {
+  def apply(x: Expr[StringContext])(using qctx: QuoteContext): Option[StringContext] = x match {
+    case '{ new StringContext(${Varargs(Consts(args))}: _*) } => Some(StringContext(args: _*))
+    case '{     StringContext(${Varargs(Consts(args))}: _*) } => Some(StringContext(args: _*))
+    case _ => None
+  }
+}
+```
+Note that we handled two cases for the `StringContext`.
+As it is a `case class` it can be created with the `new StringContext` or with the `StringContext.apply` in the companion object.
+We also used the `Varargs` extractor to match the arguments of type `Expr[Seq[String]]` into a `Seq[Expr[String]]`.
+Then we used the `Consts` to match known constants in the `Seq[Expr[String]]` to get a `Seq[String]`.
+
 
 ## The QuoteContext
 *Coming soon*

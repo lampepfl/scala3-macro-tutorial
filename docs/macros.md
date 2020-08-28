@@ -168,6 +168,20 @@ def testCode(ignore: Expr[Boolean], computation: Expr[Unit]): Expr[Boolean] =
 
 This is useful when we whant to generate code contatining several side effects.
 
+### Simple matching
+
+`Expr.matches` can be used to check if an expression matches another.
+With this method we could implement an `unlift` operation for `Expr[Boolean]` as follows.
+
+```scala
+def unlift(boolExpr: Expr[Boolean]): Option[Boolean] =
+  if boolExpr.matches(Expr(true)) then Some(true)
+  else if boolExpr.matches(Expr(false)) then Some(false)
+  else None
+```
+
+It may also be used to compare two user written expression.
+
 ### Arbitrary expresions
 
 Last but not least, it is possible to create an `Expr[T]` arbirtary code in it using quotes.
