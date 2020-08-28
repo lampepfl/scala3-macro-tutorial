@@ -233,7 +233,35 @@ Then we used the `Consts` to match known constants in the `Seq[Expr[String]]` to
 
 
 ## The QuoteContext
-*Coming soon*
+The `QuoteContext` is the main entry point for the creation of all quotes.
+This contex is usually just passed around through contextual abstractions (`using` and `?=>`).
+Each quote scope will provide have its own `QuoteContext`.
+New scopes are intoduced each time a splice is intoduced `${...}`.
+Though it looks like a splice takes an expression as argument, it actually takes a `QuoteContext ?=> Expr[T]`.
+Therfore we could actually write it explicitly as `${ (using q) => ... }`, this might be useful when debuging to avoid generated names for these scopes.
+
+When we write a top level splice in a macro we are calling something similar to the following definition.
+This splice will provide the initial `QuoteContext` asociated with the macro expansion.
+```scala
+def $[T](x: QuoteContext ?=> Expr[T]): T = ...
+```
+
+When we have a splice within a quote, the inner quote context will depend on the outer one.
+This link is represented using the `QuoteContext.Nested` type.
+This relation tells us that it is safe to use expressions createed with `q1` within the scope of `q2` but not the other way around (this constraint is statically checked yet).
+
+```scala
+def f(using q1: QuoteContext) = '{
+  ${ (using q2: q1.Nested) ?=>
+      ...
+  }
+}
+```
+
+We can imagine that a nested splice is like the following method, where `ctx` is the context recived by the sourounding quote.
+```scala
+def $[T](using ctx: QuoteContext)(x: ctx.Nested ?=> Expr[T]): T = ...
+```
 
 ## Beta-reduction
 *Coming soon*
