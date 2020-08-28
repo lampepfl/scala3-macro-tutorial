@@ -26,7 +26,7 @@ Finally, for those macros that need a bit more than expression, we will learn ho
 
 ## Scala 2 migration
  * [Scala 2 migration and cross-compilation][migration]
- * [Migration status][cross-compilation]
+ * [Migration status][migration-status]
 
 ## Dotty documentation
 - [Dotty Documentation](https://dotty.epfl.ch/docs/reference/metaprogramming/toc.html)
