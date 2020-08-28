@@ -240,6 +240,16 @@ New scopes are intoduced each time a splice is intoduced `${...}`.
 Though it looks like a splice takes an expression as argument, it actually takes a `QuoteContext ?=> Expr[T]`.
 Therfore we could actually write it explicitly as `${ (using q) => ... }`, this might be useful when debuging to avoid generated names for these scopes.
 
+The method `scala.quoted.qctx` provides a simple way to use the current `QuoteContext` without naming it.
+It is usually imported along with the `QuoteContext` using `import scala.quoted._`.
+
+```scala
+${ (using q1) => body(using q1) }
+// equivalent to
+${ body(using qctx) }
+```
+If you explicitly name a `QuoteContext` `qctx` you will shadow this definition.
+
 When we write a top level splice in a macro we are calling something similar to the following definition.
 This splice will provide the initial `QuoteContext` asociated with the macro expansion.
 ```scala
