@@ -13,7 +13,6 @@ Finally, for those macros that need a bit more than expression, we will learn ho
 
 ## Chapters
  * [Inline Tutorial][inline]
-   * [scala.compiletime][compiletime] (optional)
  * [Macros][macros]
  * [Quoted expressions Tutorial][quotes]
  * [TASTy Reflection Tutorial][tasty]
@@ -21,19 +20,37 @@ Finally, for those macros that need a bit more than expression, we will learn ho
 ## Other
  * [Best practices][best-practices]
  * [FAQ][faq]
- * [Other references][references]
- * [scala.compiletime][compiletime]
- * [Scala 2 cross-compilation][cross-compilation]
+ * [`scala.compiletime`][compiletime]
+
+# Other resources
+
+## Scala 2 migration
+ * [Scala 2 migration and cross-compilation][migration]
  * [Migration status][cross-compilation]
+
+## Dotty documentation
+- [Dotty Documentation](https://dotty.epfl.ch/docs/reference/metaprogramming/toc.html)
+- [Macros: The Plan For Scala 3](https://www.scala-lang.org/blog/2018/04/30/in-a-nutshell.html)
+- [Examples](https://github.com/lampepfl/dotty-macro-examples) - a repository with small, self-contained examples of various tasks done with Dotty macros.
+
+## Talks
+* [Scala Days - Metaprogramming in Dotty](https://www.youtube.com/watch?v=ZfDS_gJyPTc)
+
+## Projects and examples
+* [dotty-macro-examples](https://github.com/lampepfl/dotty-macro-examples)
+* [XML Interpolator](https://github.com/dotty-staging/xml-interpolator/tree/master)
+* [Shapeless 3](https://github.com/dotty-staging/shapeless/tree/shapeless-3)
+* *More Coming soon*
+
 
  
 [best-practices]: /docs/best-practices.md
 [compiletime]: /docs/compiletime.md
-[cross-compilation]: /docs/cross-compilation.md
+[migration]: https://github.com/scalacenter/scala-3-migration-guide/blob/master/docs/macros.md#how-to
 [faq]: /docs/faq.md
 [inline]: /docs/inline.md
 [macros]: /docs/macros.md
-[migration-status]: /docs/migration-status.md
+[migration-status]: https://github.com/scalacenter/scala-3-migration-guide/blob/master/docs/macros.md#migration-status
 [quotes]: /docs/quotes.md
 [references]: /docs/references.md
 [tasty]: /docs/tasty-reflection.md
