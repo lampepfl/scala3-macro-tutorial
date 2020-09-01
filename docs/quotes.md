@@ -273,11 +273,52 @@ We can imagine that a nested splice is like the following method, where `ctx` is
 def $[T](using ctx: QuoteContext)(x: ctx.Nested ?=> Expr[T]): T = ...
 ```
 
-## Beta-reduction
-*Coming soon*
+## β-reduction
+When we have a lambda applied to an argument in a quote `'{ ((x: Int) => x + x)(y) }` we do not reduce it within the quote, the code is kept as is.
+There is an optimization that β-reduce all lambdas directly applied to parameters to aboid the creation of the closure.
+This will not be visible from the quotes perspective.
 
-## Expr.summon
-*Coming soon*
+Sometime it is useful to perform this β-reduction on the quotes directly.
+We provide the function `Expr.betaReduce[T]` that recives an `Expr[T]` and β-reduce if it ccontains a directly applied lambda.
+
+```scala
+Expr.betaReduce('{ ((x: Int) => x + x)(y) }) // returns '{ val x = y; x + x }
+```
+
+
+## Summon values
+There are two ways to summon values in a macro.
+The first is to have a `using` parameter in the inline method that is passed explicitly to the macro implementation.
+
+```scala
+inline def setFor[T](using ord: Ordering[T]): Set[T] =
+  ${ setForCode[T]('ord) }
+
+def setForCode[T: Type](ord: Expr[Ordering[T]])(using QuoteContext): Expr[Set[T]] =
+  '{ TreeSet.empty[T](using $ord) }
+```
+
+In this scenario, the context parameter is found before the macro is expanded.
+If not found, the macro will not expand.
+
+The second way is using `Expr.summon`.
+This allows to programatically search for distinct given expressions.
+The following example is similar to the previous example.
+
+```scala
+inline def setFor[T]: Set[T] =
+  ${ setForCode[T] }
+
+def setForCode[T: Type](using QuoteContext): Expr[Set[T]] =
+  import scala.collection.immutable._
+  Expr.summon[Ordering[T]] match
+    case Some(ord) => '{ TreeSet.empty[T](using $ord) }
+    case _ => '{ HashSet.empty[T] }
+```
+
+The difference is that in this sencario we do start expanding the maro before the implicit search failure and we can write arbirtary code to hande the case where it is not found.
+Here we used `HashSet` and another valid implemetation that does not need the `Ordering`.
+
 
 ⮕ [Continue to TASTy Reflection][tasty]
 
