@@ -4,7 +4,7 @@
 
 ## Inline values
 
-This simplest form of inlining is in the form of known literal constants.
+The simplest form of inlining comes in the form of known literal constants.
 
 In Scala 2 we would have used a `final val` without a return type for this purpose.
 
@@ -12,9 +12,10 @@ In Scala 2 we would have used a `final val` without a return type for this purpo
 final val pi = 3.141592653589793
 final val pie = "🥧"
 ```
-This did its best effort to inline the values.
+The compiler operated on a best-effort basis to inline the values.
 
-Instead, if we use `inline val` we can guarantee that all references to these constants are inlined.
+In Scala 3 we make the first step towards inlining similarly but with stronger guarantees. Firstly, we use the modifier explicitly.
+Secondly, `inline val` *guarantees* that all references to these constants are inlined.
 
 
 ```scala
@@ -31,7 +32,7 @@ As there are no direct references to `pi` and `pi2`, these definitions can be re
 
 ## Inline Functions
 
-We use `inline def` to define a function that will be inlined.
+We use `inline def` to define a function that will be inlined at a call-site.
 
 ```scala
 inline def logged[T](tag: String)(thunk: =>T): Unit =
@@ -41,9 +42,9 @@ inline def logged[T](tag: String)(thunk: =>T): Unit =
   res
 ```
 
-When this function is called, it is β-reduced at compile-time removing.
-This results in the removal of call and duplication of the body of the function.
-Therefore the following code would be inlined as follows
+When this function is called, its body will be applied at compile-time over its passed arguments!
+This results in the removal of the call itself replaced by the body of the function with all parameters replaced systematically.
+Therefore, the following code would be inlined as follows
 
 ```scala
 logged(getTag()) {
@@ -58,13 +59,14 @@ logger.log(s"Result of $tag: $res")
 res
 ```
 
-Note that by inlining we generate a `val` binding for all by-value parameters and we generate a `def` binding for each by-name parameter.
+Note that our original definition has two kinds of parameters for exposition: by-value and by-name.
+For all *by-value* parameters we generate a `val` binding and for all *by-name* parameters we generate a `def` binding.
 This is done to avoid changes in the order of any side effects of by-values parameters and in general to avoid duplication of the code of the parameters.
 In some cases, when the arguments are pure constant values, the binding is omitted and the value is inlined directly.
-There is also the possibility of marking the parameter as `inline` avoid the creation of the binding as we will see [later](#inline-parameters).
+We also introduce the option of marking the parameter as `inline` to avoid the creation of the binding if that is needed. We will see [later](#inline-parameters) more details about that.
 
-It is important to understand that when a call is inlined it will not change its semantics.
-This implies that the initial elaboration (overload resolution, implicit search, ...) performed while typing the body of the inline method will not change when inlined.
+It is important to understand that when a call is inlined it **will not change** its semantics.
+This implies that the initial elaboration (overload resolution, implicit search, ...), performed while typing the body of the inline method, will not change when inlined.
 For example consider the following code: 
 
 ```scala
@@ -83,7 +85,7 @@ The initial elaboration `logger.log(x)` tells us that we will call the `Log.log`
 
 ```scala
 logged(new RefinedLogger, "✔️")
-// exapnds to
+// expands to
 val loggeer = new RefinedLogger
 val x = "✔️"
 logger.log(x)
@@ -92,10 +94,10 @@ Even though now we know that `x` is a `String` we will still `log` that receives
 But it is now a call on `RefinedLogger` directly, the call got de-virtualized when inlining.
 Another way to interpret this is that if `logged` is a `def` or `inline def` they would perform the same operations with some differences in performance.
 
-
 ### Inline parameters
-One important application of inlining is to help constant folding some code.
-Inline parameters do not create binding and their code is duplicated everywhere they are used.
+
+One important application of inlining is to promote constant folding of some code.
+Inline parameters do not create bindings and their code is duplicated everywhere they are used.
 
 ```scala
 inline def perimeter(inline radius: Double): Double = 
@@ -136,7 +138,7 @@ printPerimeter(longComputation())
 println(s"Perimeter (r = ${longComputation()}) = ${6.283185307179586 * longComputation()}")
 ```
 
-A useful application of inline parameters is to avoid the creation of closures of some by name parameters.
+A useful application of inline parameters is to avoid the creation of closures of some by-name parameters.
 
 ```scala
 def assert1(cond: Boolean, msg: =>String) =
@@ -150,7 +152,7 @@ def msg = "error1"
 if !cond then 
     throw new Exception("error1")
 ```
-In this case, we can see that closure for `msg` is created before the condition is checked.
+In this case, we can see that the closure for `msg` is created before the condition is checked.
 
 If we use an inline parameter instead, we can guarantee that the condition is checked before any of the code that handles the exception is reached.
 In the case of an assertion, this code should never be reached.
@@ -167,7 +169,7 @@ if !cond then
 ```
 
 ### Inline Conditionals
-If the condition of the inline is known constant (`true` or `false`) possibly after inlining then if is partially evaluated away and only one branch will be kept.
+If the condition of the inline is a known constant (`true` or `false`), possibly after inlining, then the `if` or `else`-branch is partially evaluated away and only one branch will be kept.
 
 For example, the following power function contains some `if` that will unroll the recursion and remove all function calls.
 
@@ -271,6 +273,7 @@ power(2, unkownNumber) // error
 We will come back to this example later and see how we can get more control on how code is generated.
 
 ## Inline Methods
+
 When combining `inline def` with overriding and interfaces we will have some restrictions to ensure the correct behavior of the methods.
 
 The first restriction is that all inline methods are effectively final.
@@ -290,7 +293,7 @@ class PrintLogger extends Logger:
   inline def log(x: Any): Unit = println(x)
 ```
 Now it is possible to call the `log` method directly on `PrintLogger` which will inline the code but we could also call it on `Logger`.
-This implies that the code of log must exist at runtime, we call this a _retaind inline_ method.
+This implies that the code of log must exist at runtime, we call this a _retained inline_ method.
 
 For any non-retained inline `def` or `val` the code can always be fully inlined at all call sites.
 Hence the methods will not be needed at runtime and can be erased from the bytecode.
@@ -336,7 +339,7 @@ Therfore the code can bee inlined.
 
 
 ## Transparent Inline
-This is a simple yet powerful extension to `inline` methods that unlock many metaprogramming usescases.
+This is a simple yet powerful extension to `inline` methods that unlocks many metaprogramming usescases.
 These inline calls allow for an inline piece of code to refine the type based on the precise type of the inlined expression.
 In Scala 2 parlance, these capture the essence of _whitebox macros_.
 
