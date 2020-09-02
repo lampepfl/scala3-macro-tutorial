@@ -59,7 +59,7 @@ logger.log(s"Result of $tag: $res")
 res
 ```
 
-Note that our original definition has two kinds of parameters for exposition: by-name and by-value.
+Note that our original definition has two kinds of parameters for exposition: by-value and by-name.
 For all *by-value* parameters we generate a `val` binding and for all *by-name* parameters we generate a `def` binding.
 This is done to avoid changes in the order of any side effects of by-values parameters and in general to avoid duplication of the code of the parameters.
 In some cases, when the arguments are pure constant values, the binding is omitted and the value is inlined directly.
