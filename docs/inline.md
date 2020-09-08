@@ -5,7 +5,7 @@ Scala 3 makes several improvements related to inlining:
 
 1. It introduces `inline` as a [soft keyword][soft-modifier].
 2. It introduces _inline expressions_.
-3. It guarantees that an _inline definition_ is inlined at the point of usage and an _inline expression_ is always reduced.
+3. It guarantees that an inlining actually happens instead of being best-effort.
 
 
 ## Inline constants
