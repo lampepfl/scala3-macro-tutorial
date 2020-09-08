@@ -50,41 +50,54 @@ However, the user may change `inline` to `final`, and the constant propagation o
 
 ## Inline Methods
 
-We use `inline def` to define a function that will be inlined at a call-site.
+We can use the modifier `inline` to define a method that should be inlined at call-site:
 
 ```scala
-inline def logged[T](tag: String)(thunk: =>T): Unit =
-  println(s"Computing $tag")
+inline def logged[T](level: Int, message: => String)(inline op: T): Unit =
+  println(s"[$level]Computing $message")
   val res = thunk
-  println(s"Result of $tag: $res")
+  println(s"[$level]Result of $message: $res")
   res
 ```
 
-When this function is called, its body will be applied at compile-time over its passed arguments!
-This results in the removal of the call itself replaced by the body of the function with all parameters replaced systematically.
-Therefore, the following code would be inlined as follows
+When this method is called, its body will be applied at compile-time over its passed arguments!
+This results in the replacement of the call by the body of the method with all parameters substituted correspondingly.
+Therefore, the following code 
 
 ```scala
-logged(getTag()) {
+logged(logLevel, getMessage()) {
   computeSomthing()
 }
-// becomes
-val tag = getTag()
-def thunk = computeSomthing()
-logger.log(s"Computing $tag")
-val res = thunk
-logger.log(s"Result of $tag: $res")
+```
+would be inlined and becomes
+
+```Scala
+val level   = logLevel
+def message = getMessage()
+
+println(s"[$level]Computing $message")
+val res = computeSomthing()
+println(s"[$level]Result of $tag: $res")
 res
 ```
 
-Note that our original definition has two kinds of parameters for exposition: by-value and by-name.
-For all *by-value* parameters we generate a `val` binding and for all *by-name* parameters we generate a `def` binding.
-This is done to avoid changes in the order of any side effects of by-values parameters and in general to avoid duplication of the code of the parameters.
-In some cases, when the arguments are pure constant values, the binding is omitted and the value is inlined directly.
-We also introduce the option of marking the parameter as `inline` to avoid the creation of the binding if that is needed. We will see [later](#inline-parameters) more details about that.
+Method inlining handles three kinds of parameters differently:
+
+1. __By-value parameters__. The compiler generates a `val` binding for *by-value* parameters.
+
+    This can be seen in the parameter `level` from the example.
+    In some cases, when the arguments are pure constant values, the binding is omitted and the value is inlined directly.
+
+2. __By-Name parameters__. The compiler generates a `def` binding for *by-name* parameters. 
+
+    This can be seen in the parameter `message` from the example.
+
+3. __Inline parameters__. Inline parameters do not create bindings and their code is duplicated everywhere they are used.
+
+    This can be seen in the parameter `op` from the example.
 
 It is important to understand that when a call is inlined it **will not change** its semantics.
-This implies that the initial elaboration (overload resolution, implicit search, ...), performed while typing the body of the inline method, will not change when inlined.
+This implies that the initial elaboration (overloading resolution, implicit search, ...), performed while typing the body of the inline method, will not change when inlined.
 For example consider the following code: 
 
 ```scala
@@ -99,22 +112,27 @@ inline def logged[T](logger: Logger, x: T): Unit =
   logger.log(x)
 ```
 
-The initial elaboration `logger.log(x)` tells us that we will call the `Log.log` which takes an `Any`.
+The separate type checking of `logger.log(x)` will resolve the call to the method `Log.log` which takes an argument of the type `Any`.
+Now, given the following code:
 
 ```scala
 logged(new RefinedLogger, "✔️")
-// expands to
+```
+
+It expands to:
+
+```
 val loggeer = new RefinedLogger
 val x = "✔️"
 logger.log(x)
 ```
-Even though now we know that `x` is a `String` we will still `log` that receives an `Any`.
-But it is now a call on `RefinedLogger` directly, the call got de-virtualized when inlining.
+Even though now we know that `x` is a `String`, the call ``logger.log(x)` still resovles to the method `Log.log` which takes an argument of the type `Any`.
+
 Another way to interpret this is that if `logged` is a `def` or `inline def` they would perform the same operations with some differences in performance.
 
 ### Inline parameters
 
-One important application of inlining is to promote constant folding of some code.
+One important application of inlining is to enable constant folding optimization across method boundaries.
 Inline parameters do not create bindings and their code is duplicated everywhere they are used.
 
 ```scala
@@ -122,19 +140,32 @@ inline def perimeter(inline radius: Double): Double =
   2. * pi * radius
 ```
 In this case, we expect that if the `radius` is known then the whole computation can be done at compile-time.
-We use an `inline` parameter to ensure that it is not
+We use an `inline` parameter to enforce the requirement.
+The follwing code
 
 ```scala
 perimeter(5.)
-// perimeter is inlined as 
+```
+
+is inlined as 
+
+```Scala
 2. * pi * 5.
-// then pi is inlined (inline val definition from the start)
+```
+
+Then `pi` is inlined (we assume the `inline val` definition from the start):
+
+```Scala
 2. * 3.141592653589793 * 5.
-// then constant folded to
+```
+
+Finally, it is constant folded to
+
+```
 31.4159265359
 ```
 
-It is important to be careful when using an inline parameter more than once.
+Be careful when using an inline parameter more than once.
 Consider the following code:
 
 ```scala
@@ -156,7 +187,7 @@ printPerimeter(longComputation())
 println(s"Perimeter (r = ${longComputation()}) = ${6.283185307179586 * longComputation()}")
 ```
 
-A useful application of inline parameters is to avoid the creation of closures of some by-name parameters.
+A useful application of inline parameters is to avoid the creation of closures of by-name parameters.
 
 ```scala
 def assert1(cond: Boolean, msg: =>String) =
