@@ -43,6 +43,7 @@ Currently, only constant expression may appear on the right-hand side of an inli
 Therefore, the following code is invalid, though the compiler knows that the right-hand side is a compile-time constant value:
 
 ```Scala
+val pi = 3.141592653589793
 inline val pi2 = pi + pi // error
 ```
 
@@ -126,7 +127,7 @@ val loggeer = new RefinedLogger
 val x = "✔️"
 logger.log(x)
 ```
-Even though now we know that `x` is a `String`, the call ``logger.log(x)` still resovles to the method `Log.log` which takes an argument of the type `Any`.
+Even though now we know that `x` is a `String`, the call `logger.log(x)` still resolves to the method `Log.log` which takes an argument of the type `Any`.
 
 Another way to interpret this is that if `logged` is a `def` or `inline def` they would perform the same operations with some differences in performance.
 
