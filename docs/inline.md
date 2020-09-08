@@ -1,7 +1,7 @@
 # Inline
 
-Inlining is a common compile-time meta-programming technique for performance optimization.
-Scala 3 makes significant improvements related to inlining:
+Inlining is a common compile-time meta-programming technique for performance optimizations.
+Scala 3 makes several improvements related to inlining:
 
 1. It introduces `inline` as a [keyword][soft-modifier].
 2. It introduces _inline expressions_.
@@ -28,7 +28,7 @@ val pie2 = pie + pie // val pie2 = "🥧🥧"
 In the code above, the references `pi` and `pie` are inlined.
 Then constant folding optimization in the compiler will compute the resulting value `pi2` and `pie2` at _compile-time_.
 
-In Scala 2, we would have used a `final val` without a return type for this purpose:
+In Scala 2, we would have used the modifier `final` in the definition that is without a return type:
 
 ```scala
 final val pi = 3.141592653589793
