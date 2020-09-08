@@ -48,7 +48,6 @@ val pi = 3.141592653589793
 inline val pi2 = pi + pi // error
 ```
 
-However, the user may change `inline` to `final`, and the constant propagation optimization in the compiler can still inline such computed constants.
 
 ## Inline Methods
 
