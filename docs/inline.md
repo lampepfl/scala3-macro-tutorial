@@ -38,6 +38,7 @@ final val pie = "🥧"
 The `final` modifier will ensure that `pi` and `pie` will take a _literal type_.
 Then the constant propagation optimization in the compiler can perform inlining for such definitions.
 However, inlining based constant propagation is _best-effort_ and not guaranteed.
+The `final val` inlining is also supported by Scala 3.0 as _best-effort_ inlining for migration purposes.
 
 Currently, only constant expression may appear on the right-hand side of an inline value definition.
 Therefore, the following code is invalid, though the compiler knows that the right-hand side is a compile-time constant value:
