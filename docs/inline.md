@@ -221,7 +221,7 @@ if !cond then
 ### Inline Conditionals
 If the condition of the inline is a known constant (`true` or `false`), possibly after inlining, then the `if` or `else`-branch is partially evaluated away and only one branch will be kept.
 
-For example, the following power function contains some `if` that will unroll the recursion and remove all function calls.
+For example, the following power method contains some `if` that will unroll the recursion and remove all method calls.
 
 ```scala
 inline def power(x: Double, inline n: Int): Double =
@@ -322,7 +322,7 @@ power(2, unkownNumber) // error
 
 We will come back to this example later and see how we can get more control on how code is generated.
 
-## Inline Methods
+## Inline Method Overloading
 
 When combining `inline def` with overriding and interfaces we will have some restrictions to ensure the correct behavior of the methods.
 
@@ -453,7 +453,7 @@ half(n) // error: n is not statically known to be an Int or a Double
 
 
 ## scala.compiletime
-The package `scala.compiletime` provides useful metaprogramming abstractions that can be used within `inline` functions to provide custom semantics.
+The package `scala.compiletime` provides useful metaprogramming abstractions that can be used within `inline` methods to provide custom semantics.
 
 ⮕ [See more here][compiletime]
 
