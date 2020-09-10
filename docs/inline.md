@@ -3,10 +3,9 @@
 Inlining is a common compile-time meta-programming technique for performance optimizations.
 Scala 3 makes several improvements related to inlining:
 
-1. It introduces `inline` as a [soft keyword][soft-modifier].
-2. It introduces _inline expressions_.
-3. It guarantees that an inlining actually happens instead of being best-effort.
-
+1. It introduces inline as a [soft keyword][soft-modifier].
+2. It guarantees that inlining actually happens instead of being best-effort.
+3. It introduces operations that are guaranteed to evaluate at compiletime.
 
 ## Inline constants
 
