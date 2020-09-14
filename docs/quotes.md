@@ -59,8 +59,67 @@ This will catch the errors in `myBadCounter1` and `myBadCounter2`.
 
 Eventhoug we cannot rever to variable inside of a quote, we can still pass its current value to it by lifting the value to an expression using `Expr.apply`.
 
+
 ## Generics
-*Coming soon*
+
+When using type parameters or other kinds of abstract types with quoted code we will need to keep track of some of these types explicitly.
+Scala uses erased-types semantics for its generics.
+This implies that types are removed from the program when compiling and the runtime does not have to track all types at runtime.
+
+Consider the following code
+```scala
+def evalAndUse[T](x: Expr[T]) = '{
+  val x2: T = $x // error
+  ... // use x2
+}
+```
+
+Here we will get an error telling us that we are missing a contextual `Type[T]`.
+Therefore we can easely fix it by writing
+```scala
+def evalAndUse[X](x: Expr[X])(using Type[X])(using QuoteContext) = '{
+  val x2: X = $x
+  ... // use x2
+}
+```
+This code will be equivalent to the more verbose
+```scala
+def evalAndUse[X](x: Expr[X])(using t: Type[X])(using QuoteContext) = '{
+  val x2: t.T = $x
+  ... // use x2
+}
+```
+Note that `Type` has a type member called `T` that refers to the type held within the `Type`, in this case `t.T` is `X`.
+Note that even if we used it implicitly is better to keep it contextual as some changes inside the quote may require it.
+The less verbose version is usually the best way to write the types as it is much simpler to read.
+In some cases, we will not know statically the type within the `Type` and will need to use the `.T` to refer to it.
+
+When do we need this extra `Type` parameter?
+* When a type is abstract and it is used in a level that is larger than the current level.
+
+When you add a `Type` contextual parameter to a method you will either get it from another context parameter or implicitly with a call to `Type.apply`.
+```scala
+evalAndUse(Expr(3))
+// is equivalent to
+evalAndUse[Int](Expr(3))(using Type[Int])
+```
+As you may have guessed, not every type is can be used in this `Type[..]` out of the box.
+We cannot recover abstract types that have already been erased.
+```scala
+def evalAndUse[T](x: Expr[T])(using QuoteContext) =
+  given Type[T] = Type[T] // error
+  '{
+    val x2: T = $x
+    ... // use x2
+  }
+```
+
+But we can write more complex types that depend on these abstract types.
+For example, if we look for or construct explicitly a `Type[List[T]]`, then the system will require a `Type[T]` in the current context to compile.
+
+Good code should only add `Type` to the context parameters and never use them explicitly.
+Explicit use is useful while debugging at the cost of conciseness and clarity.
+
 
 ## Liftables
 The `Expr.apply` method uses intances of `Liftable` to perform the lifting.
