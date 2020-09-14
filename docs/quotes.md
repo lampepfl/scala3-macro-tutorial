@@ -66,7 +66,8 @@ Eventhoug we cannot rever to variable inside of a quote, we can still pass its c
 The `Expr.apply` method uses intances of `Liftable` to perform the lifting.
 ```scala
 object Expr:
-  def apply[T](x: T)(using qctx: QuoteContext, lift: Liftable[T]): Expr[T] = lift.toExpr(x)
+  def apply[T](x: T)(using QuoteContext, Liftable[T]): Expr[T] =
+    summon[Liftable[T]].toExpr(x)
 ```
 
 `Liftable` is defined as follows:
@@ -203,7 +204,7 @@ object Unlifted:
 `Unliftable` is defined as follows:
 ```scala
 trait Unliftable[T]:
-  def apply(x: Expr[T])(using QuoteContext): Option[T]
+  def fromExpr(x: Expr[T])(using QuoteContext): Option[T]
 ```
 
 The `toExpr` method will take a value `T` and generate code that will construct a copy of this value at runtime.
@@ -211,7 +212,7 @@ The `toExpr` method will take a value `T` and generate code that will construct 
 We can define our own `Uniftable`s like:
 ```scala
 given Unliftable[Boolean] = new Unliftable[Boolean] {
-  def apply(x: Expr[Boolean])(using QuoteContext): Option[Boolean] =
+  def fromExpr(x: Expr[Boolean])(using QuoteContext): Option[Boolean] =
     x match
       case '{ true } => Some(true)
       case '{ false } => Some(false)
@@ -219,7 +220,7 @@ given Unliftable[Boolean] = new Unliftable[Boolean] {
 }
 
 given Unliftable[StringContext] = new Unliftable[StringContext] {
-  def apply(x: Expr[StringContext])(using qctx: QuoteContext): Option[StringContext] = x match {
+  def fromExpr(x: Expr[StringContext])(using qctx: QuoteContext): Option[StringContext] = x match {
     case '{ new StringContext(${Varargs(Consts(args))}: _*) } => Some(StringContext(args: _*))
     case '{     StringContext(${Varargs(Consts(args))}: _*) } => Some(StringContext(args: _*))
     case _ => None
