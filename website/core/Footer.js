@@ -51,7 +51,7 @@ class Footer extends React.Component {
           </div>
           <div>
             <h5>Community</h5>
-            <a href="https://gitter.im/scala/center" target="_blank">
+            <a href="https://gitter.im/lampepfl/dotty" target="_blank">
               Chat on Gitter
             </a>
             <a href="https://users.scala-lang.org/" target="_blank">
