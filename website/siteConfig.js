@@ -76,8 +76,8 @@ const siteConfig = {
   // No .html extensions for paths.
 
   /* Open Graph and Twitter card images */
-  ogImage: "img/scalacenter2x.png",
-  twitterImage: "img/scalacenter2x.png",
+  ogImage: "img/dotty-logo.svg",
+  twitterImage: "img/dotty-logo.svg",
 
   editUrl: `${repoUrl}/edit/master/docs/`,
 
