@@ -1,16 +1,17 @@
 {
   "docs": {
     "Tutorial": [
-      "get-started",
-      "inline",
-      "scala-3-macros",
-      "quoted-code",
-      "tasty-reflection"
+      "tutorial/get-started",
+      "tutorial/inline",
+      "tutorial/scala-3-macros",
+      "tutorial/quoted-code",
+      "tutorial/tasty-reflection"
     ],
     "Other": [
-      "compile-time-operations",
+      "faq",
       "best-practices",
-      "faq"
+      "compile-time-operations",
+      "other-recources"
     ]
   }
 }

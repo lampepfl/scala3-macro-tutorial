@@ -85,10 +85,10 @@ Summon all provides a way to summon multiple values at the same time from a tupl
 [compiletime]: compiletime.md
 [cross-compilation]: cross-compilation.md
 [faq]: faq.md
-[inline]: inline.md
-[macros]: macros.md
+[inline]: tutorial/inline.md
+[macros]: tutorial/macros.md
 [migration-status]: https://scalacenter.github.io/scala-3-migration-guide/docs/macros/migration-status.html
-[quotes]: quotes.md
+[quotes]: tutorial/quotes.md
 [references]: references.md
-[tasty]: tasty-reflection.md
+[tasty]: tutorial/tasty-reflection.md
 [compiletime-api]: https://dotty.epfl.ch/api/scala/compiletime/index.html

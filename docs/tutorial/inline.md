@@ -475,6 +475,6 @@ def powerCode(x: Expr[Double], n: Expr[Int])(using QuoteContext): Expr[Double] =
 
 [best-practices]: best-practices.md
 [compiletime]: compiletime.md
-[macros]: macros.md
+[macros]: tutorial/macros.md
 [references]: references.md
 [soft-modifier]: https://dotty.epfl.ch/docs/reference/soft-modifier.html
