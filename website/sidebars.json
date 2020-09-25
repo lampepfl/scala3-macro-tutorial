@@ -5,12 +5,12 @@
       "inline",
       "scala-3-macros",
       "quoted-code",
-      "tasty-reflection",
+      "tasty-reflection"
     ],
     "Other": [
       "compile-time-operations",
       "best-practices",
-      "faq",
+      "faq"
     ]
   }
 }
