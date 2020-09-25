@@ -5,7 +5,7 @@
 const repoUrl = "https://github.com/lampepfl/scala3-macro-tutorial";
 
 const siteConfig = {
-  title: "Scala 3 macro tutorial",
+  title: "Scala 3 Macro Tutorial",
   tagline: "A tutorial to cover all the features involved in writing macros in Scala 3",
 
   url: "https://lampepfl.github.io/",
@@ -19,7 +19,7 @@ const siteConfig = {
 
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
-    { doc: 'introduction', label: 'Tutorial' },
+    { doc: 'tutorial/introduction', label: 'Tutorial' },
     { doc: 'contributing', label: 'Contribute' },
     { href: repoUrl, label: "GitHub", external: true }
   ],

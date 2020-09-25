@@ -18,7 +18,7 @@
         "title": "FAQ"
       },
       "get-started": {
-        "title": "Scala 3 Macro Tutorial"
+        "title": "Scala 3 macros tutorial"
       },
       "inline": {
         "title": "Inline"
@@ -31,15 +31,31 @@
       },
       "tasty-reflection": {
         "title": "TASTy Reflection"
+      },
+      "tutorial/inline": {
+        "title": "Inline"
+      },
+      "tutorial/introduction": {
+        "title": "Introduction"
+      },
+      "tutorial/scala-3-macros": {
+        "title": "Scala 3 macros"
+      },
+      "tutorial/quoted-code": {
+        "title": "Quoted Code"
+      },
+      "tutorial/tasty-reflection": {
+        "title": "TASTy Reflection"
       }
     },
     "links": {
-      "Tuorial": "Tutorial",
+      "Tutorial": "Tutorial",
       "Contribute": "Contribute",
       "GitHub": "GitHub"
     },
     "categories": {
-      "Macros": "Macros"
+      "Tutorial": "Tutorial",
+      "Other": "Other"
     }
   },
   "pages-strings": {
