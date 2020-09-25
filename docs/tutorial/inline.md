@@ -457,8 +457,6 @@ half(n) // error: n is not statically known to be an Int or a Double
 ## scala.compiletime
 The package `scala.compiletime` provides useful metaprogramming abstractions that can be used within `inline` methods to provide custom semantics.
 
-⮕ [See more here][compiletime]
-
 ## Macros
 Inlining is also the core mechanism used to write macros.
 Macros provide a way to control the code generation and analysis after the call is inlined.
@@ -470,8 +468,6 @@ inline def power(x: Double, inline n: Int) =
 
 def powerCode(x: Expr[Double], n: Expr[Int])(using QuoteContext): Expr[Double] = ...
 ```
-
-⮕ [Continue to Scala 3 macros][macros]
 
 [best-practices]: best-practices.md
 [compiletime]: tutorial/compiletime.md
