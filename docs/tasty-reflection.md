@@ -1,4 +1,7 @@
-# TASTy Reflection
+---
+id: tasty-reflection
+title: TASTy Reflection
+---
 
 The reflection API provides a more complex and comprehensive view on the structure of the code.
 It provides a view on the *Typed Abstract Syntax Trees* **TASTy** and their properties such as types, symbols, positions and comments.

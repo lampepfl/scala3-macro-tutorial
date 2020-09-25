@@ -1,4 +1,7 @@
-# Compile-time operations
+---
+id: compile-time-operations
+title: Compile-time operations
+---
 
 [Scala docs: scala.compiletime][compiletime-api]
 
@@ -78,14 +81,14 @@ Summon all provides a way to summon multiple values at the same time from a tupl
 ⮕ [Continue to Scala 3 macros][macros]
 
 
-[best-practices]: /docs/best-practices.md
-[compiletime]: /docs/compiletime.md
-[cross-compilation]: /docs/cross-compilation.md
-[faq]: /docs/faq.md
-[inline]: /docs/inline.md
-[macros]: /docs/macros.md
-[migration-status]: /docs/migration-status.md
-[quotes]: /docs/quotes.md
-[references]: /docs/references.md
-[tasty]: /docs/tasty-reflection.md
+[best-practices]: best-practices.md
+[compiletime]: compiletime.md
+[cross-compilation]: cross-compilation.md
+[faq]: faq.md
+[inline]: inline.md
+[macros]: macros.md
+[migration-status]: https://scalacenter.github.io/scala-3-migration-guide/docs/macros/migration-status.html
+[quotes]: quotes.md
+[references]: references.md
+[tasty]: tasty-reflection.md
 [compiletime-api]: https://dotty.epfl.ch/api/scala/compiletime/index.html
