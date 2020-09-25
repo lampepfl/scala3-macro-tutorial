@@ -25,11 +25,11 @@ title: Other Recources
 [contributing]: contributing.md
 [best-practices]: best-practices.md
 [compiletime]: tutorial/compiletime.md
-[migration]: https://github.com/scalacenter/scala-3-migration-guide/blob/master/docs/macros.md#how-to
+[migration]: https://scalacenter.github.io/scala-3-migration-guide/docs/macros/migrating-macros.html
 [faq]: faq.md
 [inline]: tutorial/inline.md
 [macros]: tutorial/macros.md
-[migration-status]: https://github.com/scalacenter/scala-3-migration-guide/blob/master/docs/macros.md#migration-status
+[migration-status]: https://scalacenter.github.io/scala-3-migration-guide/docs/macros/migration-status.html
 [quotes]: tutorial/quotes.md
 [references]: references.md
 [tasty]: tutorial/tasty-reflection.md
