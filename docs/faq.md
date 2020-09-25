@@ -3,9 +3,6 @@ id: faq
 title: FAQ
 ---
 
-## How do I ...?
-**Coming soon**
-
 ## Which should I use `Expr(...)` or `'{...}`?
 If you can write your code using `Expr(...)`, you will evaluate more at compile time.
 Only use `'{...}` if you really need to evaluate the code later at runtime, usually because it depends on runtime values.

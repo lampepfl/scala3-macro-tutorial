@@ -13,3 +13,4 @@ Finally, for those macros that need a bit more than expression, we will learn ho
 🚧 We are still in the process of writing the turorial. You can [help us improve it][contributing] 🚧
 
 [inline]: tutorial/inline.md
+[contributing]: contributing.md

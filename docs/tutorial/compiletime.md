@@ -38,7 +38,7 @@ val bool: Boolean = ...
 doSomething(bool) // error: Mode must be a know value but got: bool
 ```
 
-### Summoning
+## Summoning
 
 There are two ways to summon values in inline methods, the first is with a `using` parameter and the second is with one of `summonInline`, `summonAll` or `summonFrom`.
 `using` will summon the value at call site before inlining as if the method was not `inline`.
@@ -64,18 +64,7 @@ Summon all provides a way to summon multiple values at the same time from a tupl
 
 *Coming soon*
 
-## Ops
-
-### `scala.compiletime.ops.boolean`
-*Coming soon*
-
-### `scala.compiletime.ops.int`
-*Coming soon*
-
-### `scala.compiletime.ops.int`
-*Coming soon*
-
-### `scala.compiletime.ops.any`
+## Ops (scala.compiletime.ops)
 *Coming soon*
 
 

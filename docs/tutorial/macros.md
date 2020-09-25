@@ -61,7 +61,7 @@ def evalPowerCode(x: Expr[Double], n: Expr[Int])(using QuoteContext): Expr[Doubl
 The `pow` operation simply computes the value of `xⁿ`.
 The interesting part is how we create and look into the `Expr`s.
 
-### Creating expression with `Expr.apply`
+### Creating expression
 
 Lets first look at `Expr(value)`.
 This will return an expression containing the code representing that value.

@@ -4,10 +4,14 @@ title: Best practices
 ---
 
 ## Inline
-**Coming soon**
+
+### Be careful when inlining for performance
+To take the most advantage of the JVM JIT optimizations you want to avoid generating large methods.
+
 
 ## Macros
 **Coming soon**
+
 
 ## Quoted code
 
