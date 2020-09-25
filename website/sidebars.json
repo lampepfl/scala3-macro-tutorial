@@ -1,7 +1,7 @@
 {
   "docs": {
     "Tutorial": [
-      "tutorial/get-started",
+      "tutorial/introduction",
       "tutorial/inline",
       "tutorial/scala-3-macros",
       "tutorial/quoted-code",
