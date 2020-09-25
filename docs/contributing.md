@@ -35,7 +35,7 @@ Additionally, we will include a cross-compilation/migration guide (M-A).
 
 
 [best-practices]: best-practices.md
-[compiletime]: compiletime.md
+[compiletime]: tutorial/compiletime.md
 [cross-compilation]: cross-compilation.md
 [faq]: faq.md
 [inline]: tutorial/inline.md

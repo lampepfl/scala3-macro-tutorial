@@ -383,10 +383,8 @@ The difference is that in this sencario we do start expanding the maro before th
 Here we used `HashSet` and another valid implemetation that does not need the `Ordering`.
 
 
-⮕ [Continue to TASTy Reflection][tasty]
-
 [best-practices]: best-practices.md
-[compiletime]: compiletime.md
+[compiletime]: tutorial/compiletime.md
 [cross-compilation]: cross-compilation.md
 [faq]: faq.md
 [inline]: tutorial/inline.md

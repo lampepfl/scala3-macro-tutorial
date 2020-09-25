@@ -3,14 +3,14 @@
     "Tutorial": [
       "tutorial/introduction",
       "tutorial/inline",
+      "tutorial/compile-time-operations",
       "tutorial/scala-3-macros",
       "tutorial/quoted-code",
       "tutorial/tasty-reflection"
     ],
-    "Other": [
+    "Extra": [
       "faq",
       "best-practices",
-      "compile-time-operations",
       "other-recources"
     ]
   }

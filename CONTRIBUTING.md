@@ -32,7 +32,7 @@ Additionally, we will include a cross-compilation/migration guide (M-A).
 
 
 [best-practices]: /docs/best-practices.md
-[compiletime]: /docs/compiletime.md
+[compiletime]: /docs/tutorial/compiletime.md
 [cross-compilation]: /docs/cross-compilation.md
 [faq]: /docs/faq.md
 [inline]: /docs/inline.md

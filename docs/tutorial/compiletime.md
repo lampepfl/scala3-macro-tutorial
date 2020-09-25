@@ -3,7 +3,8 @@ id: compile-time-operations
 title: Compile-time operations
 ---
 
-[Scala docs: scala.compiletime][compiletime-api]
+Operations in [scala.compiletime][compiletime-api] are metaprogramming operations that can be used within an `inline` method.
+These operation do cover some common usecases of macros without you needing to define a macro.
 
 ## Reporting
 
@@ -78,11 +79,8 @@ Summon all provides a way to summon multiple values at the same time from a tupl
 *Coming soon*
 
 
-⮕ [Continue to Scala 3 macros][macros]
-
-
 [best-practices]: best-practices.md
-[compiletime]: compiletime.md
+[compiletime]: tutorial/compiletime.md
 [cross-compilation]: cross-compilation.md
 [faq]: faq.md
 [inline]: tutorial/inline.md

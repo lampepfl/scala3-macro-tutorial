@@ -34,7 +34,7 @@ class Footer extends React.Component {
               href={`
                 ${this.props.config.baseUrl}docs/tutorial/introduction.html`}
             >
-              Get started
+              Tutorial
             </a>
             <a
               href={`

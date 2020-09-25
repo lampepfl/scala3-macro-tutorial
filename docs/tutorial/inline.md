@@ -474,7 +474,7 @@ def powerCode(x: Expr[Double], n: Expr[Int])(using QuoteContext): Expr[Double] =
 ⮕ [Continue to Scala 3 macros][macros]
 
 [best-practices]: best-practices.md
-[compiletime]: compiletime.md
+[compiletime]: tutorial/compiletime.md
 [macros]: tutorial/macros.md
 [references]: references.md
 [soft-modifier]: https://dotty.epfl.ch/docs/reference/soft-modifier.html

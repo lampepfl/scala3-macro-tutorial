@@ -24,7 +24,7 @@ title: Scala 3 macros
 
 [contributing]: contributing.md
 [best-practices]: best-practices.md
-[compiletime]: compiletime.md
+[compiletime]: tutorial/compiletime.md
 [migration]: https://github.com/scalacenter/scala-3-migration-guide/blob/master/docs/macros.md#how-to
 [faq]: faq.md
 [inline]: tutorial/inline.md

@@ -192,11 +192,9 @@ The quote syntax `'{ ... }`  provides a way to write an arbirtaty `Expr[T]`.
 For exmaple `'{ doSomething(); getIntResult() }` will generate an `Expr[Int]` that will contain the code that is with the quoted block.
 
 
-⮕ [Continue to Quoted Code][quotes]
-
 
 [best-practices]: best-practices.md
-[compiletime]: compiletime.md
+[compiletime]: tutorial/compiletime.md
 [cross-compilation]: cross-compilation.md
 [faq]: faq.md
 [inline]: tutorial/inline.md
