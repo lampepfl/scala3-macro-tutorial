@@ -1,0 +1,197 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Scala 3 macros · Scala 3 macro tutorial</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="## Inline and macros"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Scala 3 macros · Scala 3 macro tutorial"/><meta property="og:type" content="website"/><meta property="og:url" content="https://lampepfl.github.io//scala3-macro-tutorial/index.html"/><meta property="og:description" content="## Inline and macros"/><meta property="og:image" content="https://lampepfl.github.io//scala3-macro-tutorial/img/scalacenter2x.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://lampepfl.github.io//scala3-macro-tutorial/img/scalacenter2x.png"/><link rel="shortcut icon" href="/scala3-macro-tutorial/img/dotty-logo.svg"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css"/><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster&amp;display=swap"/><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Fira+Code:400,700&amp;display=fallback"/><script src="/scala3-macro-tutorial/js/scrollSpy.js"></script><link rel="stylesheet" href="/scala3-macro-tutorial/css/main.css"/><script src="/scala3-macro-tutorial/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/scala3-macro-tutorial/"><img class="logo" src="/scala3-macro-tutorial/img/dotty-logo-white.svg" alt="Scala 3 macro tutorial"/><h2 class="headerTitleWithLogo">Scala 3 macro tutorial</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/scala3-macro-tutorial/docs/get-started.html" target="_self">User Guide</a></li><li class=""><a href="/scala3-macro-tutorial/docs/contributing.html" target="_self">Contribute</a></li><li class=""><a href="https://github.com/lampepfl/scala3-macro-tutorial" target="_blank">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Macros</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Macros</h3><ul class=""><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/get-started.html">Scala 3 Macro Tutorial</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/best-practices.html">Best practices</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/compile-time-operations.html">Compile-time operations</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/inline.html">Inline</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/scala3-macro-tutorial/docs/scala-3-macros.html">Scala 3 macros</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/quoted-code.html">Quoted Code</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tasty-reflection.html">TASTy Reflection</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/faq.html">FAQ</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><a class="edit-page-link button" href="https://github.com/lampepfl/scala3-macro-tutorial/edit/master/docs/macros.md" target="_blank" rel="noreferrer noopener">Edit</a><h1 id="__docusaurus" class="postHeaderTitle">Scala 3 macros</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="inline-and-macros"></a><a href="#inline-and-macros" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Inline and macros</h2>
+<p>Let us start simple, we will define a macro that will compute <code>xⁿ</code> for a known values <code>x</code> and <code>n</code>.</p>
+<pre><code class="hljs css language-scala"><span class="hljs-keyword">import</span> scala.quoted._
+
+inline <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">power</span></span>(inline x: <span class="hljs-type">Double</span>, inline n: <span class="hljs-type">Int</span>) =
+  ${ evalPowerCode(<span class="hljs-symbol">'x</span>, <span class="hljs-symbol">'n</span>)  }
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">evalPowerCode</span></span>(x: <span class="hljs-type">Expr</span>[<span class="hljs-type">Double</span>], n: <span class="hljs-type">Expr</span>[<span class="hljs-type">Int</span>])(using <span class="hljs-type">QuoteContext</span>): <span class="hljs-type">Expr</span>[<span class="hljs-type">Double</span>] = ...
+</code></pre>
+<p>All macros are defined with an <code>inline def</code> and their bodies contain a splice <code>${ ... }</code> in their implementation.
+Then the macros have a single call to a method that will generate the code that will replace the call to the macro.
+This method will receive the parameters with a quote <code>'</code> and a contextual <code>QuoteContext</code>.
+The <code>scala.quoted.Expr[T]</code> represents the code of some expression.
+We will dig deeper into these concepts later.</p>
+<p>If the macro has type parameters, the implementation will also need to know about them.
+This is done with a contextual <code>scala.quoted.Type[T]</code>.</p>
+<pre><code class="hljs css language-scala">inline <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">logged</span></span>[<span class="hljs-type">T</span>](inline x: <span class="hljs-type">T</span>): <span class="hljs-type">T</span> =
+  ${ loggedCode(<span class="hljs-symbol">'x</span>)  }
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">loggedCode</span></span>[<span class="hljs-type">T</span>](x: <span class="hljs-type">Expr</span>[<span class="hljs-type">T</span>])(using <span class="hljs-type">Type</span>[<span class="hljs-type">T</span>])(using <span class="hljs-type">QuoteContext</span>): <span class="hljs-type">Expr</span>[<span class="hljs-type">T</span>] = ...
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="compilation-vs-interpretation"></a><a href="#compilation-vs-interpretation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Compilation vs interpretation</h3>
+<p>A key difference between inlining and macros is the way they are evaluated.
+Inlining works by replacing code and then optimizing based on rules the compiler knows; on the other hand, a macro will execute user-written code that will generate the code that the macro expands to.
+The inlined code <code>${ evalPowerCode('x, 'n) }</code> is interpreted and will call through Java reflection the method <code>evalPowerCode</code>, then the method will execute as normal code.</p>
+<h3><a class="anchor" aria-hidden="true" id="macro-compilation-and-suspension"></a><a href="#macro-compilation-and-suspension" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Macro compilation and suspension</h3>
+<p>As we need to execute <code>evalPowerCode</code> we need to compile its code first.
+Therefore we cannot define and use a macro in the same class/file.
+It is possible to have the macro definition and its call in the same project as long as the implementation of the macro can be compiled first.
+This is made possible by only expanding macros when the macro has been compiled, otherwise, the compilation of the file is suspended.
+Suspended files are compiled once all non suspended files are compiled.
+In some cases, you will have cyclic dependencies that will block the completion of the compilation.
+To get more information on which files are suspended you can use the <code>-Xprint-suspension</code> compiler flag.</p>
+<h2><a class="anchor" aria-hidden="true" id="simple-expressions"></a><a href="#simple-expressions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Simple Expressions</h2>
+<p>A <code>scala.quoted.Expr[T]</code> contains the code of an expression of type <code>T</code>.</p>
+<p>We could implement <code>evalPowerCode</code> as follows:</p>
+<pre><code class="hljs css language-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">evalPowerCode</span></span>(x: <span class="hljs-type">Expr</span>[<span class="hljs-type">Double</span>], n: <span class="hljs-type">Expr</span>[<span class="hljs-type">Int</span>])(using <span class="hljs-type">QuoteContext</span>): <span class="hljs-type">Expr</span>[<span class="hljs-type">Double</span>] =
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">pow</span></span>(x: <span class="hljs-type">Double</span>, n: <span class="hljs-type">Int</span>): <span class="hljs-type">Double</span> =
+    <span class="hljs-keyword">if</span> n == <span class="hljs-number">0</span> then <span class="hljs-number">1</span> <span class="hljs-keyword">else</span> pow(x, n - <span class="hljs-number">1</span>)
+  <span class="hljs-keyword">val</span> value: <span class="hljs-type">Double</span> = pow(n.unliftOrError, n.unliftOrError)
+  <span class="hljs-type">Expr</span>(value)
+</code></pre>
+<p>The <code>pow</code> operation simply computes the value of <code>xⁿ</code>.
+The interesting part is how we create and look into the <code>Expr</code>s.</p>
+<h3><a class="anchor" aria-hidden="true" id="creating-expression-with-exprapply"></a><a href="#creating-expression-with-exprapply" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Creating expression with <code>Expr.apply</code></h3>
+<p>Lets first look at <code>Expr(value)</code>.
+This will return an expression containing the code representing that value.
+Here the value is computed at compile-time, at runtime we only need to instasiate this value.</p>
+<p>This will work for all <em>primitive types</em>, <em>tuples</em> of any arity, <code>Class</code>, <code>Array</code>, <code>Seq</code>, <code>Set</code>, <code>List</code>, <code>Map</code>, <code>Option</code>, <code>Either</code>, <code>BigInt</code>, <code>BigDecimal</code>, <code>StringContext</code>.
+Other types can also work if a <code>Liftable</code> is implemented for it, we will <a href="#Liftables">see this later</a>.</p>
+<h3><a class="anchor" aria-hidden="true" id="extracting-vaues-out-of-expressions"></a><a href="#extracting-vaues-out-of-expressions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Extracting vaues out of expressions</h3>
+<p>The second operation we used if the <code>unliftOrError</code> on and <code>Expr[T]</code> which will do the opposite operation.
+If the expression contains the code of value it will return this value, otherwise, it will throw a special exception that will stop the macro expansion and report an error saying that the code did not correspond to value.</p>
+<p>We could also use the <code>unlift</code> operation which will return an <code>Option</code>.
+This way we can report the error with a custom error message.</p>
+<pre><code class="hljs css language-scala">  ...
+  (x.unlift, n.unlift) <span class="hljs-keyword">match</span>
+    <span class="hljs-keyword">case</span> (<span class="hljs-type">Some</span>(base), <span class="hljs-type">Some</span>(exponent)) =&gt; pow(base, exponent)
+    <span class="hljs-keyword">case</span> (<span class="hljs-type">Some</span>(_), _) =&gt; report.error(<span class="hljs-string">"Exprected a know value for the exponent, but was "</span> + n.show, n)
+    <span class="hljs-keyword">case</span> _ =&gt; report.error(<span class="hljs-string">"Exprected a know value for the base, but was "</span> + x.show, x)
+</code></pre>
+<p>Alternatively, we can also use the <code>Unlifted</code> extractor</p>
+<pre><code class="hljs css language-scala">  ...
+  (x, n) <span class="hljs-keyword">match</span>
+    <span class="hljs-keyword">case</span> (<span class="hljs-type">Unlifted</span>(base), <span class="hljs-type">Unlifted</span>(exponent)) =&gt; pow(base, exponent)
+    <span class="hljs-keyword">case</span> (<span class="hljs-type">Unlifted</span>(_), _) =&gt; ...
+    <span class="hljs-keyword">case</span> _ =&gt; ...
+</code></pre>
+<p><code>unlift</code>, <code>unliftOrError</code>, and <code>Unlifted</code> will work for all <em>primitive types</em>, <em>tuples</em> of any arity, , <code>Option</code> <code>Seq</code>, <code>Set</code>, <code>Map</code>, <code>Either</code> and <code>StringContext</code>.
+Other types can also work if an <code>Unliftable</code> is implemented for it, we will <a href="#Unliftables">see this later</a>.</p>
+<h3><a class="anchor" aria-hidden="true" id="showing-expressions"></a><a href="#showing-expressions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Showing expressions</h3>
+<p>Expression <code>Expr</code> can be converted to a string representation of the source using <code>.show</code> method.
+This might be useful for example to debug some code:</p>
+<pre><code class="hljs css language-scala">def debugEvalPowerCode(x: Expr[Double], n: Expr[Int])(using QuoteContext): Expr[Double] =
+  println(
+    s"""evalPowerCode
+       |  x := ${x.show}
+       |  n := ${n.show}""".stripMargin)
+  val code = evalPowerCode(x, n)
+  println(s"  code := ${code.show}")
+  code
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="working-with-varargs"></a><a href="#working-with-varargs" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Working with varargs</h3>
+<p>Varargs in are represented with <code>Seq</code>, hence when we write a macro with a <em>vararg</em> we will pass it as an <code>Expr[Seq[T]]</code>.
+It is possible to recover each individual argument using the <code>scala.quoted.Varargs</code> extractor.</p>
+<pre><code class="hljs css language-scala"><span class="hljs-keyword">import</span> scala.quoted._
+
+inline <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">sumNow</span></span>(inline numbers: <span class="hljs-type">Int</span>*): <span class="hljs-type">Int</span> =
+  ${ evalSumCode(<span class="hljs-symbol">'numbers</span>)  }
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">evalSumCode</span></span>(numbersExpr: <span class="hljs-type">Expr</span>[<span class="hljs-type">Seq</span>[<span class="hljs-type">Int</span>]])(using <span class="hljs-type">QuoteContext</span>): <span class="hljs-type">Expr</span>[<span class="hljs-type">Int</span>] =
+  numbersExpr <span class="hljs-keyword">match</span>
+    <span class="hljs-keyword">case</span>  <span class="hljs-type">Varargs</span>(numberExprs) =&gt; <span class="hljs-comment">// numberExprs: Seq[Expr[Int]]</span>
+      <span class="hljs-keyword">val</span> numbers: <span class="hljs-type">Seq</span>[<span class="hljs-type">Int</span>] = numberExprs.map(_.unliftOrError)
+      <span class="hljs-type">Expr</span>(numbers.sum)
+    <span class="hljs-keyword">case</span> _ =&gt; report.error(<span class="hljs-string">"Expected explicit agument. Notation `agrs: _*` is not supported."</span>, numbersExpr)
+</code></pre>
+<p>The extractor will match a call to <code>sumNow(1, 2, 3)</code> and extract a <code>Seq[Expr[Int]]</code> containing the code of each parameter.
+But, if we try to match the argument of the call <code>sumNow(nums: _*)</code>, the extractor will not match.</p>
+<p><code>Varargs</code> can also be used as a constructor, <code>Varargs(Expr(1), Expr(2), Expr(3))</code> will return a <code>Expr[Seq[Int]]</code>.
+We will see how this can be useful later.</p>
+<h2><a class="anchor" aria-hidden="true" id="constucting-complex-expressions"></a><a href="#constucting-complex-expressions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Constucting complex expressions</h2>
+<h3><a class="anchor" aria-hidden="true" id="collections"></a><a href="#collections" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Collections</h3>
+<p>We have seen how to convert a <code>List[Int]</code> into an <code>Expr[List[Int]]</code> using <code>Expr.apply</code>.
+How about converting a <code>List[Expr[Int]]</code> into <code>Expr[List[Int]]</code>?
+We mentioned that <code>Varargs.apply</code> can do this for sequences, but other methods are available.</p>
+<ul>
+<li><code>Expr.ofList</code>: Transform a <code>List[Expr[T]]</code> into <code>Expr[List[T]]</code></li>
+<li><code>Expr.ofSeq</code>: Transform a <code>List[Expr[T]]</code> into <code>Expr[List[T]]</code> (just like <code>Varargs</code>)</li>
+<li><code>Expr.ofTupleFromSeq</code>: Transform a <code>Seq[Expr[T]]</code> into <code>Expr[Tuple]</code></li>
+<li><code>Expr.ofTuple</code>: Transform a <code>(Expr[T1], ..., Expr[Tn])</code> into <code>Expr[(T1, ..., Tn)]</code></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="simple-blocks"></a><a href="#simple-blocks" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Simple Blocks</h3>
+<p><code>Expr.block</code> provides a simple way to create a block of code <code>{ stat1; ...; statn; expr }</code>.
+Its first arguments is a list with all the statements and the second argument is the expession at the ind of the block.</p>
+<pre><code class="hljs css language-scala">inline <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test</span></span>(inline ignore: <span class="hljs-type">Boolean</span>, computation: =&gt; <span class="hljs-type">Unit</span>): <span class="hljs-type">Boolean</span> =
+  ${ testCode(<span class="hljs-symbol">'ignore</span>, <span class="hljs-symbol">'computation</span>) }
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">testCode</span></span>(ignore: <span class="hljs-type">Expr</span>[<span class="hljs-type">Boolean</span>], computation: <span class="hljs-type">Expr</span>[<span class="hljs-type">Unit</span>]): <span class="hljs-type">Expr</span>[<span class="hljs-type">Boolean</span>] =
+  <span class="hljs-keyword">if</span> ignore.unliftOrError then <span class="hljs-type">Expr</span>(<span class="hljs-literal">false</span>)
+  <span class="hljs-keyword">else</span> <span class="hljs-type">Expr</span>.block(<span class="hljs-type">List</span>(computation), <span class="hljs-type">Expr</span>(<span class="hljs-literal">true</span>))
+</code></pre>
+<p>This is useful when we whant to generate code contatining several side effects.</p>
+<h3><a class="anchor" aria-hidden="true" id="simple-matching"></a><a href="#simple-matching" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Simple matching</h3>
+<p><code>Expr.matches</code> can be used to check if an expression matches another.
+With this method we could implement an <code>unlift</code> operation for <code>Expr[Boolean]</code> as follows.</p>
+<pre><code class="hljs css language-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">unlift</span></span>(boolExpr: <span class="hljs-type">Expr</span>[<span class="hljs-type">Boolean</span>]): <span class="hljs-type">Option</span>[<span class="hljs-type">Boolean</span>] =
+  <span class="hljs-keyword">if</span> boolExpr.matches(<span class="hljs-type">Expr</span>(<span class="hljs-literal">true</span>)) then <span class="hljs-type">Some</span>(<span class="hljs-literal">true</span>)
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> boolExpr.matches(<span class="hljs-type">Expr</span>(<span class="hljs-literal">false</span>)) then <span class="hljs-type">Some</span>(<span class="hljs-literal">false</span>)
+  <span class="hljs-keyword">else</span> <span class="hljs-type">None</span>
+</code></pre>
+<p>It may also be used to compare two user written expression.</p>
+<h3><a class="anchor" aria-hidden="true" id="arbitrary-expresions"></a><a href="#arbitrary-expresions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Arbitrary expresions</h3>
+<p>Last but not least, it is possible to create an <code>Expr[T]</code> arbirtary code in it using quotes.
+The quote syntax <code>'{ ... }</code>  provides a way to write an arbirtaty <code>Expr[T]</code>.
+For exmaple <code>'{ doSomething(); getIntResult() }</code> will generate an <code>Expr[Int]</code> that will contain the code that is with the quoted block.</p>
+<p>⮕ <a href="/scala3-macro-tutorial/docs/quoted-code.html">Continue to Quoted Code</a></p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/scala3-macro-tutorial/docs/inline.html"><span class="arrow-prev">← </span><span>Inline</span></a><a class="docs-next button" href="/scala3-macro-tutorial/docs/quoted-code.html"><span>Quoted Code</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#inline-and-macros">Inline and macros</a><ul class="toc-headings"><li><a href="#compilation-vs-interpretation">Compilation vs interpretation</a></li><li><a href="#macro-compilation-and-suspension">Macro compilation and suspension</a></li></ul></li><li><a href="#simple-expressions">Simple Expressions</a><ul class="toc-headings"><li><a href="#creating-expression-with-exprapply">Creating expression with <code>Expr.apply</code></a></li><li><a href="#extracting-vaues-out-of-expressions">Extracting vaues out of expressions</a></li><li><a href="#showing-expressions">Showing expressions</a></li><li><a href="#working-with-varargs">Working with varargs</a></li></ul></li><li><a href="#constucting-complex-expressions">Constucting complex expressions</a><ul class="toc-headings"><li><a href="#collections">Collections</a></li><li><a href="#simple-blocks">Simple Blocks</a></li><li><a href="#simple-matching">Simple matching</a></li><li><a href="#arbitrary-expresions">Arbitrary expresions</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer" style="background-color:#224951"><section class="sitemap"><a href="/scala3-macro-tutorial/" class="nav-home"><img src="/scala3-macro-tutorial/img/dotty-logo-white.svg" alt="Scala 3 macro tutorial" width="66" height="58"/></a><div><h5>Docs</h5><a href="
+                /scala3-macro-tutorial/docs/get-started.html">Get started</a><a href="
+                /scala3-macro-tutorial/docs/contributing.html">Contribute</a><a href="
+                /scala3-macro-tutorial/docs/faq.html">FAQ</a></div><div><h5>Community</h5><a href="https://gitter.im/scala/center" target="_blank">Chat on Gitter</a><a href="https://users.scala-lang.org/" target="_blank">Discuss on Scala Users</a></div><div><h5>More</h5><a href="https://github.com/lampepfl/scala3-macro-tutorial" target="_blank">GitHub</a></div></section><section class="copyright">Copyright © 2020 Scala Center</section></footer></div></body></html>
