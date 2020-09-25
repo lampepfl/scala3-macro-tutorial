@@ -1,7 +1,7 @@
 # Scala 3 Macro Tutorial
 
 This tutorial covers all the features involved in writing macros in Scala 3.
-Visit [the website](https://lampepfl.github.io/scala3-macro-tutorial/) to learn.
+Visit [the website](https://lampepfl.github.io/scala3-macro-tutorial/) to learn more about it.
 We will start with the new `inline` feature which is the entry point of all macros.
 We also cover some meetaprogramming features that can be used with `inline`.
 Then we learn how to create a macro using `inline` and quoted expressions.
