@@ -386,7 +386,6 @@ Here we used `HashSet` and another valid implemetation that does not need the `O
 
 [best-practices]: best-practices.md
 [compiletime]: tutorial/compiletime.md
-[cross-compilation]: cross-compilation.md
 [faq]: faq.md
 [inline]: tutorial/inline.md
 [macros]: tutorial/macros.md

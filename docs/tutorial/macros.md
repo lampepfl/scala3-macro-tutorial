@@ -1,6 +1,6 @@
 ---
 id: scala-3-macros
-title: Scala 3 macros
+title: Scala 3 Macros
 ---
 
 ## Inline and macros
@@ -195,7 +195,6 @@ For exmaple `'{ doSomething(); getIntResult() }` will generate an `Expr[Int]` th
 
 [best-practices]: best-practices.md
 [compiletime]: tutorial/compiletime.md
-[cross-compilation]: cross-compilation.md
 [faq]: faq.md
 [inline]: tutorial/inline.md
 [macros]: tutorial/macros.md

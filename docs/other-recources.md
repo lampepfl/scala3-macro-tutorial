@@ -1,6 +1,6 @@
 ---
-id: scala-3-macros
-title: Scala 3 macros
+id: other-recources
+title: Other Recources
 ---
 
 ## Scala 2 migration

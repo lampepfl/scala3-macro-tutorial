@@ -1,6 +1,6 @@
 ---
 id: compile-time-operations
-title: Compile-time operations
+title: Scala Compile-time Operations
 ---
 
 Operations in [scala.compiletime][compiletime-api] are metaprogramming operations that can be used within an `inline` method.
@@ -70,7 +70,6 @@ Summon all provides a way to summon multiple values at the same time from a tupl
 
 [best-practices]: best-practices.md
 [compiletime]: tutorial/compiletime.md
-[cross-compilation]: cross-compilation.md
 [faq]: faq.md
 [inline]: tutorial/inline.md
 [macros]: tutorial/macros.md

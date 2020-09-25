@@ -1,6 +1,6 @@
 ---
 id: best-practices
-title: Best practices
+title: Best Practices
 ---
 
 ## Inline

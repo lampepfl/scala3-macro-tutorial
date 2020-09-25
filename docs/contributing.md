@@ -36,7 +36,7 @@ Additionally, we will include a cross-compilation/migration guide (M-A).
 
 [best-practices]: best-practices.md
 [compiletime]: tutorial/compiletime.md
-[cross-compilation]: cross-compilation.md
+[cross-compilation]: https://scalacenter.github.io/scala-3-migration-guide/docs/macros/migrating-macros.html#defining-a-project-that-cross-compiles-macros
 [faq]: faq.md
 [inline]: tutorial/inline.md
 [macros]: tutorial/macros.md
