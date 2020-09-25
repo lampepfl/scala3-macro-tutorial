@@ -1,4 +1,7 @@
-# Inline
+---
+id: inline
+title: Inline
+---
 
 Inlining is a common compile-time meta-programming technique for performance optimizations.
 Scala 3 makes several improvements related to inlining:
@@ -470,8 +473,8 @@ def powerCode(x: Expr[Double], n: Expr[Int])(using QuoteContext): Expr[Double] =
 
 ⮕ [Continue to Scala 3 macros][macros]
 
-[best-practices]: /docs/best-practices.md
-[compiletime]: /docs/compiletime.md
-[macros]: /docs/macros.md
-[references]: /docs/references.md
+[best-practices]: best-practices.md
+[compiletime]: compiletime.md
+[macros]: macros.md
+[references]: references.md
 [soft-modifier]: https://dotty.epfl.ch/docs/reference/soft-modifier.html

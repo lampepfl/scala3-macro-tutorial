@@ -1,4 +1,7 @@
-# Best practices
+---
+id: best-practices
+title: Best practices
+---
 
 ## Inline
 **Coming soon**

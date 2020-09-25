@@ -1,4 +1,7 @@
-# FAQ
+---
+id: faq
+title: FAQ
+---
 
 ## How do I ...?
 **Coming soon**
