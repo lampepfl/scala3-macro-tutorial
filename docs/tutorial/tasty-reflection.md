@@ -21,8 +21,6 @@ def pow(x: Expr[Int])(using QuoteContext): Expr[Int] = {
 This will import all the types and modules (with extension methods) of the API.
 
 The full imported API can be found here: [Reflection](http://dotty.epfl.ch/api/scala/tasty/Reflection.html)
-* [Types hierarchy definitions](http://dotty.epfl.ch/api/scala/tasty/Reflection.html)
-* [Modules and other useful methods](https://dotty.epfl.ch/api/scala/tasty/Reflection.html)
 
 For example to find what is a `Term`, we can see in the hireachy that it is a subtype of `Statement` which is a subtype of `Tree`.
 If we look into the [`TermMethods`](http://dotty.epfl.ch/api/scala/tasty/Reflection/TermMethods.html) we will find all the extension methods that are defined for `Term` such as `Term.tpe` which returns a `Type`.
