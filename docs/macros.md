@@ -68,7 +68,7 @@ This will return an expression containing the code representing that value.
 Here the value is computed at compile-time, at runtime we only need to instasiate this value.
 
 This will work for all _primitive types_, _tuples_ of any arity, `Class`, `Array`, `Seq`, `Set`, `List`, `Map`, `Option`, `Either`, `BigInt`, `BigDecimal`, `StringContext`.
-Other types can also work if a `Liftable` is implemented for it, we will [see this later](#Liftables).
+Other types can also work if a `Liftable` is implemented for it, we will [see this later][quotes].
 
 ### Extracting vaues out of expressions
 
@@ -97,7 +97,7 @@ Alternatively, we can also use the `Unlifted` extractor
 ```
 
 `unlift`, `unliftOrError`, and `Unlifted` will work for all _primitive types_, _tuples_ of any arity, , `Option` `Seq`, `Set`, `Map`, `Either` and `StringContext`.
-Other types can also work if an `Unliftable` is implemented for it, we will [see this later](#Unliftables).
+Other types can also work if an `Unliftable` is implemented for it, we will [see this later][quotes].
 
 
 ### Showing expressions
