@@ -1,0 +1,82 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Other Recources · Scala 3 Macro Tutorial</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="## Scala 2 migration"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Other Recources · Scala 3 Macro Tutorial"/><meta property="og:type" content="website"/><meta property="og:url" content="https://lampepfl.github.io//scala3-macro-tutorial/index.html"/><meta property="og:description" content="## Scala 2 migration"/><meta property="og:image" content="https://lampepfl.github.io//scala3-macro-tutorial/img/scalacenter2x.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://lampepfl.github.io//scala3-macro-tutorial/img/scalacenter2x.png"/><link rel="shortcut icon" href="/scala3-macro-tutorial/img/dotty-logo.svg"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css"/><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster&amp;display=swap"/><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Fira+Code:400,700&amp;display=fallback"/><script src="/scala3-macro-tutorial/js/scrollSpy.js"></script><link rel="stylesheet" href="/scala3-macro-tutorial/css/main.css"/><script src="/scala3-macro-tutorial/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/scala3-macro-tutorial/"><img class="logo" src="/scala3-macro-tutorial/img/dotty-logo-white.svg" alt="Scala 3 Macro Tutorial"/><h2 class="headerTitleWithLogo">Scala 3 Macro Tutorial</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/scala3-macro-tutorial/docs/tutorial/introduction.html" target="_self">Tutorial</a></li><li class=""><a href="/scala3-macro-tutorial/docs/contributing.html" target="_self">Contribute</a></li><li class=""><a href="https://github.com/lampepfl/scala3-macro-tutorial" target="_blank">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Extra</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorial</h3><ul class=""><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/introduction.html">Introduction</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/inline.html">Inline</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/compile-time-operations.html">Scala Compile-time Operations</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/scala-3-macros.html">Scala 3 Macros</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/quoted-code.html">Quoted Code</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/tasty-reflection.html">TASTy Reflection</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Extra</h3><ul class=""><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/faq.html">FAQ</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/best-practices.html">Best Practices</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/scala3-macro-tutorial/docs/other-recources.html">Other Recources</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><a class="edit-page-link button" href="https://github.com/lampepfl/scala3-macro-tutorial/edit/master/docs/other-recources.md" target="_blank" rel="noreferrer noopener">Edit</a><h1 id="__docusaurus" class="postHeaderTitle">Other Recources</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="scala-2-migration"></a><a href="#scala-2-migration" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Scala 2 migration</h2>
+<ul>
+<li><a href="https://github.com/scalacenter/scala-3-migration-guide/blob/master/docs/macros.md#how-to">Scala 2 migration and cross-compilation</a></li>
+<li><a href="https://github.com/scalacenter/scala-3-migration-guide/blob/master/docs/macros.md#migration-status">Migration status</a></li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="dotty-documentation"></a><a href="#dotty-documentation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Dotty documentation</h2>
+<ul>
+<li><a href="https://dotty.epfl.ch/docs/reference/metaprogramming/toc.html">Dotty Documentation</a></li>
+<li><a href="https://www.scala-lang.org/blog/2018/04/30/in-a-nutshell.html">Macros: The Plan For Scala 3</a></li>
+<li><a href="https://github.com/lampepfl/dotty-macro-examples">Examples</a> - a repository with small, self-contained examples of various tasks done with Dotty macros.</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="talks"></a><a href="#talks" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Talks</h2>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=ZfDS_gJyPTc">Scala Days - Metaprogramming in Dotty</a></li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="projects-and-examples"></a><a href="#projects-and-examples" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Projects and examples</h2>
+<ul>
+<li><a href="https://github.com/lampepfl/dotty-macro-examples">dotty-macro-examples</a></li>
+<li><a href="https://github.com/dotty-staging/xml-interpolator/tree/master">XML Interpolator</a></li>
+<li><a href="https://github.com/dotty-staging/shapeless/tree/shapeless-3">Shapeless 3</a></li>
+<li><em>More Coming soon</em></li>
+</ul>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/scala3-macro-tutorial/docs/best-practices.html"><span class="arrow-prev">← </span><span>Best Practices</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#scala-2-migration">Scala 2 migration</a></li><li><a href="#dotty-documentation">Dotty documentation</a></li><li><a href="#talks">Talks</a></li><li><a href="#projects-and-examples">Projects and examples</a></li></ul></nav></div><footer class="nav-footer" id="footer" style="background-color:#224951"><section class="sitemap"><a href="/scala3-macro-tutorial/" class="nav-home"><img src="/scala3-macro-tutorial/img/dotty-logo-white.svg" alt="Scala 3 Macro Tutorial" width="66" height="58"/></a><div><h5>Docs</h5><a href="
+                /scala3-macro-tutorial/docs/tutorial/introduction.html">Tutorial</a><a href="
+                /scala3-macro-tutorial/docs/contributing.html">Contribute</a><a href="
+                /scala3-macro-tutorial/docs/faq.html">FAQ</a></div><div><h5>Community</h5><a href="https://gitter.im/lampepfl/dotty" target="_blank">Chat on Gitter</a><a href="https://users.scala-lang.org/" target="_blank">Discuss on Scala Users</a></div><div><h5>More</h5><a href="https://github.com/lampepfl/scala3-macro-tutorial" target="_blank">GitHub</a></div></section><section class="copyright">Copyright © 2020 LAMP EPFL</section></footer></div></body></html>
