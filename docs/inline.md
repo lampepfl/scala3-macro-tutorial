@@ -55,7 +55,7 @@ We can use the modifier `inline` to define a method that should be inlined at ca
 ```scala
 inline def logged[T](level: Int, message: => String)(inline op: T): Unit =
   println(s"[$level]Computing $message")
-  val res = thunk
+  val res = op
   println(s"[$level]Result of $message: $res")
   res
 ```
