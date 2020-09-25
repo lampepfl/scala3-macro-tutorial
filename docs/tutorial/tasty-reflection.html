@@ -66,10 +66,6 @@ We can use <code>scala.quoted.qctx</code> to import it.</p>
 </code></pre>
 <p>This will import all the types and modules (with extension methods) of the API.</p>
 <p>The full imported API can be found here: <a href="http://dotty.epfl.ch/api/scala/tasty/Reflection.html">Reflection</a></p>
-<ul>
-<li><a href="http://dotty.epfl.ch/api/scala/tasty/Reflection.html">Types hierarchy definitions</a></li>
-<li><a href="https://dotty.epfl.ch/api/scala/tasty/Reflection.html">Modules and other useful methods</a></li>
-</ul>
 <p>For example to find what is a <code>Term</code>, we can see in the hireachy that it is a subtype of <code>Statement</code> which is a subtype of <code>Tree</code>.
 If we look into the <a href="http://dotty.epfl.ch/api/scala/tasty/Reflection/TermMethods.html"><code>TermMethods</code></a> we will find all the extension methods that are defined for <code>Term</code> such as <code>Term.tpe</code> which returns a <code>Type</code>.
 As it is a subtype of <code>Tree</code> we can also look into the <a href="http://dotty.epfl.ch/api/scala/tasty/Reflection/TreeMethods.html"><code>TreeMethods</code></a> to find more methods such as <code>Tree.pos</code>.
