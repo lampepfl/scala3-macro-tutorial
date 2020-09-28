@@ -4,6 +4,7 @@ title: Introduction
 ---
 
 This tutorial covers all the features involved in writing macros in Scala 3.
+
 The metaprogramming API of Scala 3 is designed in layers to gradually
 support different levels of use-cases. Each successive layer exposes additional
 abstractions and offers more fine-grained control.

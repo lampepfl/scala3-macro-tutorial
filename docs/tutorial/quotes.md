@@ -4,9 +4,9 @@ title: Quoted Code
 ---
 
 ## Code blocks
-A quoted code block `'{ ... }` is syntactacaly similar to a string quote `" ... "` with the diffecence that the fist contains typed code.
+A quoted code block `'{ ... }` is syntactically similar to a string quote `" ... "` with the difference that the fist contains typed code.
 To insert a code into other code we use the `$expr` or `${ expr }` where `expr` is of type `Expr[T]`.
-Intuitively, the code directly within the quote is not excecuted now, while the code within the splices is evaluated and their results are then spliced int the sourounding expression.
+Intuitively, the code directly within the quote is not executed now, while the code within the splices is evaluated and their results are then spliced int the surrounding expression.
 
 ```scala
 val msg = Expr("Hello")
@@ -14,16 +14,16 @@ val printHello = '{ print($hello) }
 println(printHello.show) // print("Hello")
 ```
 
-In general, the quote delays the excecution while the splice makes it happen before the sourounding code.
-This generalization allows us to also give meeining to a `${ .. }` that is not within a quote, this evaluate the code within the splice at compile-time and place the result in the generated code.
-Due to some thechincal considerations we only allow it directly within `inline` definitions that we call a [macro][macros].
+In general, the quote delays the execution while the splice makes it happen before the surrounding code.
+This generalisation allows us to also give meaning to a `${ .. }` that is not within a quote, this evaluate the code within the splice at compile-time and place the result in the generated code.
+Due to some technical considerations we only allow it directly within `inline` definitions that we call a [macro][macros].
 
 It is possible to write a quote within a quote, but usually when we write macros we do not encounter such code.
 
-## Level consitency
+## Level consistency
 One cannot simple write any arbitrary code within quotes and within splices.
 A part of the program will live at compile-time and the other will live at runtime.
-Consider the folllowing ill-consturucted code.
+Consider the following ill-constructed code.
 
 ```scala
 def myBadCounter1(using QuoteContext): Expr[Int] = {
@@ -31,7 +31,7 @@ def myBadCounter1(using QuoteContext): Expr[Int] = {
   '{ x += 1; x }
 }
 ```
-The problem with this code is that `x` exists durring compilation, but then we try to use it after the compiler has finished (maybe even in another machine).
+The problem with this code is that `x` exists during compilation, but then we try to use it after the compiler has finished (maybe even in another machine).
 Clearly it would be impossible to access its value and update it.
 
 Now consider the dual version, where we define the variable at runtime and try to access it at compile-time.
@@ -42,7 +42,7 @@ def myBadCounter2(using QuoteContext): Expr[Int] = '{
 }
 ```
 Clearly, this should work as the variable does not exist yet.
-To make sure you can only write programs that do not contain these kinds of probems we restrict the set of references to variable and other definitions.
+To make sure you can only write programs that do not contain these kinds of problems we restrict the set of references to variable and other definitions.
 
 We introduce _levels_ as a count of the number of quotes minus the number of splices surrounding an expression or definition.
 
@@ -57,11 +57,11 @@ We introduce _levels_ as a count of the number of quotes minus the number of spl
 }
 ```
 
-The system will allow at any level references to global definitions such as `println`, but will restrict refrences to local definitions.
-A local definition can only be accessed if it is defined a the same level as its reference.
+The system will allow at any level references to global definitions such as `println`, but will restrict references to local definitions.
+A local definition can only be accessed if it is defined at the same level as its reference.
 This will catch the errors in `myBadCounter1` and `myBadCounter2`.
 
-Eventhoug we cannot rever to variable inside of a quote, we can still pass its current value to it by lifting the value to an expression using `Expr.apply`.
+Even though we cannot refer to variable inside of a quote, we can still pass its current value to it by lifting the value to an expression using `Expr.apply`.
 
 
 ## Generics
@@ -79,7 +79,7 @@ def evalAndUse[T](x: Expr[T]) = '{
 ```
 
 Here we will get an error telling us that we are missing a contextual `Type[T]`.
-Therefore we can easely fix it by writing
+Therefore we can easily fix it by writing
 ```scala
 def evalAndUse[X](x: Expr[X])(using Type[X])(using QuoteContext) = '{
   val x2: X = $x
@@ -196,7 +196,7 @@ def valueOfBooleanOption(x: Expr[Option[Boolean]])(using QuoteContext): Option[O
 
 ### Matching types of expression
 
-We can also match agains code of an arbitrarry type `T`.
+We can also match agains code of an arbitrary type `T`.
 Bellow we match agains `$x` of type `T` and we get out an `x` of type `Expr[T]`.
 
 ```scala
@@ -224,7 +224,7 @@ case '{ Some($x: Boolean) } => // x: Expr[Boolean]
 
 ### Matching reciver of methods
 
-When we want to match the reciver of a method we need to explicitly state its type
+When we want to match the receiver of a method we need to explicitly state its type
 
 ```scala
 case '{ ($ls: List[Int]).sum } =>
@@ -298,11 +298,11 @@ Then we used the `Consts` to match known constants in the `Seq[Expr[String]]` to
 
 ## The QuoteContext
 The `QuoteContext` is the main entry point for the creation of all quotes.
-This contex is usually just passed around through contextual abstractions (`using` and `?=>`).
+This context is usually just passed around through contextual abstractions (`using` and `?=>`).
 Each quote scope will provide have its own `QuoteContext`.
-New scopes are intoduced each time a splice is intoduced `${...}`.
+New scopes are introduced each time a splice is introduced `${...}`.
 Though it looks like a splice takes an expression as argument, it actually takes a `QuoteContext ?=> Expr[T]`.
-Therfore we could actually write it explicitly as `${ (using q) => ... }`, this might be useful when debuging to avoid generated names for these scopes.
+Therefore we could actually write it explicitly as `${ (using q) => ... }`, this might be useful when debugging to avoid generated names for these scopes.
 
 The method `scala.quoted.qctx` provides a simple way to use the current `QuoteContext` without naming it.
 It is usually imported along with the `QuoteContext` using `import scala.quoted._`.
@@ -315,14 +315,14 @@ ${ body(using qctx) }
 If you explicitly name a `QuoteContext` `qctx` you will shadow this definition.
 
 When we write a top level splice in a macro we are calling something similar to the following definition.
-This splice will provide the initial `QuoteContext` asociated with the macro expansion.
+This splice will provide the initial `QuoteContext` associated with the macro expansion.
 ```scala
 def $[T](x: QuoteContext ?=> Expr[T]): T = ...
 ```
 
 When we have a splice within a quote, the inner quote context will depend on the outer one.
 This link is represented using the `QuoteContext.Nested` type.
-This relation tells us that it is safe to use expressions createed with `q1` within the scope of `q2` but not the other way around (this constraint is statically checked yet).
+This relation tells us that it is safe to use expressions created with `q1` within the scope of `q2` but not the other way around (this constraint is statically checked yet).
 
 ```scala
 def f(using q1: QuoteContext) = '{
@@ -332,18 +332,18 @@ def f(using q1: QuoteContext) = '{
 }
 ```
 
-We can imagine that a nested splice is like the following method, where `ctx` is the context recived by the sourounding quote.
+We can imagine that a nested splice is like the following method, where `ctx` is the context received by the surrounding quote.
 ```scala
 def $[T](using ctx: QuoteContext)(x: ctx.Nested ?=> Expr[T]): T = ...
 ```
 
 ## β-reduction
 When we have a lambda applied to an argument in a quote `'{ ((x: Int) => x + x)(y) }` we do not reduce it within the quote, the code is kept as is.
-There is an optimization that β-reduce all lambdas directly applied to parameters to aboid the creation of the closure.
+There is an optimisation that β-reduce all lambdas directly applied to parameters to avoid the creation of the closure.
 This will not be visible from the quotes perspective.
 
 Sometime it is useful to perform this β-reduction on the quotes directly.
-We provide the function `Expr.betaReduce[T]` that recives an `Expr[T]` and β-reduce if it ccontains a directly applied lambda.
+We provide the function `Expr.betaReduce[T]` that receives an `Expr[T]` and β-reduce if it contains a directly applied lambda.
 
 ```scala
 Expr.betaReduce('{ ((x: Int) => x + x)(y) }) // returns '{ val x = y; x + x }
@@ -380,8 +380,8 @@ def setForCode[T: Type](using QuoteContext): Expr[Set[T]] =
     case _ => '{ HashSet.empty[T] }
 ```
 
-The difference is that in this sencario we do start expanding the maro before the implicit search failure and we can write arbirtary code to hande the case where it is not found.
-Here we used `HashSet` and another valid implemetation that does not need the `Ordering`.
+The difference is that in this scenario we do start expanding the macro before the implicit search failure and we can write arbitrary code to handle the case where it is not found.
+Here we used `HashSet` and another valid implementation that does not need the `Ordering`.
 
 
 [best-practices]: best-practices.md

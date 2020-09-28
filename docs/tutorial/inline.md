@@ -5,11 +5,9 @@ title: Inline
 
 Inlining is a common compile-time meta-programming technique, typically used to achieve performance optimizations. As we will see, in Scala 3, the concept of inlining provides us with an entrypoint to programming with macros.
 
-Compared to the previous versions, Scala 3 makes several improvements related to inlining:
-
 1. It introduces inline as a [soft keyword][soft-modifier].
 2. It guarantees that inlining actually happens instead of being best-effort.
-3. It introduces operations that are guaranteed to evaluate at compiletime.
+3. It introduces operations that are guaranteed to evaluate at compile-time.
 
 ## Inline Constants
 
@@ -29,10 +27,10 @@ val pie2 = pie + pie // val pie2 = "🥧🥧"
 ```
 
 In the code above, the references `pi` and `pie` are inlined.
-Then an optimization called "constant folding" is applied by the compiler, which  computes the resulting value `pi2` and `pie2` at _compile-time_.
+Then an optimization called "constant folding" is applied by the compiler, which computes the resulting value `pi2` and `pie2` at _compile-time_.
 
 > #### Inline (Scala 3) vs. final (Scala 2)
-> In Scala 2, we would have used the modifier `final` in the definition that is  without a return type:
+> In Scala 2, we would have used the modifier `final` in the definition that is without a return type:
 >
 > ```scala
 > final val pi = 3.141592653589793
@@ -78,6 +76,7 @@ logged(logLevel, getMessage()) {
   computeSomthing()
 }
 ```
+
 and rewrites it to:
 
 ```Scala
@@ -110,7 +109,7 @@ that inlining handles those parameters differently:
 The way the different parameters are translated guarantees that inlining a call **will not change** its semantics.
 This implies that the initial elaboration (overloading resolution, implicit search, ...), performed while typing the body of the inline method, will not change when inlined.
 
-For example consider the following code:
+For example, consider the following code:
 
 ```scala
 class Logger:
@@ -145,7 +144,7 @@ Even though now we know that `x` is a `String`, the call `logger.log(x)` still r
 
 ### Inline Parameters
 
-One important application of inlining is to enable constant folding optimization across method boundaries.
+One important application of inlining is to enable constant folding optimisation across method boundaries.
 Inline parameters do not create bindings and their code is duplicated everywhere they are used.
 
 ```scala
@@ -386,6 +385,7 @@ This ensures that the call semantics are the same for both methods.
 
 #### Retained inline methods
 It is possible to implement or override a normal method with an inline method.
+
 Consider the following example:
 
 ```scala
@@ -416,7 +416,7 @@ class PrintLogger inline InlineLogger:
 ```
 
 This forces the implementation of `log` to be an inline method and also allows `inline` parameters.
-Maybe unintuitively, the `log` on the interface `InlineLogger` cannot be directly called. The method implementation is not statically known and we thus do not know what to inline. Calling an abstract inline methods thus results in an error.
+Counterintuitively, the `log` on the interface `InlineLogger` cannot be directly called. The method implementation is not statically known and we thus do not know what to inline. Calling an abstract inline methods thus results in an error.
 The usefuleness of abstract inline methods becomes apparent when used in another inline method:
 
 ```scala
@@ -431,7 +431,7 @@ val logger: PrintLogger = new PrintLogger
 logger.log(x)
 ```
 After inlining, the call to `log` is de-virtualized and known to be on `PrintLogger`.
-Therfore also the code of `log` can be inlined.
+Therefore also the code of `log` can be inlined.
 
 #### Summary of inline methods
 * All `inline` methods are final.
@@ -439,11 +439,11 @@ Therfore also the code of `log` can be inlined.
 * If an inline method overrides/implements a normal method then it must be retained and retained methods cannot have inline parameters.
 * Abstract `inline` methods cannot be called directly (except in inline code).
 
-
 ## Transparent Inline Methods
 Transparent inlines are a simple, yet powerful, extension to `inline` methods and unlock many metaprogramming usecases.
 Calls to transparents allow for an inline piece of code to refine the return type based on the precise type of the inlined expression.
 In Scala 2 parlance, transparents capture the essence of _whitebox macros_.
+
 
 ```scala
 transparent inline def default(inline name: String): Any =

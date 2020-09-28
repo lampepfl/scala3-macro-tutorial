@@ -4,7 +4,7 @@ title: Scala Compile-time Operations
 ---
 
 Operations in [scala.compiletime][compiletime-api] are metaprogramming operations that can be used within an `inline` method.
-These operation do cover some common usecases of macros without you needing to define a macro.
+These operation do cover some common use cases of macros without you needing to define a macro.
 
 ## Reporting
 
@@ -19,10 +19,10 @@ inline def doSomething(inline mode: Boolean): Unit =
 doSomething(true)
 doSomething(false)
 val bool: Boolean = ...
-doSomething(bool) // error: Mode must be a know value
+doSomething(bool) // error: Mode must be a known value
 ```
 
-If `error` is called ouside an inline method the error will be emitted when compiling that call.
+If `error` is called outside an inline method the error will be emitted when compiling that call.
 If the `error` is written inside an inline method, the error will be emitted only if after inlining the call in not removed as part of a dead branch.
 In the previous example we used the value of `mode` is know we would only keep one of the first two branches.
 
@@ -32,10 +32,10 @@ If we want to include part the source code of the arguments in the error message
 inline def doSomething(inline mode: Boolean): Unit = 
   if mode then ...
   else if !mode then ...
-  else error(code"Mode must be a know value but got: $mode")
+  else error(code"Mode must be a known value but got: $mode")
 
 val bool: Boolean = ...
-doSomething(bool) // error: Mode must be a know value but got: bool
+doSomething(bool) // error: Mode must be a known value but got: bool
 ```
 
 ## Summoning
