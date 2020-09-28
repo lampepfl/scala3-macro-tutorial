@@ -8,7 +8,7 @@ If you can write your code using `Expr(...)`, you will evaluate more at compile 
 Only use `'{...}` if you really need to evaluate the code later at runtime, usually because it depends on runtime values.
 
 ## Which is better between `Expr(true)` or `'{true}`?
-All quotes containg a value of a primitive type is optimized to an `Expr.apply`.
+All quotes containing a value of a primitive type is optimised to an `Expr.apply`.
 Choose one in your project and stick with a single notation to avoid confusion.
 
 ## How do I get a value out of an `Expr`?

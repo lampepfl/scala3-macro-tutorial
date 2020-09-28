@@ -22,7 +22,7 @@ This will import all the types and modules (with extension methods) of the API.
 
 The full imported API can be found here: [Reflection](http://dotty.epfl.ch/api/scala/tasty/Reflection.html)
 
-For example to find what is a `Term`, we can see in the hireachy that it is a subtype of `Statement` which is a subtype of `Tree`.
+For example to find what is a `Term`, we can see in the hierarchy that it is a subtype of `Statement` which is a subtype of `Tree`.
 If we look into the [`TermMethods`](http://dotty.epfl.ch/api/scala/tasty/Reflection/TermMethods.html) we will find all the extension methods that are defined for `Term` such as `Term.tpe` which returns a `Type`.
 As it is a subtype of `Tree` we can also look into the [`TreeMethods`](http://dotty.epfl.ch/api/scala/tasty/Reflection/TreeMethods.html) to find more methods such as `Tree.pos`.
 Each type also a module with some _static-ish_ methods, for example in the [TypeModule](http://dotty.epfl.ch/api/scala/tasty/Reflection/TypeModule.html) we can find the method `Type.of[T]` with will create an instance of `Type` containing `T`.

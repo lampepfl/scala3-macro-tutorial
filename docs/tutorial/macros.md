@@ -33,7 +33,7 @@ def loggedCode[T](x: Expr[T])(using Type[T])(using QuoteContext): Expr[T] = ...
 
 ### Compilation vs interpretation
 A key difference between inlining and macros is the way they are evaluated.
-Inlining works by replacing code and then optimizing based on rules the compiler knows; on the other hand, a macro will execute user-written code that will generate the code that the macro expands to.
+Inlining works by replacing code and then optimising based on rules the compiler knows; on the other hand, a macro will execute user-written code that will generate the code that the macro expands to.
 The inlined code `${ evalPowerCode('x, 'n)  }` is interpreted and will call through Java reflection the method `evalPowerCode`, then the method will execute as normal code.
 
 ### Macro compilation and suspension
@@ -63,9 +63,9 @@ The interesting part is how we create and look into the `Expr`s.
 
 ### Creating expression
 
-Lets first look at `Expr(value)`.
+Let's first look at `Expr(value)`.
 This will return an expression containing the code representing that value.
-Here the value is computed at compile-time, at runtime we only need to instasiate this value.
+Here the value is computed at compile-time, at runtime we only need to instantiate this value.
 
 This will work for all _primitive types_, _tuples_ of any arity, `Class`, `Array`, `Seq`, `Set`, `List`, `Map`, `Option`, `Either`, `BigInt`, `BigDecimal`, `StringContext`.
 Other types can also work if a `Liftable` is implemented for it, we will [see this later][quotes].
@@ -83,7 +83,7 @@ This way we can report the error with a custom error message.
   (x.unlift, n.unlift) match
     case (Some(base), Some(exponent)) => pow(base, exponent)
     case (Some(_), _) => report.error("Exprected a know value for the exponent, but was " + n.show, n)
-    case _ => report.error("Exprected a know value for the base, but was " + x.show, x)
+    case _ => report.error("Expected a know value for the base, but was " + x.show, x)
 ```
 
 Alternatively, we can also use the `Unlifted` extractor
@@ -142,7 +142,7 @@ But, if we try to match the argument of the call `sumNow(nums: _*)`, the extract
 We will see how this can be useful later.
 
 
-## Constucting complex expressions
+## Constructing complex expressions
 
 ### Collections
 
@@ -158,7 +158,7 @@ We mentioned that `Varargs.apply` can do this for sequences, but other methods a
 ### Simple Blocks
 
 `Expr.block` provides a simple way to create a block of code `{ stat1; ...; statn; expr }`.
-Its first arguments is a list with all the statements and the second argument is the expession at the ind of the block.
+Its first arguments is a list with all the statements and the second argument is the expression at the ind of the block.
 
 ```scala
 inline def test(inline ignore: Boolean, computation: => Unit): Boolean =
@@ -169,7 +169,7 @@ def testCode(ignore: Expr[Boolean], computation: Expr[Unit]): Expr[Boolean] =
   else Expr.block(List(computation), Expr(true))
 ```
 
-This is useful when we whant to generate code contatining several side effects.
+This is useful when we want to generate code contanining several side effects.
 
 ### Simple matching
 
@@ -188,8 +188,8 @@ It may also be used to compare two user written expression.
 ### Arbitrary expresions
 
 Last but not least, it is possible to create an `Expr[T]` arbirtary code in it using quotes.
-The quote syntax `'{ ... }`  provides a way to write an arbirtaty `Expr[T]`.
-For exmaple `'{ doSomething(); getIntResult() }` will generate an `Expr[Int]` that will contain the code that is with the quoted block.
+The quote syntax `'{ ... }`  provides a way to write an arbitrary `Expr[T]`.
+For example `'{ doSomething(); getIntResult() }` will generate an `Expr[Int]` that will contain the code that is with the quoted block.
 
 
 

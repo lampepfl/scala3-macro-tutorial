@@ -6,7 +6,7 @@ title: Best Practices
 ## Inline
 
 ### Be careful when inlining for performance
-To take the most advantage of the JVM JIT optimizations you want to avoid generating large methods.
+To take the most advantage of the JVM JIT optimisations you want to avoid generating large methods.
 
 
 ## Macros
@@ -20,12 +20,12 @@ To take the most advantage of the JVM JIT optimizations you want to avoid genera
   * Use `$someExpr`
   * Use `${ someExprFrom('localExpr) }`
 
-To ilustrate, consider the following example:
+To illustrate, consider the following example:
 ```scala
 val x: StringContext = ...
 '{ StringContext(${Varargs(stringContext.parts.map(Expr(_)))}: _*) }
 ```
-Insead we can write the following:
+Instead we can write the following:
 
 ```scala
 val x: StringContext = ...
@@ -46,7 +46,7 @@ def body(x: Expr[Int])(using qctx.Nested) =  '{ $x + $y }
 ```
 
 Instead, use a normal context and pass all needed expressions.
-This has also the advantage of allowing the funtion to not be defined locally.
+This has also the advantage of allowing the function to not be defined locally.
 ```scala
 def body(x: Expr[Int], y: Expr[Int])(using QuoteContext) =
   '{ $x + $y }
