@@ -5,7 +5,7 @@ title: Contributing
 
 We are starting to write the initial draft of the macro tutorial. 
 Help improving text that has been written so far would be helpful at this point.
-Another extreamely valuable addition would be to update the [migration status][migration-status].
+Another extremely valuable addition would be to update the [migration status][migration-status].
 
 This tutorial will cover all that is needed to start writing macros. 
 The first part (M-1) will cover `inline`, the second part (M-2) will cover macros and quoted expressions and the third part (M-3) will cover how to use the TASTy reflection API.
@@ -16,10 +16,10 @@ Additionally, we will include a cross-compilation/migration guide (M-A).
   * Write [cross-compilation][cross-compilation]
   * Create simple example projects in SBT and Mill
 * M-1 Inline tutorial
-  * Write [inline turorial][inline] (in progress)
+  * Write [inline tutorial][inline] (in progress)
   * Write [scala.compiletime tutorial][compiletime]: Each feature or group of featurs will need a section
-* M-2 Macro turorial (not started)
-  * Write [macros turorial][macros]: Understanding relation between inline and quoted expressions
+* M-2 Macro tutorial (not started)
+  * Write [macros tutorial][macros]: Understanding relation between inline and quoted expressions
   * Write [quoted expressions tutorial][quotes]: Dive deep into all quoted expression features
 * M-3 TASTy reflect API (not started)
   * Write [TASTy reflection tutorial][tasty] (not started): How to access it and the relation with quoted expressions
