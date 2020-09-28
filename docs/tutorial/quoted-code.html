@@ -55,27 +55,27 @@
               }
             });
         </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><a class="edit-page-link button" href="https://github.com/lampepfl/scala3-macro-tutorial/edit/master/docs/tutorial/quotes.md" target="_blank" rel="noreferrer noopener">Edit</a><h1 id="__docusaurus" class="postHeaderTitle">Quoted Code</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="code-blocks"></a><a href="#code-blocks" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Code blocks</h2>
-<p>A quoted code block <code>'{ ... }</code> is syntactacaly similar to a string quote <code>&quot; ... &quot;</code> with the diffecence that the fist contains typed code.
+<p>A quoted code block <code>'{ ... }</code> is syntactically similar to a string quote <code>&quot; ... &quot;</code> with the difference that the fist contains typed code.
 To insert a code into other code we use the <code>$expr</code> or <code>${ expr }</code> where <code>expr</code> is of type <code>Expr[T]</code>.
-Intuitively, the code directly within the quote is not excecuted now, while the code within the splices is evaluated and their results are then spliced int the sourounding expression.</p>
+Intuitively, the code directly within the quote is not executed now, while the code within the splices is evaluated and their results are then spliced int the surrounding expression.</p>
 <pre><code class="hljs css language-scala"><span class="hljs-keyword">val</span> msg = <span class="hljs-type">Expr</span>(<span class="hljs-string">"Hello"</span>)
 <span class="hljs-keyword">val</span> printHello = '{ print($hello) }
 println(printHello.show) <span class="hljs-comment">// print("Hello")</span>
 </code></pre>
-<p>In general, the quote delays the excecution while the splice makes it happen before the sourounding code.
-This generalization allows us to also give meeining to a <code>${ .. }</code> that is not within a quote, this evaluate the code within the splice at compile-time and place the result in the generated code.
-Due to some thechincal considerations we only allow it directly within <code>inline</code> definitions that we call a <a href="/scala3-macro-tutorial/docs/tutorial/scala-3-macros.html">macro</a>.</p>
+<p>In general, the quote delays the execution while the splice makes it happen before the surrounding code.
+This generalisation allows us to also give meaning to a <code>${ .. }</code> that is not within a quote, this evaluate the code within the splice at compile-time and place the result in the generated code.
+Due to some technical considerations we only allow it directly within <code>inline</code> definitions that we call a <a href="/scala3-macro-tutorial/docs/tutorial/scala-3-macros.html">macro</a>.</p>
 <p>It is possible to write a quote within a quote, but usually when we write macros we do not encounter such code.</p>
-<h2><a class="anchor" aria-hidden="true" id="level-consitency"></a><a href="#level-consitency" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Level consitency</h2>
+<h2><a class="anchor" aria-hidden="true" id="level-consistency"></a><a href="#level-consistency" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Level consistency</h2>
 <p>One cannot simple write any arbitrary code within quotes and within splices.
 A part of the program will live at compile-time and the other will live at runtime.
-Consider the folllowing ill-consturucted code.</p>
+Consider the following ill-constructed code.</p>
 <pre><code class="hljs css language-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">myBadCounter1</span></span>(using <span class="hljs-type">QuoteContext</span>): <span class="hljs-type">Expr</span>[<span class="hljs-type">Int</span>] = {
   <span class="hljs-keyword">var</span> x = <span class="hljs-number">0</span>
   '{ x += <span class="hljs-number">1</span>; x }
 }
 </code></pre>
-<p>The problem with this code is that <code>x</code> exists durring compilation, but then we try to use it after the compiler has finished (maybe even in another machine).
+<p>The problem with this code is that <code>x</code> exists during compilation, but then we try to use it after the compiler has finished (maybe even in another machine).
 Clearly it would be impossible to access its value and update it.</p>
 <p>Now consider the dual version, where we define the variable at runtime and try to access it at compile-time.</p>
 <pre><code class="hljs css language-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">myBadCounter2</span></span>(using <span class="hljs-type">QuoteContext</span>): <span class="hljs-type">Expr</span>[<span class="hljs-type">Int</span>] = '{
@@ -84,7 +84,7 @@ Clearly it would be impossible to access its value and update it.</p>
 }
 </code></pre>
 <p>Clearly, this should work as the variable does not exist yet.
-To make sure you can only write programs that do not contain these kinds of probems we restrict the set of references to variable and other definitions.</p>
+To make sure you can only write programs that do not contain these kinds of problems we restrict the set of references to variable and other definitions.</p>
 <p>We introduce <em>levels</em> as a count of the number of quotes minus the number of splices surrounding an expression or definition.</p>
 <pre><code class="hljs css language-scala"><span class="hljs-comment">// level 0</span>
 '{ <span class="hljs-comment">// level 1</span>
@@ -95,10 +95,10 @@ To make sure you can only write programs that do not contain these kinds of prob
   }
 }
 </code></pre>
-<p>The system will allow at any level references to global definitions such as <code>println</code>, but will restrict refrences to local definitions.
-A local definition can only be accessed if it is defined a the same level as its reference.
+<p>The system will allow at any level references to global definitions such as <code>println</code>, but will restrict references to local definitions.
+A local definition can only be accessed if it is defined at the same level as its reference.
 This will catch the errors in <code>myBadCounter1</code> and <code>myBadCounter2</code>.</p>
-<p>Eventhoug we cannot rever to variable inside of a quote, we can still pass its current value to it by lifting the value to an expression using <code>Expr.apply</code>.</p>
+<p>Even though we cannot refer to variable inside of a quote, we can still pass its current value to it by lifting the value to an expression using <code>Expr.apply</code>.</p>
 <h2><a class="anchor" aria-hidden="true" id="generics"></a><a href="#generics" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Generics</h2>
 <p>When using type parameters or other kinds of abstract types with quoted code we will need to keep track of some of these types explicitly.
 Scala uses erased-types semantics for its generics.
@@ -110,7 +110,7 @@ This implies that types are removed from the program when compiling and the runt
 }
 </code></pre>
 <p>Here we will get an error telling us that we are missing a contextual <code>Type[T]</code>.
-Therefore we can easely fix it by writing</p>
+Therefore we can easily fix it by writing</p>
 <pre><code class="hljs css language-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">evalAndUse</span></span>[<span class="hljs-type">X</span>](x: <span class="hljs-type">Expr</span>[<span class="hljs-type">X</span>])(using <span class="hljs-type">Type</span>[<span class="hljs-type">X</span>])(using <span class="hljs-type">QuoteContext</span>) = '{
   <span class="hljs-keyword">val</span> x2: <span class="hljs-type">X</span> = $x
   ... <span class="hljs-comment">// use x2</span>
@@ -201,7 +201,7 @@ Bellow we show how we can match some expressions using <code>case '{...} =&gt;</
     <span class="hljs-keyword">case</span> _ =&gt; <span class="hljs-type">None</span>
 </code></pre>
 <h3><a class="anchor" aria-hidden="true" id="matching-types-of-expression"></a><a href="#matching-types-of-expression" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Matching types of expression</h3>
-<p>We can also match agains code of an arbitrarry type <code>T</code>.
+<p>We can also match agains code of an arbitrary type <code>T</code>.
 Bellow we match agains <code>$x</code> of type <code>T</code> and we get out an <code>x</code> of type <code>Expr[T]</code>.</p>
 <pre><code class="hljs css language-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">exprOfOption</span></span>[<span class="hljs-type">T</span>: <span class="hljs-type">Type</span>](x: <span class="hljs-type">Expr</span>[<span class="hljs-type">Option</span>[<span class="hljs-type">T</span>]])(using <span class="hljs-type">QuoteContext</span>): <span class="hljs-type">Option</span>[<span class="hljs-type">Expr</span>[<span class="hljs-type">T</span>]] =
   x <span class="hljs-keyword">match</span>
@@ -220,7 +220,7 @@ Bellow we match agains <code>$x</code> of type <code>T</code> and we get out an 
 <pre><code class="hljs css language-scala"><span class="hljs-keyword">case</span> '{ <span class="hljs-type">Some</span>($x: <span class="hljs-type">Boolean</span>) } =&gt; <span class="hljs-comment">// x: Expr[Boolean]</span>
 </code></pre>
 <h3><a class="anchor" aria-hidden="true" id="matching-reciver-of-methods"></a><a href="#matching-reciver-of-methods" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Matching reciver of methods</h3>
-<p>When we want to match the reciver of a method we need to explicitly state its type</p>
+<p>When we want to match the receiver of a method we need to explicitly state its type</p>
 <pre><code class="hljs css language-scala"><span class="hljs-keyword">case</span> '{ ($ls: <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>]).sum } =&gt;
 </code></pre>
 <p>If we would have written <code>$ls.sum</code> we would not have been able to know the type of <code>ls</code> and which <code>sum</code> method we are calling.</p>
@@ -275,11 +275,11 @@ We also used the <code>Varargs</code> extractor to match the arguments of type <
 Then we used the <code>Consts</code> to match known constants in the <code>Seq[Expr[String]]</code> to get a <code>Seq[String]</code>.</p>
 <h2><a class="anchor" aria-hidden="true" id="the-quotecontext"></a><a href="#the-quotecontext" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The QuoteContext</h2>
 <p>The <code>QuoteContext</code> is the main entry point for the creation of all quotes.
-This contex is usually just passed around through contextual abstractions (<code>using</code> and <code>?=&gt;</code>).
+This context is usually just passed around through contextual abstractions (<code>using</code> and <code>?=&gt;</code>).
 Each quote scope will provide have its own <code>QuoteContext</code>.
-New scopes are intoduced each time a splice is intoduced <code>${...}</code>.
+New scopes are introduced each time a splice is introduced <code>${...}</code>.
 Though it looks like a splice takes an expression as argument, it actually takes a <code>QuoteContext ?=&gt; Expr[T]</code>.
-Therfore we could actually write it explicitly as <code>${ (using q) =&gt; ... }</code>, this might be useful when debuging to avoid generated names for these scopes.</p>
+Therefore we could actually write it explicitly as <code>${ (using q) =&gt; ... }</code>, this might be useful when debugging to avoid generated names for these scopes.</p>
 <p>The method <code>scala.quoted.qctx</code> provides a simple way to use the current <code>QuoteContext</code> without naming it.
 It is usually imported along with the <code>QuoteContext</code> using <code>import scala.quoted._</code>.</p>
 <pre><code class="hljs css language-scala">${ (using q1) =&gt; body(using q1) }
@@ -288,27 +288,27 @@ ${ body(using qctx) }
 </code></pre>
 <p>If you explicitly name a <code>QuoteContext</code> <code>qctx</code> you will shadow this definition.</p>
 <p>When we write a top level splice in a macro we are calling something similar to the following definition.
-This splice will provide the initial <code>QuoteContext</code> asociated with the macro expansion.</p>
+This splice will provide the initial <code>QuoteContext</code> associated with the macro expansion.</p>
 <pre><code class="hljs css language-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">$</span></span>[<span class="hljs-type">T</span>](x: <span class="hljs-type">QuoteContext</span> ?=&gt; <span class="hljs-type">Expr</span>[<span class="hljs-type">T</span>]): <span class="hljs-type">T</span> = ...
 </code></pre>
 <p>When we have a splice within a quote, the inner quote context will depend on the outer one.
 This link is represented using the <code>QuoteContext.Nested</code> type.
-This relation tells us that it is safe to use expressions createed with <code>q1</code> within the scope of <code>q2</code> but not the other way around (this constraint is statically checked yet).</p>
+This relation tells us that it is safe to use expressions created with <code>q1</code> within the scope of <code>q2</code> but not the other way around (this constraint is statically checked yet).</p>
 <pre><code class="hljs css language-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f</span></span>(using q1: <span class="hljs-type">QuoteContext</span>) = '{
   ${ (using q2: q1.<span class="hljs-type">Nested</span>) ?=&gt;
       ...
   }
 }
 </code></pre>
-<p>We can imagine that a nested splice is like the following method, where <code>ctx</code> is the context recived by the sourounding quote.</p>
+<p>We can imagine that a nested splice is like the following method, where <code>ctx</code> is the context received by the surrounding quote.</p>
 <pre><code class="hljs css language-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">$</span></span>[<span class="hljs-type">T</span>](using ctx: <span class="hljs-type">QuoteContext</span>)(x: ctx.<span class="hljs-type">Nested</span> ?=&gt; <span class="hljs-type">Expr</span>[<span class="hljs-type">T</span>]): <span class="hljs-type">T</span> = ...
 </code></pre>
 <h2><a class="anchor" aria-hidden="true" id="β-reduction"></a><a href="#β-reduction" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>β-reduction</h2>
 <p>When we have a lambda applied to an argument in a quote <code>'{ ((x: Int) =&gt; x + x)(y) }</code> we do not reduce it within the quote, the code is kept as is.
-There is an optimization that β-reduce all lambdas directly applied to parameters to aboid the creation of the closure.
+There is an optimisation that β-reduce all lambdas directly applied to parameters to avoid the creation of the closure.
 This will not be visible from the quotes perspective.</p>
 <p>Sometime it is useful to perform this β-reduction on the quotes directly.
-We provide the function <code>Expr.betaReduce[T]</code> that recives an <code>Expr[T]</code> and β-reduce if it ccontains a directly applied lambda.</p>
+We provide the function <code>Expr.betaReduce[T]</code> that receives an <code>Expr[T]</code> and β-reduce if it contains a directly applied lambda.</p>
 <pre><code class="hljs css language-scala"><span class="hljs-type">Expr</span>.betaReduce('{ ((x: <span class="hljs-type">Int</span>) =&gt; x + x)(y) }) <span class="hljs-comment">// returns '{ val x = y; x + x }</span>
 </code></pre>
 <h2><a class="anchor" aria-hidden="true" id="summon-values"></a><a href="#summon-values" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Summon values</h2>
@@ -334,9 +334,9 @@ The following example is similar to the previous example.</p>
     <span class="hljs-keyword">case</span> <span class="hljs-type">Some</span>(ord) =&gt; '{ <span class="hljs-type">TreeSet</span>.empty[<span class="hljs-type">T</span>](using $ord) }
     <span class="hljs-keyword">case</span> _ =&gt; '{ <span class="hljs-type">HashSet</span>.empty[<span class="hljs-type">T</span>] }
 </code></pre>
-<p>The difference is that in this sencario we do start expanding the maro before the implicit search failure and we can write arbirtary code to hande the case where it is not found.
-Here we used <code>HashSet</code> and another valid implemetation that does not need the <code>Ordering</code>.</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/scala3-macro-tutorial/docs/tutorial/scala-3-macros.html"><span class="arrow-prev">← </span><span>Scala 3 Macros</span></a><a class="docs-next button" href="/scala3-macro-tutorial/docs/tutorial/tasty-reflection.html"><span>TASTy Reflection</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#code-blocks">Code blocks</a></li><li><a href="#level-consitency">Level consitency</a></li><li><a href="#generics">Generics</a></li><li><a href="#liftables">Liftables</a></li><li><a href="#quoted-patterns">Quoted patterns</a><ul class="toc-headings"><li><a href="#matching-exact-expression">Matching exact expression</a></li><li><a href="#matching-partial-expression">Matching partial expression</a></li><li><a href="#matching-types-of-expression">Matching types of expression</a></li><li><a href="#matching-reciver-of-methods">Matching reciver of methods</a></li><li><a href="#matching-function-expressions">Matching function expressions</a></li><li><a href="#matching-types">Matching types</a></li></ul></li><li><a href="#unliftables">Unliftables</a></li><li><a href="#the-quotecontext">The QuoteContext</a></li><li><a href="#β-reduction">β-reduction</a></li><li><a href="#summon-values">Summon values</a></li></ul></nav></div><footer class="nav-footer" id="footer" style="background-color:#224951"><section class="sitemap"><a href="/scala3-macro-tutorial/" class="nav-home"><img src="/scala3-macro-tutorial/img/dotty-logo-white.svg" alt="Scala 3 Macro Tutorial" width="66" height="58"/></a><div><h5>Docs</h5><a href="
+<p>The difference is that in this scenario we do start expanding the macro before the implicit search failure and we can write arbitrary code to handle the case where it is not found.
+Here we used <code>HashSet</code> and another valid implementation that does not need the <code>Ordering</code>.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/scala3-macro-tutorial/docs/tutorial/scala-3-macros.html"><span class="arrow-prev">← </span><span>Scala 3 Macros</span></a><a class="docs-next button" href="/scala3-macro-tutorial/docs/tutorial/tasty-reflection.html"><span>TASTy Reflection</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#code-blocks">Code blocks</a></li><li><a href="#level-consistency">Level consistency</a></li><li><a href="#generics">Generics</a></li><li><a href="#liftables">Liftables</a></li><li><a href="#quoted-patterns">Quoted patterns</a><ul class="toc-headings"><li><a href="#matching-exact-expression">Matching exact expression</a></li><li><a href="#matching-partial-expression">Matching partial expression</a></li><li><a href="#matching-types-of-expression">Matching types of expression</a></li><li><a href="#matching-reciver-of-methods">Matching reciver of methods</a></li><li><a href="#matching-function-expressions">Matching function expressions</a></li><li><a href="#matching-types">Matching types</a></li></ul></li><li><a href="#unliftables">Unliftables</a></li><li><a href="#the-quotecontext">The QuoteContext</a></li><li><a href="#β-reduction">β-reduction</a></li><li><a href="#summon-values">Summon values</a></li></ul></nav></div><footer class="nav-footer" id="footer" style="background-color:#224951"><section class="sitemap"><a href="/scala3-macro-tutorial/" class="nav-home"><img src="/scala3-macro-tutorial/img/dotty-logo-white.svg" alt="Scala 3 Macro Tutorial" width="66" height="58"/></a><div><h5>Docs</h5><a href="
                 /scala3-macro-tutorial/docs/tutorial/introduction.html">Tutorial</a><a href="
                 /scala3-macro-tutorial/docs/contributing.html">Contribute</a><a href="
                 /scala3-macro-tutorial/docs/faq.html">FAQ</a></div><div><h5>Community</h5><a href="https://gitter.im/lampepfl/dotty" target="_blank">Chat on Gitter</a><a href="https://users.scala-lang.org/" target="_blank">Discuss on Scala Users</a></div><div><h5>More</h5><a href="https://github.com/lampepfl/scala3-macro-tutorial" target="_blank">GitHub</a></div></section><section class="copyright">Copyright © 2020 LAMP EPFL</section></footer></div></body></html>

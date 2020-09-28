@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Inline · Scala 3 Macro Tutorial</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Inlining is a common compile-time meta-programming technique for performance optimizations."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Inline · Scala 3 Macro Tutorial"/><meta property="og:type" content="website"/><meta property="og:url" content="https://lampepfl.github.io//scala3-macro-tutorial/index.html"/><meta property="og:description" content="Inlining is a common compile-time meta-programming technique for performance optimizations."/><meta property="og:image" content="https://lampepfl.github.io//scala3-macro-tutorial/img/dotty-logo.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://lampepfl.github.io//scala3-macro-tutorial/img/dotty-logo.svg"/><link rel="shortcut icon" href="/scala3-macro-tutorial/img/dotty-logo.svg"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css"/><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster&amp;display=swap"/><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Fira+Code:400,700&amp;display=fallback"/><script src="/scala3-macro-tutorial/js/scrollSpy.js"></script><link rel="stylesheet" href="/scala3-macro-tutorial/css/main.css"/><script src="/scala3-macro-tutorial/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/scala3-macro-tutorial/"><img class="logo" src="/scala3-macro-tutorial/img/dotty-logo-white.svg" alt="Scala 3 Macro Tutorial"/><h2 class="headerTitleWithLogo">Scala 3 Macro Tutorial</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/scala3-macro-tutorial/docs/tutorial/introduction.html" target="_self">Tutorial</a></li><li class=""><a href="/scala3-macro-tutorial/docs/contributing.html" target="_self">Contribute</a></li><li class=""><a href="https://github.com/lampepfl/scala3-macro-tutorial" target="_blank">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Tutorial</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorial</h3><ul class=""><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/introduction.html">Introduction</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/inline.html">Inline</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/compile-time-operations.html">Scala Compile-time Operations</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/scala-3-macros.html">Scala 3 Macros</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/quoted-code.html">Quoted Code</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/tasty-reflection.html">TASTy Reflection</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Extra</h3><ul class=""><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/faq.html">FAQ</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/best-practices.html">Best Practices</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/other-recources.html">Other Recources</a></li></ul></div></div></section></div><script>
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Inline · Scala 3 Macro Tutorial</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Inlining is a common compile-time meta-programming technique for performance optimisations."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Inline · Scala 3 Macro Tutorial"/><meta property="og:type" content="website"/><meta property="og:url" content="https://lampepfl.github.io//scala3-macro-tutorial/index.html"/><meta property="og:description" content="Inlining is a common compile-time meta-programming technique for performance optimisations."/><meta property="og:image" content="https://lampepfl.github.io//scala3-macro-tutorial/img/dotty-logo.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://lampepfl.github.io//scala3-macro-tutorial/img/dotty-logo.svg"/><link rel="shortcut icon" href="/scala3-macro-tutorial/img/dotty-logo.svg"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css"/><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster&amp;display=swap"/><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Fira+Code:400,700&amp;display=fallback"/><script src="/scala3-macro-tutorial/js/scrollSpy.js"></script><link rel="stylesheet" href="/scala3-macro-tutorial/css/main.css"/><script src="/scala3-macro-tutorial/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/scala3-macro-tutorial/"><img class="logo" src="/scala3-macro-tutorial/img/dotty-logo-white.svg" alt="Scala 3 Macro Tutorial"/><h2 class="headerTitleWithLogo">Scala 3 Macro Tutorial</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/scala3-macro-tutorial/docs/tutorial/introduction.html" target="_self">Tutorial</a></li><li class=""><a href="/scala3-macro-tutorial/docs/contributing.html" target="_self">Contribute</a></li><li class=""><a href="https://github.com/lampepfl/scala3-macro-tutorial" target="_blank">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Tutorial</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorial</h3><ul class=""><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/introduction.html">Introduction</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/inline.html">Inline</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/compile-time-operations.html">Scala Compile-time Operations</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/scala-3-macros.html">Scala 3 Macros</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/quoted-code.html">Quoted Code</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/tutorial/tasty-reflection.html">TASTy Reflection</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Extra</h3><ul class=""><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/faq.html">FAQ</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/best-practices.html">Best Practices</a></li><li class="navListItem"><a class="navItem" href="/scala3-macro-tutorial/docs/other-recources.html">Other Recources</a></li></ul></div></div></section></div><script>
             var coll = document.getElementsByClassName('collapsible');
             var checkActiveCategory = true;
             for (var i = 0; i < coll.length; i++) {
@@ -54,12 +54,12 @@
                 };
               }
             });
-        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><a class="edit-page-link button" href="https://github.com/lampepfl/scala3-macro-tutorial/edit/master/docs/tutorial/inline.md" target="_blank" rel="noreferrer noopener">Edit</a><h1 id="__docusaurus" class="postHeaderTitle">Inline</h1></header><article><div><span><p>Inlining is a common compile-time meta-programming technique for performance optimizations.
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><a class="edit-page-link button" href="https://github.com/lampepfl/scala3-macro-tutorial/edit/master/docs/tutorial/inline.md" target="_blank" rel="noreferrer noopener">Edit</a><h1 id="__docusaurus" class="postHeaderTitle">Inline</h1></header><article><div><span><p>Inlining is a common compile-time meta-programming technique for performance optimisations.
 Scala 3 makes several improvements related to inlining:</p>
 <ol>
 <li>It introduces inline as a <a href="https://dotty.epfl.ch/docs/reference/soft-modifier.html">soft keyword</a>.</li>
 <li>It guarantees that inlining actually happens instead of being best-effort.</li>
-<li>It introduces operations that are guaranteed to evaluate at compiletime.</li>
+<li>It introduces operations that are guaranteed to evaluate at compile-time.</li>
 </ol>
 <h2><a class="anchor" aria-hidden="true" id="inline-constants"></a><a href="#inline-constants" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Inline constants</h2>
 <p>The simplest form of inlining is to inline constants in programs:</p>
@@ -71,13 +71,13 @@ inline <span class="hljs-keyword">val</span> pie = <span class="hljs-string">"�
 <span class="hljs-keyword">val</span> pie2 = pie + pie <span class="hljs-comment">// val pie2 = "🥧🥧"</span>
 </code></pre>
 <p>In the code above, the references <code>pi</code> and <code>pie</code> are inlined.
-Then constant folding optimization in the compiler will compute the resulting value <code>pi2</code> and <code>pie2</code> at <em>compile-time</em>.</p>
+Then constant folding optimisation in the compiler will compute the resulting value <code>pi2</code> and <code>pie2</code> at <em>compile-time</em>.</p>
 <p>In Scala 2, we would have used the modifier <code>final</code> in the definition that is without a return type:</p>
 <pre><code class="hljs css language-scala"><span class="hljs-keyword">final</span> <span class="hljs-keyword">val</span> pi = <span class="hljs-number">3.141592653589793</span>
 <span class="hljs-keyword">final</span> <span class="hljs-keyword">val</span> pie = <span class="hljs-string">"🥧"</span>
 </code></pre>
 <p>The <code>final</code> modifier will ensure that <code>pi</code> and <code>pie</code> will take a <em>literal type</em>.
-Then the constant propagation optimization in the compiler can perform inlining for such definitions.
+Then the constant propagation optimisation in the compiler can perform inlining for such definitions.
 However, inlining based constant propagation is <em>best-effort</em> and not guaranteed.
 The <code>final val</code> inlining is also supported by Scala 3.0 as <em>best-effort</em> inlining for migration purposes.</p>
 <p>Currently, only constant expression may appear on the right-hand side of an inline value definition.
@@ -120,8 +120,8 @@ In some cases, when the arguments are pure constant values, the binding is omitt
 <p>This can be seen in the parameter <code>op</code> from the example.</p></li>
 </ol>
 <p>It is important to understand that when a call is inlined it <strong>will not change</strong> its semantics.
-This implies that the initial elaboration (overloading resolution, implicit search, ...), performed while typing the body of the inline method, will not change when inlined.
-For example consider the following code:</p>
+This implies that the initial elaboration (overloading resolution, implicit search, ...), performed while typing the body of the inline method, will not change when inlined.</p>
+<p>For example, consider the following code:</p>
 <pre><code class="hljs css language-scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Logger</span></span>:
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">log</span></span>(x: <span class="hljs-type">Any</span>): <span class="hljs-type">Unit</span> = println(x)
 
@@ -144,14 +144,14 @@ logger.log(x)
 <p>Even though now we know that <code>x</code> is a <code>String</code>, the call <code>logger.log(x)</code> still resolves to the method <code>Log.log</code> which takes an argument of the type <code>Any</code>.</p>
 <p>Another way to interpret this is that if <code>logged</code> is a <code>def</code> or <code>inline def</code> they would perform the same operations with some differences in performance.</p>
 <h3><a class="anchor" aria-hidden="true" id="inline-parameters"></a><a href="#inline-parameters" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Inline parameters</h3>
-<p>One important application of inlining is to enable constant folding optimization across method boundaries.
+<p>One important application of inlining is to enable constant folding optimisation across method boundaries.
 Inline parameters do not create bindings and their code is duplicated everywhere they are used.</p>
 <pre><code class="hljs css language-scala">inline <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">perimeter</span></span>(inline radius: <span class="hljs-type">Double</span>): <span class="hljs-type">Double</span> = 
   <span class="hljs-number">2.</span> * pi * radius
 </code></pre>
 <p>In this case, we expect that if the <code>radius</code> is known then the whole computation can be done at compile-time.
 We use an <code>inline</code> parameter to enforce the requirement.
-The follwing code</p>
+The following code</p>
 <pre><code class="hljs css language-scala">perimeter(<span class="hljs-number">5.</span>)
 </code></pre>
 <p>is inlined as</p>
@@ -275,7 +275,7 @@ x2 * <span class="hljs-number">1.0</span>
 ...
 </code></pre>
 <p></details></p>
-<p>Instead, we can use the <code>inline if</code> variant of <code>if</code> that ensures that the branching desition is performed at compile-time.
+<p>Instead, we can use the <code>inline if</code> variant of <code>if</code> that ensures that the branching decision is performed at compile-time.
 It will always remove them if after inlining and keep a single branch before inlining the contents of the branch.
 If it does not have a constant condition it will emit an error and stop inlining.</p>
 <pre><code class="hljs css language-scala">inline <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">power</span></span>(x: <span class="hljs-type">Double</span>, inline n: <span class="hljs-type">Int</span>): <span class="hljs-type">Double</span> =
@@ -288,13 +288,13 @@ power(<span class="hljs-number">2</span>, unkownNumber) <span class="hljs-commen
 </code></pre>
 <p>We will come back to this example later and see how we can get more control on how code is generated.</p>
 <h2><a class="anchor" aria-hidden="true" id="inline-method-overloading"></a><a href="#inline-method-overloading" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Inline Method Overloading</h2>
-<p>When combining <code>inline def</code> with overriding and interfaces we will have some restrictions to ensure the correct behavior of the methods.</p>
+<p>When combining <code>inline def</code> with overriding and interfaces we will have some restrictions to ensure the correct behaviour of the methods.</p>
 <p>The first restriction is that all inline methods are effectively final.
 This ensures that the overload resolution at compile-time behaves the same as the one at runtime.</p>
 <p>Inline overrides must have the same signature as the overridden method including the inline parameters.
-This ensures that the call semantics are the same for both methods.</p>
-<p>A new concern appears when we implement or override a normal method with an inline method.
-Consider the following example:</p>
+This ensures that the call semantics is the same for both methods.</p>
+<p>A new concern appears when we implement or override a normal method with an inline method.</p>
+<p>Consider the following example:</p>
 <pre><code class="hljs css language-scala"><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Logger</span></span>:
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">log</span></span>(x: <span class="hljs-type">Any</span>): <span class="hljs-type">Unit</span>
 
@@ -316,7 +316,7 @@ Other cases involve metaprogramming constructs that only have meaning when inlin
   inline <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">log</span></span>(inline x: <span class="hljs-type">Any</span>): <span class="hljs-type">Unit</span> = println(x)
 </code></pre>
 <p>This forces the implementation of <code>log</code> to be an inline method and also allows <code>inline</code> parameters.
-Unintuitively, the <code>log</code> in <code>Logger</code> cannot be called, this would result in an error as we do not know what to inline.
+Counterintuitively, the <code>log</code> in <code>Logger</code> cannot be called, this would result in an error as we do not know what to inline.
 Its usefulness becomes apparent when we use it in another inline method</p>
 <pre><code class="hljs css language-scala">inline <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">logged</span></span>(logger: <span class="hljs-type">Logger</span>, x: <span class="hljs-type">Any</span>) =
   logger.log(x)
@@ -327,7 +327,7 @@ Its usefulness becomes apparent when we use it in another inline method</p>
 logger.log(x)
 </code></pre>
 <p>In this case, when inlined, the call to <code>log</code> is de-virtualized and known to be on <code>PrintLogger</code>.
-Therfore the code can bee inlined.</p>
+Therefore the code can bee inlined.</p>
 <h4><a class="anchor" aria-hidden="true" id="summary-of-inline-methods"></a><a href="#summary-of-inline-methods" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Summary of inline methods</h4>
 <ul>
 <li>All <code>inline</code> methods are final.</li>
@@ -336,7 +336,7 @@ Therfore the code can bee inlined.</p>
 <li>Retained methods cannot have inline parameters.</li>
 </ul>
 <h2><a class="anchor" aria-hidden="true" id="transparent-inline"></a><a href="#transparent-inline" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Transparent Inline</h2>
-<p>This is a simple yet powerful extension to <code>inline</code> methods that unlocks many metaprogramming usescases.
+<p>This is a simple yet powerful extension to <code>inline</code> methods that unlocks many metaprogramming uses cases.
 These inline calls allow for an inline piece of code to refine the type based on the precise type of the inlined expression.
 In Scala 2 parlance, these capture the essence of <em>whitebox macros</em>.</p>
 <pre><code class="hljs css language-scala">transparent <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">default</span></span>(inline name: <span class="hljs-type">String</span>): <span class="hljs-type">Any</span> =
