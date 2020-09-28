@@ -4,13 +4,30 @@ title: Introduction
 ---
 
 This tutorial covers all the features involved in writing macros in Scala 3.
-We will start with the new `inline` feature which is the entry point of all macros.
-We also cover some metaprogramming features that can be used with `inline`.
-Then we learn how to create a macro using `inline` and quoted expressions.
-We will have a look at the _quoted expressions_ API and how to use them.
-Finally, for those macros that need a bit more than expression, we will learn how to access thier typed AST.
+The metaprogramming API of Scala 3 is designed in layers to gradually
+support different levels of use-cases. Each successive layer exposes additional
+abstractions and offers more fine-grained control.
 
-🚧 We are still in the process of writing the tutorial. You can [help us improve it][contributing] 🚧
+- As a starting point, the new [`inline` feature](inline) allows some abstractions
+  (values and methods) to be marked as statically reducible. It can be used to
+  optimize performance by specializing code and also provides the entry point
+  for macros.
+
+- [Compile-time operations](compile-time-operations) offer additional metaprogramming
+  utilities that can be used within `inline` methods (for example to improve error reporting),
+  without having to define a macro.
+
+- Starting from `inline`-methods, [macros](scala-3-macros) are programs that
+  explicitly operate on trees of programs.
+
+- Macros can be defined in terms of a _high-level_ API of [quoted expressions](quoted-code),
+  that admits simple construction and deconstruction of programs.
+
+- Macros can also be defined in terms of a more _low-level_ API of [TASTy Reflection](tasty-reflection),
+  that allows detailed inspection of programs.
+
+
+> 🚧 We are still in the process of writing the tutorial. You can [help us improve it][contributing] 🚧
 
 [inline]: tutorial/inline.md
 [contributing]: contributing.md
