@@ -20,11 +20,11 @@ abstractions and offers more fine-grained control.
 - Starting from `inline`-methods, [macros](scala-3-macros) are programs that
   explicitly operate on trees of programs.
 
-- Macros can be defined in terms of a _high-level_ API of [quoted expressions](quoted-code),
-  that admits simple construction and deconstruction of programs.
+  - Macros can be defined in terms of a _high-level_ API of [quoted expressions](quoted-code),
+    that admits simple construction and deconstruction of programs.
 
-- Macros can also be defined in terms of a more _low-level_ API of [TASTy Reflection](tasty-reflection),
-  that allows detailed inspection of programs.
+  - Macros can also be defined in terms of a more _low-level_ API of [TASTy Reflection](tasty-reflection),
+    that allows detailed inspection of programs.
 
 
 > 🚧 We are still in the process of writing the tutorial. You can [help us improve it][contributing] 🚧
