@@ -3,12 +3,12 @@ id: inline
 title: Inline
 ---
 
-Inlining is a common compile-time meta-programming technique for performance optimizations.
+Inlining is a common compile-time meta-programming technique for performance optimisations.
 Scala 3 makes several improvements related to inlining:
 
 1. It introduces inline as a [soft keyword][soft-modifier].
 2. It guarantees that inlining actually happens instead of being best-effort.
-3. It introduces operations that are guaranteed to evaluate at compiletime.
+3. It introduces operations that are guaranteed to evaluate at compile-time.
 
 ## Inline constants
 
@@ -28,7 +28,7 @@ val pie2 = pie + pie // val pie2 = "🥧🥧"
 ```
 
 In the code above, the references `pi` and `pie` are inlined.
-Then constant folding optimization in the compiler will compute the resulting value `pi2` and `pie2` at _compile-time_.
+Then constant folding optimisation in the compiler will compute the resulting value `pi2` and `pie2` at _compile-time_.
 
 In Scala 2, we would have used the modifier `final` in the definition that is without a return type:
 
@@ -38,7 +38,7 @@ final val pie = "🥧"
 ```
 
 The `final` modifier will ensure that `pi` and `pie` will take a _literal type_.
-Then the constant propagation optimization in the compiler can perform inlining for such definitions.
+Then the constant propagation optimisation in the compiler can perform inlining for such definitions.
 However, inlining based constant propagation is _best-effort_ and not guaranteed.
 The `final val` inlining is also supported by Scala 3.0 as _best-effort_ inlining for migration purposes.
 
@@ -72,6 +72,7 @@ logged(logLevel, getMessage()) {
   computeSomthing()
 }
 ```
+
 would be inlined and becomes
 
 ```Scala
@@ -101,7 +102,8 @@ Method inlining handles three kinds of parameters differently:
 
 It is important to understand that when a call is inlined it **will not change** its semantics.
 This implies that the initial elaboration (overloading resolution, implicit search, ...), performed while typing the body of the inline method, will not change when inlined.
-For example consider the following code: 
+
+For example, consider the following code: 
 
 ```scala
 class Logger:
@@ -135,7 +137,7 @@ Another way to interpret this is that if `logged` is a `def` or `inline def` the
 
 ### Inline parameters
 
-One important application of inlining is to enable constant folding optimization across method boundaries.
+One important application of inlining is to enable constant folding optimisation across method boundaries.
 Inline parameters do not create bindings and their code is duplicated everywhere they are used.
 
 ```scala
@@ -144,7 +146,7 @@ inline def perimeter(inline radius: Double): Double =
 ```
 In this case, we expect that if the `radius` is known then the whole computation can be done at compile-time.
 We use an `inline` parameter to enforce the requirement.
-The follwing code
+The following code
 
 ```scala
 perimeter(5.)
@@ -183,6 +185,7 @@ println(s"Perimeter (r = ${5.}) = ${31.4159265359}")
 ```
 
 But if something larger, possibly with side-effects is passed, then we might accidentally duplicate some work.
+
 
 ```scala
 printPerimeter(longComputation()) 
@@ -306,7 +309,7 @@ else {
 ```
 </details>
 
-Instead, we can use the `inline if` variant of `if` that ensures that the branching desition is performed at compile-time.
+Instead, we can use the `inline if` variant of `if` that ensures that the branching decision is performed at compile-time.
 It will always remove them if after inlining and keep a single branch before inlining the contents of the branch.
 If it does not have a constant condition it will emit an error and stop inlining.
 
@@ -326,15 +329,16 @@ We will come back to this example later and see how we can get more control on h
 
 ## Inline Method Overloading
 
-When combining `inline def` with overriding and interfaces we will have some restrictions to ensure the correct behavior of the methods.
+When combining `inline def` with overriding and interfaces we will have some restrictions to ensure the correct behaviour of the methods.
 
 The first restriction is that all inline methods are effectively final.
 This ensures that the overload resolution at compile-time behaves the same as the one at runtime.
 
 Inline overrides must have the same signature as the overridden method including the inline parameters.
-This ensures that the call semantics are the same for both methods.
+This ensures that the call semantics is the same for both methods.
 
 A new concern appears when we implement or override a normal method with an inline method.
+
 Consider the following example:
 
 ```scala
@@ -365,7 +369,7 @@ class PrintLogger inline InlineLogger:
 ```
 
 This forces the implementation of `log` to be an inline method and also allows `inline` parameters.
-Unintuitively, the `log` in `Logger` cannot be called, this would result in an error as we do not know what to inline.
+Counterintuitively, the `log` in `Logger` cannot be called, this would result in an error as we do not know what to inline.
 Its usefulness becomes apparent when we use it in another inline method
 
 ```scala
@@ -381,7 +385,7 @@ logger.log(x)
 ```
 
 In this case, when inlined, the call to `log` is de-virtualized and known to be on `PrintLogger`.
-Therfore the code can bee inlined.
+Therefore the code can bee inlined.
 
 #### Summary of inline methods
 * All `inline` methods are final.
@@ -391,7 +395,7 @@ Therfore the code can bee inlined.
 
 
 ## Transparent Inline
-This is a simple yet powerful extension to `inline` methods that unlocks many metaprogramming usescases.
+This is a simple yet powerful extension to `inline` methods that unlocks many metaprogramming uses cases.
 These inline calls allow for an inline piece of code to refine the type based on the precise type of the inlined expression.
 In Scala 2 parlance, these capture the essence of _whitebox macros_.
 
