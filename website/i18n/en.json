@@ -6,7 +6,7 @@
     "tagline": "A tutorial to cover all the features involved in writing macros in Scala 3",
     "docs": {
       "best-practices": {
-        "title": "Best practices"
+        "title": "Best Practices"
       },
       "compile-time-operations": {
         "title": "Compile-time operations"
@@ -24,7 +24,7 @@
         "title": "Inline"
       },
       "tutorial/scala-3-macros": {
-        "title": "Scala 3 macros"
+        "title": "Scala 3 Macros"
       },
       "tutorial/quoted-code": {
         "title": "Quoted Code"
@@ -40,7 +40,7 @@
     },
     "categories": {
       "Tutorial": "Tutorial",
-      "Other": "Other"
+      "Extra": "Extra"
     }
   },
   "pages-strings": {
