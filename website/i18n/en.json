@@ -17,32 +17,11 @@
       "faq": {
         "title": "FAQ"
       },
-      "get-started": {
-        "title": "Scala 3 macros tutorial"
-      },
-      "inline": {
-        "title": "Inline"
-      },
-      "scala-3-macros": {
-        "title": "Scala 3 macros"
-      },
-      "other-recources": {
-        "title": "Other Recources"
-      },
-      "quoted-code": {
-        "title": "Quoted Code"
-      },
-      "tasty-reflection": {
-        "title": "TASTy Reflection"
-      },
-      "tutorial/compile-time-operations": {
-        "title": "Scala Compile-time Operations"
+      "tutorial/introduction": {
+        "title": "Introduction"
       },
       "tutorial/inline": {
         "title": "Inline"
-      },
-      "tutorial/introduction": {
-        "title": "Introduction"
       },
       "tutorial/scala-3-macros": {
         "title": "Scala 3 Macros"
