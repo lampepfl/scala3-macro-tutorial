@@ -335,8 +335,7 @@ We will come back to this example later and see how we can get more control on h
 
 ### Inline Method Overriding
 
-To ensure the correct behavior of combining the static feature of `inline def` with the dynamic feature of interfaces and overriding, some restrictions have to be
-imposed.
+To ensure the correct behavior of combining the static feature of `inline def` with the dynamic feature of interfaces and overriding, some restrictions have to be imposed.
 
 #### Effectively final
 Firstly, all inline methods are _effectively final_.
@@ -381,7 +380,8 @@ class PrintLogger inline InlineLogger:
 ```
 
 This forces the implementation of `log` to be an inline method and also allows `inline` parameters.
-Counterintuitively, the `log` on the interface `InlineLogger` cannot be directly called. The method implementation is not statically known and we thus do not know what to inline. Calling an abstract inline methods thus results in an error.
+Counterintuitively, the `log` on the interface `InlineLogger` cannot be directly called. The method implementation is not statically known and we thus do not know what to inline.
+Calling an abstract inline methods thus results in an error.
 The usefuleness of abstract inline methods becomes apparent when used in another inline method:
 
 ```scala
@@ -428,8 +428,7 @@ We could also have been more precise and have written instead
 ```scala
 transparent inline def default(inline name: String): 0 | "" = ...
 ```
-While in this example it seems the return type is not necessary, it
-is important when the inline method is recursive.
+While in this example it seems the return type is not necessary, it is important when the inline method is recursive.
 There it should be precise enough for the recursion to type but will get more precise after inlining.
 
 > #### Transparents affect binary compatibility

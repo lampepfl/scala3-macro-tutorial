@@ -12,7 +12,7 @@ abstractions and offers more fine-grained control.
 - As a starting point, the new [`inline` feature](inline) allows some abstractions (values and methods) to be marked as statically reducible. 
   It can be used to optimize performance by specializing code and also provides the entry point for macros.
 
-- [Compile-time operations](compile-time-operations) offer additional metaprogramming utilities that can be used within `inline` methods (for example to improve error reporting), without having to define a macro.
+- [Compile-time operations](compiletime) offer additional metaprogramming utilities that can be used within `inline` methods (for example to improve error reporting), without having to define a macro.
 
 - Starting from `inline`-methods, [macros](scala-3-macros) are programs that explicitly operate on trees of programs.
 
@@ -25,3 +25,5 @@ abstractions and offers more fine-grained control.
 
 [inline]: tutorial/inline.md
 [contributing]: contributing.md
+[compiletime]: tutorial/compiletime.md
+
