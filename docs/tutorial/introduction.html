@@ -54,13 +54,23 @@
                 };
               }
             });
-        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><a class="edit-page-link button" href="https://github.com/lampepfl/scala3-macro-tutorial/edit/master/docs/tutorial/introduction.md" target="_blank" rel="noreferrer noopener">Edit</a><h1 id="__docusaurus" class="postHeaderTitle">Introduction</h1></header><article><div><span><p>This tutorial covers all the features involved in writing macros in Scala 3.
-We will start with the new <code>inline</code> feature which is the entry point of all macros.
-We also cover some metaprogramming features that can be used with <code>inline</code>.
-Then we learn how to create a macro using <code>inline</code> and quoted expressions.
-We will have a look at the <em>quoted expressions</em> API and how to use them.
-Finally, for those macros that need a bit more than expression, we will learn how to access their typed AST.</p>
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><a class="edit-page-link button" href="https://github.com/lampepfl/scala3-macro-tutorial/edit/master/docs/tutorial/introduction.md" target="_blank" rel="noreferrer noopener">Edit</a><h1 id="__docusaurus" class="postHeaderTitle">Introduction</h1></header><article><div><span><p>This tutorial covers all the features involved in writing macros in Scala 3.</p>
+<p>The metaprogramming API of Scala 3 is designed in layers to gradually
+support different levels of use-cases. Each successive layer exposes additional
+abstractions and offers more fine-grained control.</p>
+<ul>
+<li><p>As a starting point, the new <a href="/scala3-macro-tutorial/docs/tutorial/inline.html"><code>inline</code> feature</a> allows some abstractions (values and methods) to be marked as statically reducible.
+It provides the entry point for macros and other metaprogramming utilities.</p></li>
+<li><p><a href="/scala3-macro-tutorial/docs/tutorial/compile-time-operations.html">Compile-time operations</a> offer additional metaprogramming utilities that can be used within <code>inline</code> methods (for example to improve error reporting), without having to define a macro.</p></li>
+<li><p>Starting from <code>inline</code>-methods, <a href="/scala3-macro-tutorial/docs/tutorial/scala-3-macros.html">macros</a> are programs that explicitly operate on programs.</p>
+<ul>
+<li><p>Macros can be defined in terms of a <em>high-level</em> API of <a href="/scala3-macro-tutorial/docs/tutorial/quoted-code.html">quoted expressions</a>, that admits simple construction and deconstruction of programs expressions.</p></li>
+<li><p>Macros can also be defined in terms of a more <em>low-level</em> API of <a href="/scala3-macro-tutorial/docs/tutorial/tasty-reflection.html">TASTy Reflection</a>, that allows detailed inspection of programs.</p></li>
+</ul></li>
+</ul>
+<blockquote>
 <p>🚧 We are still in the process of writing the tutorial. You can <a href="/scala3-macro-tutorial/docs/contributing.html">help us improve it</a> 🚧</p>
+</blockquote>
 </span></div></article></div><div class="docs-prevnext"><a class="docs-next button" href="/scala3-macro-tutorial/docs/tutorial/inline.html"><span>Inline</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer" style="background-color:#224951"><section class="sitemap"><a href="/scala3-macro-tutorial/" class="nav-home"><img src="/scala3-macro-tutorial/img/dotty-logo-white.svg" alt="Scala 3 Macro Tutorial" width="66" height="58"/></a><div><h5>Docs</h5><a href="
                 /scala3-macro-tutorial/docs/tutorial/introduction.html">Tutorial</a><a href="
                 /scala3-macro-tutorial/docs/contributing.html">Contribute</a><a href="

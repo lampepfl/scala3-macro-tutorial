@@ -65,9 +65,9 @@ We can use <code>scala.quoted.qctx</code> to import it.</p>
 }
 </code></pre>
 <p>This will import all the types and modules (with extension methods) of the API.</p>
-<p>The full imported API can be found here: <a href="http://dotty.epfl.ch/api/scala/tasty/Reflection.html">Reflection</a></p>
+<p>The full imported API can be found here: <a href="https://dotty.epfl.ch/api/scala/tasty/Reflection.html">Reflection</a></p>
 <p>For example to find what is a <code>Term</code>, we can see in the hierarchy that it is a subtype of <code>Statement</code> which is a subtype of <code>Tree</code>.
-If we look into the <a href="http://dotty.epfl.ch/api/scala/tasty/Reflection/TermMethods.html"><code>TermMethods</code></a> we will find all the extension methods that are defined for <code>Term</code> such as <code>Term.tpe</code> which returns a <code>Type</code>.
+If we look into the <a href="https://dotty.epfl.ch/api/scala/tasty/Reflection/TermMethods.html"><code>TermMethods</code></a> we will find all the extension methods that are defined for <code>Term</code> such as <code>Term.tpe</code> which returns a <code>Type</code>.
 As it is a subtype of <code>Tree</code> we can also look into the <a href="http://dotty.epfl.ch/api/scala/tasty/Reflection/TreeMethods.html"><code>TreeMethods</code></a> to find more methods such as <code>Tree.pos</code>.
 Each type also a module with some <em>static-ish</em> methods, for example in the <a href="http://dotty.epfl.ch/api/scala/tasty/Reflection/TypeModule.html">TypeModule</a> we can find the method <code>Type.of[T]</code> with will create an instance of <code>Type</code> containing <code>T</code>.</p>
 <h2><a class="anchor" aria-hidden="true" id="relation-with-expressions"></a><a href="#relation-with-expressions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Relation with expressions</h2>
