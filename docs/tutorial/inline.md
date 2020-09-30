@@ -3,7 +3,7 @@ id: inline
 title: Inline
 ---
 
-Inlining is a common compile-time meta-programming technique, typically used to achieve performance optimizations. As we will see, in Scala 3, the concept of inlining provides us with an entrypoint to programming with macros.
+Inlining is a common compile-time metaprogramming technique, typically used to achieve performance optimizations. As we will see, in Scala 3, the concept of inlining provides us with an entrypoint to programming with macros.
 
 1. It introduces inline as a [soft keyword][soft-modifier].
 2. It guarantees that inlining actually happens instead of being best-effort.
@@ -49,9 +49,8 @@ Therefore, the following code is invalid, though the compiler knows that the rig
 val pi = 3.141592653589793
 inline val pi2 = pi + pi // error
 ```
-Note that defining `pi` as an inline value definition, the addition can be
-computed at compile time. This resolves the aboev error and
-`pi2` will receive the literal type `6.283185307179586 : Double`.
+Note that by defining `inline val pi`, the addition can be computed at compile time.
+This resolves the above error and `pi2` will receive the literal type `6.283185307179586d`.
 
 ## Inline Methods
 
@@ -65,10 +64,9 @@ inline def logged[T](level: Int, message: => String)(inline op: T): T =
   res
 ```
 
-When an inline method like `logged` is called, its body will be expanded at the
-call-site at compile time! That is, the call to `logged` will be replaced by the
-body of the method. The provided arguments are statically substituted for
-the parameters of `logged`, correspondingly.
+When an inline method like `logged` is called, its body will be expanded at the call-site at compile time!
+That is, the call to `logged` will be replaced by the body of the method.
+The provided arguments are statically substituted for the parameters of `logged`, correspondingly.
 Therefore, the compiler inlines the following call
 
 ```scala
@@ -151,7 +149,8 @@ Inline parameters do not create bindings and their code is duplicated everywhere
 inline def perimeter(inline radius: Double): Double =
   2.0 * pi * radius
 ```
-In the above example, we expect that if the `radius` is statically known then the whole computation can be performed at compile-time. The following call
+In the above example, we expect that if the `radius` is statically known then the whole computation can be performed at compile-time.
+The following call
 
 ```scala
 perimeter(5.0)
@@ -285,9 +284,8 @@ In contrast, let us imagine we do not know the value of `n`:
 ```scala
 power(2, unkownNumber)
 ```
-Driven by the inline annotation on the parameter, the compiler will try to
-unroll the recursion. But without any success, since the parameter is not
-statically known.
+Driven by the inline annotation on the parameter, the compiler will try to unroll the recursion.
+But without any success, since the parameter is not statically known.
 
 <details>
   <summary>See inlining steps</summary>
@@ -318,9 +316,7 @@ else {
 </details>
 
 To guarantee that the branching can indeed be performed at compile-time, we can use the `inline if` variant of `if`.
-Annotating a conditional with `inline` will guarantee that the conditional can
-be reduced at compile-time and emits an error if the condition is not a
-statically known constant.
+Annotating a conditional with `inline` will guarantee that the conditional can be reduced at compile-time and emits an error if the condition is not a statically known constant.
 
 ```scala
 inline def power(x: Double, inline n: Int): Double =
@@ -336,43 +332,10 @@ power(2, unkownNumber) // error
 
 We will come back to this example later and see how we can get more control on how code is generated.
 
-### Inline Matches
-Like inline `if`, inline matches guarantee that the pattern matching can be
-statically reduced at compile time and only one branch is kept.
-
-In the following example, the scrutinee, `x`, is an inline parameter that we can pattern match on at compile time.
-
-```scala
-inline def half(x: Any): Any =
-  inline x match
-    case x: Int => x / 2
-    case x: String => x.substring(0, x.length / 2)
-
-half(6)
-// expands to:
-// val x = 6
-// x / 2
-
-half("hello world")
-// expands to:
-// val x = "hello world"
-// x.substring(0, x.length / 2)
-```
-This illustrates that inline matches provide a way to match on the static type of some expression.
-As we match on the _static_ type of an expression, the following code would fail to compile.
-
-```scala
-val n: Any = 3
-half(n) // error: n is not statically known to be an Int or a Double
-```
-Notably, The value `n` is not marked as `inline` and in consequence at compile time
-there is not enough information about the scrutinee to decide which branch to take.
-
 
 ### Inline Method Overriding
 
-To ensure the correct behavior of combining the static feature of `inline def` with
-the dynamic feature of interfaces and overriding, some restrictions have to be
+To ensure the correct behavior of combining the static feature of `inline def` with the dynamic feature of interfaces and overriding, some restrictions have to be
 imposed.
 
 #### Effectively final
@@ -395,10 +358,12 @@ trait Logger:
 class PrintLogger extends Logger:
   inline def log(x: Any): Unit = println(x)
 ```
-However, calling the `log` method directly on `PrintLogger` will inline the code, while calling it on `Logger` will not. To also admit the latter, the code of `log` must exist at runtime.
+However, calling the `log` method directly on `PrintLogger` will inline the code, while calling it on `Logger` will not.
+To also admit the latter, the code of `log` must exist at runtime.
 We call this a _retained inline_ method.
 
-For any non-retained inline `def` or `val` the code can always be fully inlined at all call sites. Hence, those methods will not be needed at runtime and can be erased from the bytecode.
+For any non-retained inline `def` or `val` the code can always be fully inlined at all call sites.
+Hence, those methods will not be needed at runtime and can be erased from the bytecode.
 However, retained inline methods must be compatible with the case that they are not inlined.
 In particular, retained inline methods cannot take any inline parameters.
 Furthermore, an `inline if` (as in the `power` example) will not work, since the `if` cannot be constant folded in the retained case.
@@ -472,8 +437,42 @@ There it should be precise enough for the recursion to type but will get more pr
 > This implies that the body plays a part in the binary and source compatibility of this interface.
 
 
+## Compiletime Operations
 
-## scala.compiletime
+We also provide some operations that evaluate at compiletime.
+
+### Inline Matches
+Like inline `if`, inline matches guarantee that the pattern matching can be statically reduced at compile time and only one branch is kept.
+
+In the following example, the scrutinee, `x`, is an inline parameter that we can pattern match on at compile time.
+
+```scala
+inline def half(x: Any): Any =
+  inline x match
+    case x: Int => x / 2
+    case x: String => x.substring(0, x.length / 2)
+
+half(6)
+// expands to:
+// val x = 6
+// x / 2
+
+half("hello world")
+// expands to:
+// val x = "hello world"
+// x.substring(0, x.length / 2)
+```
+This illustrates that inline matches provide a way to match on the static type of some expression.
+As we match on the _static_ type of an expression, the following code would fail to compile.
+
+```scala
+val n: Any = 3
+half(n) // error: n is not statically known to be an Int or a Double
+```
+Notably, The value `n` is not marked as `inline` and in consequence at compile time
+there is not enough information about the scrutinee to decide which branch to take.
+
+### scala.compiletime
 The package `scala.compiletime` provides useful metaprogramming abstractions that can be used within `inline` methods to provide custom semantics.
 
 ## Macros

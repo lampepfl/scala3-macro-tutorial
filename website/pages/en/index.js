@@ -100,7 +100,7 @@ const Metaprogramming = () => (
         content:
           'Scala 3 provides a toolbox full of metaprogramming features, which are safer, more robust, and much more stable than their counterparts in Scala 2. ' +
           'Implementing macro libraries in Scala 3 is simpler and the resulting libraries are easier to maintain across future versions of Scala. ' +
-          'The improvements come at a price: the meta-programming facilities have been re-designed from the _ground up_. In consequence, existing macro libraries need to be ported to the new interfaces.\n\n' +
+          'The improvements come at a price: the metaprogramming facilities have been re-designed from the _ground up_. In consequence, existing macro libraries need to be ported to the new interfaces.\n\n' +
           `In the [Migrating Macros](https://scalacenter.github.io/scala-3-migration-guide/docs/macros/migrating-macros.html) section, ` +
           'you will find helpful content to port your macros code to Scala 3.',
         title: `[Migrating Macros](https://scalacenter.github.io/scala-3-migration-guide/docs/macros/migrating-macros.html)`,
