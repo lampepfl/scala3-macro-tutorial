@@ -143,7 +143,7 @@ But, if we try to match the argument of the call `sumNow(nums: _*)`, the extract
 We will see how this can be useful later.
 
 
-## Constructing complex expressions
+## Constructing Complex Expressions
 
 ### Collections
 
@@ -172,7 +172,7 @@ def testCode(ignore: Expr[Boolean], computation: Expr[Unit]): Expr[Boolean] =
 
 This is useful when we want to generate code contanining several side effects.
 
-### Simple matching
+### Simple Matching
 
 `Expr.matches` can be used to check if an expression matches another.
 With this method we could implement an `unlift` operation for `Expr[Boolean]` as follows.
@@ -186,7 +186,7 @@ def unlift(boolExpr: Expr[Boolean]): Option[Boolean] =
 
 It may also be used to compare two user written expression.
 
-### Arbitrary expresions
+### Arbitrary Expressions
 
 Last but not least, it is possible to create an `Expr[T]` arbirtary code in it using quotes.
 The quote syntax `'{ ... }`  provides a way to write an arbitrary `Expr[T]`.
