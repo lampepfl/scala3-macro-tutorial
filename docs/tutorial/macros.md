@@ -51,10 +51,11 @@ A `scala.quoted.Expr[T]` contains the code of an expression of type `T`.
 
 We could implement `evalPowerCode` as follows:
 ```scala
+def pow(x: Double, n: Int): Double =
+  if n == 0 then 1 else x * pow(x, n - 1)
+
 def evalPowerCode(x: Expr[Double], n: Expr[Int])(using QuoteContext): Expr[Double] =
-  def pow(x: Double, n: Int): Double =
-    if n == 0 then 1 else pow(x, n - 1)
-  val value: Double = pow(n.unliftOrError, n.unliftOrError)
+  val value: Double = pow(x.unliftOrError, n.unliftOrError)
   Expr(value)
 ```
 
