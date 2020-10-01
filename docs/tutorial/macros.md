@@ -3,80 +3,133 @@ id: scala-3-macros
 title: Scala 3 Macros
 ---
 
-## Inline and macros
+[Inline methods][inline] provide us with a elegant technique for metaprogramming by performing some operations at compile time.
+However, sometimes inlining is not enough and we need more powerful way to analyze and synthesize programs at compile time. Macros enable us to do exactly this: treat **programs as data** and manipulate them.
 
-Let us start simple, we will define a macro that will compute `xⁿ` for a known values `x` and `n`.
+
+## Macros Treat Programs as Data
+With a macro, we can analyze the syntax tree of a program and generate syntax trees at compile time. The tree of a Scala program with type `T` is represented by an instance of the type `scala.quoted.Expr[T]`.
+
+We will dig into the details of the type `Expr[T]`, as well as analyzing and constructing instances, when talking about [Quoted Code][quotes]. For now, it suffices to know that macros are meta programs that manipulate trees of type `Expr[T]`.
+
+The following macro implementation simply prints the syntax tree of the provided argument:
+```scala
+def inspectCode(x: Expr[Any])(using QuoteContext): Expr[Unit] =
+  println(x.unseal.showExtractors)
+  '{ () }
+```
+Calling `unseal` reveals the underlying implementation of `Expr` and allows us to print it as a syntax tree. Note how we construct a tree of type `Expr[Unit]` by enclosing the unit literal in [quotes][quotes] `'{ () }`.
+
+As foreshadowed in the section on [Inline][inline], inline methods provide the entry point for macro definitions:
 
 ```scala
-import scala.quoted._
-
-inline def power(inline x: Double, inline n: Int) =
-  ${ evalPowerCode('x, 'n)  }
-
-def evalPowerCode(x: Expr[Double], n: Expr[Int])(using QuoteContext): Expr[Double] = ...
+inline def inspect(inline x: Any): Unit = ${ inspectCode('x) }
 ```
-All macros are defined with an `inline def` and their bodies contain a splice `${ ... }` in their implementation.
-Then the macros have a single call to a method that will generate the code that will replace the call to the macro.
-This method will receive the parameters with a quote `'` and a contextual `QuoteContext`.
-The `scala.quoted.Expr[T]` represents the code of some expression.
-We will dig deeper into these concepts later.
+All macros are defined with an `inline def`. The implementation of this entry point always has the same shape:
 
-If the macro has type parameters, the implementation will also need to know about them.
-This is done with a contextual `scala.quoted.Type[T]`.
+- they only contain a single [splice][quotes] `${ ... }`
+- the splice contains a single call to the method that implements the macro (for example `inspectCode`).
+- the call to the macro implementation receives the _quoted_ parameters (that is `'x` instead of `x`) and a contextual `QuoteContext`.
+
+We will dig deeper into these concepts later in this and the following sections.
+
+Calling our `inspect` macro `inspect(sys error "abort")` prints a tree similar to the following at compile time:
+```
+Apply(
+  Select(Ident("sys"), "error"),
+  List(Literal(Constant("abort"))))
+```
+Since the macro simply returns a unit literal and discards the input tree, the call to `inspect` simply returns unit without actually raising an error.
+
+
+### Macros and Type Parameters
+
+If the macro has type parameters, the implementation will also need to know about them. Just like `Expr[T]` represents a Scala expression of type `T`, we use `scala.quoted.Type[T]` to represent the Scala type `T`.
 
 ```scala
-inline def logged[T](inline x: T): T =
-  ${ loggedCode('x)  }
+inline def logged[T](inline x: T): T = ${ loggedCode('x)  }
 
-def loggedCode[T](x: Expr[T])(using Type[T])(using QuoteContext): Expr[T] = ...
+def loggedCode[T](x: Expr[T])(
+  using Type[T], QuoteContext
+): Expr[T] = ...
 ```
+Both the instance of `Type[T]` and the contextual `QuoteContext` are automatically provided by splice in the corresponding inline method and can be used by the macro implementation.
 
-### Compilation vs interpretation
+
+### Defining and Using Macros
+
 A key difference between inlining and macros is the way they are evaluated.
-Inlining works by replacing code and then optimising based on rules the compiler knows; on the other hand, a macro will execute user-written code that will generate the code that the macro expands to.
-The inlined code `${ evalPowerCode('x, 'n)  }` is interpreted and will call through Java reflection the method `evalPowerCode`, then the method will execute as normal code.
+Inlining works by rewriting code and performing optimisations based on rules the compiler knows.
+On the other hand, a macro executes user-written code that generates the code that the macro expands to.
 
-### Macro compilation and suspension
-As we need to execute `evalPowerCode` we need to compile its code first.
-Therefore we cannot define and use a macro in the same class/file.
-It is possible to have the macro definition and its call in the same project as long as the implementation of the macro can be compiled first.
-This is made possible by only expanding macros when the macro has been compiled, otherwise, the compilation of the file is suspended.
-Suspended files are compiled once all non suspended files are compiled.
-In some cases, you will have cyclic dependencies that will block the completion of the compilation.
-To get more information on which files are suspended you can use the `-Xprint-suspension` compiler flag.
+Technically, compiling the inlined code `${ inspectCode('x)  }` calls the method `inspectCode` _at compile time_ (through Java reflection), and the method `inspectCode` then executes as normal code.
+
+To be able to execute `inspectCode`, we need to compile its source code first.
+As a technicaly consequence, we cannot define and use a macro in the **same class/file**.
+However, it is possible to have the macro definition and its call in the **same project** as long as the implementation of the macro can be compiled first.
+
+> #### Suspended Files
+> To allow defining and using macros in the same project, only those calls to macros are expanded, where the macro has already been compiled. For all other (unknown) macro calls, the compilation of the file is _suspended_.
+> Suspended files are only compiled after all non suspended files have been successfully compiled.
+> In some cases, you will have _cyclic dependencies_ that will block the completion of the compilation.
+> To get more information on which files are suspended you can use the `-Xprint-suspension` compiler flag.
+
+
+### Example: Statically Evaluating `power` with Macros
+
+Let us recall our definition of `power` from the section on [Inline][inline] that specialized the computation of `xⁿ` for statically known values of `n`.
+```
+inline def power(x: Double, inline n: Int): Double =
+  inline if (n == 0) 1.0
+  else inline if (n % 2 == 1) x * power(x, n - 1)
+  else power(x * x, n / 2)
+```
+In the remainder of this section, we will define a macro that computes `xⁿ` for a statically known values `x` and `n`. While this is also possible purely with `inline`, implementing it with macros will illustrate a few things.
+
+```scala
+inline def power(inline x: Double, inline n: Int) =
+  ${ evalPower('x, 'n)  }
+
+def powerCode(
+  x: Expr[Double],
+  n: Expr[Int]
+)(using QuoteContext): Expr[Double] = ...
+```
 
 ## Simple Expressions
 
-A `scala.quoted.Expr[T]` contains the code of an expression of type `T`.
-
-We could implement `evalPowerCode` as follows:
+We could implement `powerCode` as follows:
 ```scala
 def pow(x: Double, n: Int): Double =
   if n == 0 then 1 else x * pow(x, n - 1)
 
-def evalPowerCode(x: Expr[Double], n: Expr[Int])(using QuoteContext): Expr[Double] =
+def powerCode(
+  x: Expr[Double],
+  n: Expr[Int]
+)(using QuoteContext): Expr[Double] =
   val value: Double = pow(x.unliftOrError, n.unliftOrError)
   Expr(value)
 ```
-
-The `pow` operation simply computes the value of `xⁿ`.
+Here, the `pow` operation is a simple Scala function that computes the value of `xⁿ`.
 The interesting part is how we create and look into the `Expr`s.
 
-### Creating expression
 
-Let's first look at `Expr(value)`.
-This will return an expression containing the code representing that value.
-Here the value is computed at compile-time, at runtime we only need to instantiate this value.
+### Creating Expression From Values
 
-This will work for all _primitive types_, _tuples_ of any arity, `Class`, `Array`, `Seq`, `Set`, `List`, `Map`, `Option`, `Either`, `BigInt`, `BigDecimal`, `StringContext`.
+Let's first look at `Expr.apply(value)`. Given a value of type `T`,
+this call will return an expression containing the code representing the given value (that is, of type `Expr[T]`).
+The argument value to `Expr` is computed at compile-time, at runtime we only need to instantiate this value.
+
+Creating expressions from values works for all _primitive types_, _tuples_ of any arity, `Class`, `Array`, `Seq`, `Set`, `List`, `Map`, `Option`, `Either`, `BigInt`, `BigDecimal`, `StringContext`.
 Other types can also work if a `Liftable` is implemented for it, we will [see this later][quotes].
 
-### Extracting vaues out of expressions
 
-The second operation we used if the `unliftOrError` on and `Expr[T]` which will do the opposite operation.
-If the expression contains the code of value it will return this value, otherwise, it will throw a special exception that will stop the macro expansion and report an error saying that the code did not correspond to value.
+### Extracting Values from Expressions
 
-We could also use the `unlift` operation which will return an `Option`.
+The second method we use in the implementation of `powerCode` is `Expr[T].unliftOrError`, which has an effect opposite to `Expr.apply`.
+It attempts to extract a value of type `T` from an expression of type `Expr[T]`. This can only succeed, if the expression directly contains the code of a value, otherwise, it will throw an exception that stops the macro expansion and reports that the expression did not correspond to a value.
+
+Instead of `unliftOrError`, we could also use the `unlift` operation, which will return an `Option`.
 This way we can report the error with a custom error message.
 
 ```scala
@@ -92,48 +145,52 @@ Alternatively, we can also use the `Unlifted` extractor
 ```scala
   ...
   (x, n) match
-    case (Unlifted(base), Unlifted(exponent)) => pow(base, exponent)
+    case (Unlifted(base), Unlifted(exponent)) =>
+      pow(base, exponent)
     case (Unlifted(_), _) => ...
     case _ => ...
 ```
-
-`unlift`, `unliftOrError`, and `Unlifted` will work for all _primitive types_, _tuples_ of any arity, , `Option` `Seq`, `Set`, `Map`, `Either` and `StringContext`.
+The operations `unlift`, `unliftOrError`, and `Unlifted` will work for all _primitive types_, _tuples_ of any arity, , `Option` `Seq`, `Set`, `Map`, `Either` and `StringContext`.
 Other types can also work if an `Unliftable` is implemented for it, we will [see this later][quotes].
 
 
-### Showing expressions
+### Showing Expressions
 
-Expression `Expr` can be converted to a string representation of the source using `.show` method.
-This might be useful for example to debug some code:
+We have already seen how to print the tree representation of an expression
+by using `expr.unseal.showExtractors`. Alternatively, expressions can be converted to a string representation of the _source_ using `.show` method.
+This can be useful to perform debugging on macro implementations:
 ```scala
-def debugEvalPowerCode(x: Expr[Double], n: Expr[Int])(using QuoteContext): Expr[Double] =
+def debugPowerCode(
+  x: Expr[Double],
+  n: Expr[Int]
+)(using QuoteContext): Expr[Double] =
   println(
-    s"""evalPowerCode
+    s"""powerCode
        |  x := ${x.show}
        |  n := ${n.show}""".stripMargin)
-  val code = evalPowerCode(x, n)
+  val code = powerCode(x, n)
   println(s"  code := ${code.show}")
   code
 ```
 
 
-### Working with varargs
+### Working with Varargs
 
-Varargs in are represented with `Seq`, hence when we write a macro with a _vararg_ we will pass it as an `Expr[Seq[T]]`.
-It is possible to recover each individual argument using the `scala.quoted.Varargs` extractor.
+Varargs in Scala are represented with `Seq`, hence when we write a macro with a _vararg_, it will be passed as an `Expr[Seq[T]]`.
+It is possible to recover each individual argument (of type `Expr[T]`) using the `scala.quoted.Varargs` extractor.
 
 ```scala
-import scala.quoted._
+inline def sumNow(inline nums: Int*): Int =
+  ${ sumCode('nums)  }
 
-inline def sumNow(inline numbers: Int*): Int =
-  ${ evalSumCode('numbers)  }
-
-def evalSumCode(numbersExpr: Expr[Seq[Int]])(using QuoteContext): Expr[Int] =
-  numbersExpr match
+def sumCode(nums: Expr[Seq[Int]])(using QuoteContext): Expr[Int] =
+  nums match
     case  Varargs(numberExprs) => // numberExprs: Seq[Expr[Int]]
       val numbers: Seq[Int] = numberExprs.map(_.unliftOrError)
       Expr(numbers.sum)
-    case _ => report.error("Expected explicit agument. Notation `agrs: _*` is not supported.", numbersExpr)
+    case _ => report.error(
+      "Expected explicit argument" +
+      "Notation `args: _*` is not supported.", numbersExpr)
 ```
 
 The extractor will match a call to `sumNow(1, 2, 3)` and extract a `Seq[Expr[Int]]` containing the code of each parameter.
