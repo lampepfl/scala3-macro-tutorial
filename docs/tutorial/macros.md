@@ -4,13 +4,16 @@ title: Scala 3 Macros
 ---
 
 [Inline methods][inline] provide us with a elegant technique for metaprogramming by performing some operations at compile time.
-However, sometimes inlining is not enough and we need more powerful way to analyze and synthesize programs at compile time. Macros enable us to do exactly this: treat **programs as data** and manipulate them.
+However, sometimes inlining is not enough and we need more powerful way to analyze and synthesize programs at compile time.
+Macros enable us to do exactly this: treat **programs as data** and manipulate them.
 
 
 ## Macros Treat Programs as Data
-With a macro, we can analyze the syntax tree of a program and generate syntax trees at compile time. The tree of a Scala program with type `T` is represented by an instance of the type `scala.quoted.Expr[T]`.
+With a macro, we can analyze the syntax tree of a program and generate syntax trees at compile time.
+The tree of a Scala program with type `T` is represented by an instance of the type `scala.quoted.Expr[T]`.
 
-We will dig into the details of the type `Expr[T]`, as well as analyzing and constructing instances, when talking about [Quoted Code][quotes]. For now, it suffices to know that macros are meta programs that manipulate trees of type `Expr[T]`.
+We will dig into the details of the type `Expr[T]`, as well as analyzing and constructing instances, when talking about [Quoted Code][quotes].
+For now, it suffices to know that macros are meta programs that manipulate trees of type `Expr[T]`.
 
 The following macro implementation simply prints the syntax tree of the provided argument:
 ```scala
@@ -18,14 +21,16 @@ def inspectCode(x: Expr[Any])(using QuoteContext): Expr[Unit] =
   println(x.unseal.showExtractors)
   '{ () }
 ```
-Calling `unseal` reveals the underlying implementation of `Expr` and allows us to print it as a syntax tree. Note how we construct a tree of type `Expr[Unit]` by enclosing the unit literal in [quotes][quotes] `'{ () }`.
+Calling `unseal` reveals the underlying implementation of `Expr` and allows us to print it as a syntax tree.
+Note how we construct a tree of type `Expr[Unit]` by enclosing the unit literal in [quotes][quotes] `'{ () }`.
 
 As foreshadowed in the section on [Inline][inline], inline methods provide the entry point for macro definitions:
 
 ```scala
 inline def inspect(inline x: Any): Unit = ${ inspectCode('x) }
 ```
-All macros are defined with an `inline def`. The implementation of this entry point always has the same shape:
+All macros are defined with an `inline def`.
+The implementation of this entry point always has the same shape:
 
 - they only contain a single [splice][quotes] `${ ... }`
 - the splice contains a single call to the method that implements the macro (for example `inspectCode`).
@@ -44,7 +49,8 @@ Since the macro simply returns a unit literal and discards the input tree, the c
 
 ### Macros and Type Parameters
 
-If the macro has type parameters, the implementation will also need to know about them. Just like `Expr[T]` represents a Scala expression of type `T`, we use `scala.quoted.Type[T]` to represent the Scala type `T`.
+If the macro has type parameters, the implementation will also need to know about them.
+Just like `Expr[T]` represents a Scala expression of type `T`, we use `scala.quoted.Type[T]` to represent the Scala type `T`.
 
 ```scala
 inline def logged[T](inline x: T): T = ${ loggedCode('x)  }
@@ -69,7 +75,8 @@ As a technicaly consequence, we cannot define and use a macro in the **same clas
 However, it is possible to have the macro definition and its call in the **same project** as long as the implementation of the macro can be compiled first.
 
 > #### Suspended Files
-> To allow defining and using macros in the same project, only those calls to macros are expanded, where the macro has already been compiled. For all other (unknown) macro calls, the compilation of the file is _suspended_.
+> To allow defining and using macros in the same project, only those calls to macros are expanded, where the macro has already been compiled.
+> For all other (unknown) macro calls, the compilation of the file is _suspended_.
 > Suspended files are only compiled after all non suspended files have been successfully compiled.
 > In some cases, you will have _cyclic dependencies_ that will block the completion of the compilation.
 > To get more information on which files are suspended you can use the `-Xprint-suspension` compiler flag.
@@ -84,7 +91,8 @@ inline def power(x: Double, inline n: Int): Double =
   else inline if (n % 2 == 1) x * power(x, n - 1)
   else power(x * x, n / 2)
 ```
-In the remainder of this section, we will define a macro that computes `xⁿ` for a statically known values `x` and `n`. While this is also possible purely with `inline`, implementing it with macros will illustrate a few things.
+In the remainder of this section, we will define a macro that computes `xⁿ` for a statically known values `x` and `n`.
+While this is also possible purely with `inline`, implementing it with macros will illustrate a few things.
 
 ```scala
 inline def power(inline x: Double, inline n: Int) =
@@ -127,7 +135,8 @@ Other types can also work if a `Liftable` is implemented for it, we will [see th
 ### Extracting Values from Expressions
 
 The second method we use in the implementation of `powerCode` is `Expr[T].unliftOrError`, which has an effect opposite to `Expr.apply`.
-It attempts to extract a value of type `T` from an expression of type `Expr[T]`. This can only succeed, if the expression directly contains the code of a value, otherwise, it will throw an exception that stops the macro expansion and reports that the expression did not correspond to a value.
+It attempts to extract a value of type `T` from an expression of type `Expr[T]`.
+This can only succeed, if the expression directly contains the code of a value, otherwise, it will throw an exception that stops the macro expansion and reports that the expression did not correspond to a value.
 
 Instead of `unliftOrError`, we could also use the `unlift` operation, which will return an `Option`.
 This way we can report the error with a custom error message.
