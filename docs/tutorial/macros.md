@@ -4,25 +4,24 @@ title: Scala 3 Macros
 ---
 
 [Inline methods][inline] provide us with a elegant technique for metaprogramming by performing some operations at compile time.
-However, sometimes inlining is not enough and we need more powerful way to analyze and synthesize programs at compile time.
+However, sometimes inlining is not enough and we need more powerful ways to analyze and synthesize programs at compile time.
 Macros enable us to do exactly this: treat **programs as data** and manipulate them.
 
 
-## Macros Treat Programs as Data
-With a macro, we can analyze the syntax tree of a program and generate syntax trees at compile time.
-The tree of a Scala program with type `T` is represented by an instance of the type `scala.quoted.Expr[T]`.
+## Macros Treat Programs as Values
+With a macro, we can treat programs as values, which allows us to analyze and generate them at compile time.
+A Scala expression with type `T` is represented by an instance of the type `scala.quoted.Expr[T]`.
 
-We will dig into the details of the type `Expr[T]`, as well as analyzing and constructing instances, when talking about [Quoted Code][quotes].
-For now, it suffices to know that macros are meta programs that manipulate trees of type `Expr[T]`.
+We will dig into the details of the type `Expr[T]`, as well as the different ways of analyzing and constructing instances, when talking about [Quoted Code][quotes] and [Reflection][tasty].
+For now, it suffices to know that macros are meta programs that manipulate expressions of type `Expr[T]`.
 
-The following macro implementation simply prints the syntax tree of the provided argument:
+The following macro implementation simply prints the expression of the provided argument:
 ```scala
 def inspectCode(x: Expr[Any])(using QuoteContext): Expr[Unit] =
-  println(x.unseal.showExtractors)
+  println(x.show)
   '{ () }
 ```
-Calling `unseal` reveals the underlying implementation of `Expr` and allows us to print it as a syntax tree.
-Note how we construct a tree of type `Expr[Unit]` by enclosing the unit literal in [quotes][quotes] `'{ () }`.
+After printing the argument expression, we return a Scala expression of type `Expr[Unit]` by enclosing the unit literal in [quotes][quotes] `'{ () }`.
 
 As foreshadowed in the section on [Inline][inline], inline methods provide the entry point for macro definitions:
 
@@ -38,28 +37,24 @@ The implementation of this entry point always has the same shape:
 
 We will dig deeper into these concepts later in this and the following sections.
 
-Calling our `inspect` macro `inspect(sys error "abort")` prints a tree similar to the following at compile time:
+Calling our `inspect` macro `inspect(sys error "abort")` prints a string representation of the argument expression at compile time:
 ```
-Apply(
-  Select(Ident("sys"), "error"),
-  List(Literal(Constant("abort"))))
+scala.sys.error("abort")
 ```
-Since the macro simply returns a unit literal and discards the input tree, the call to `inspect` simply returns unit without actually raising an error.
+Since the macro simply returns a unit literal and discards the input expression, the call to `inspect` simply returns unit without actually raising an error.
 
 
 ### Macros and Type Parameters
 
 If the macro has type parameters, the implementation will also need to know about them.
-Just like `Expr[T]` represents a Scala expression of type `T`, we use `scala.quoted.Type[T]` to represent the Scala type `T`.
+Just like `scala.quoted.Expr[T]` represents a Scala expression of type `T`, we use `scala.quoted.Type[T]` to represent the Scala type `T`.
 
 ```scala
 inline def logged[T](inline x: T): T = ${ loggedCode('x)  }
 
-def loggedCode[T](x: Expr[T])(
-  using Type[T], QuoteContext
-): Expr[T] = ...
+def loggedCode[T](x: Expr[T])(using Type[T], QuoteContext): Expr[T] = ...
 ```
-Both the instance of `Type[T]` and the contextual `QuoteContext` are automatically provided by splice in the corresponding inline method and can be used by the macro implementation.
+Both the instance of `Type[T]` and the contextual `QuoteContext` are automatically provided by the splice in the corresponding inline method (that is, `logged`) and can be used by the macro implementation.
 
 
 ### Defining and Using Macros
@@ -144,9 +139,12 @@ This way we can report the error with a custom error message.
 ```scala
   ...
   (x.unlift, n.unlift) match
-    case (Some(base), Some(exponent)) => pow(base, exponent)
-    case (Some(_), _) => report.error("Exprected a know value for the exponent, but was " + n.show, n)
-    case _ => report.error("Expected a know value for the base, but was " + x.show, x)
+    case (Some(base), Some(exponent)) =>
+      pow(base, exponent)
+    case (Some(_), _) =>
+      report.error("Expected a known value for the exponent, but was " + n.show, n)
+    case _ =>
+      report.error("Expected a known value for the base, but was " + x.show, x)
 ```
 
 Alternatively, we can also use the `Unlifted` extractor
@@ -165,8 +163,7 @@ Other types can also work if an `Unliftable` is implemented for it, we will [see
 
 ### Showing Expressions
 
-We have already seen how to print the tree representation of an expression
-by using `expr.unseal.showExtractors`. Alternatively, expressions can be converted to a string representation of the _source_ using `.show` method.
+In the implementation of `inspectCode`, we have already seen how to convert expressions to the string representation of their _source code_ using the `.show` method.
 This can be useful to perform debugging on macro implementations:
 ```scala
 def debugPowerCode(
@@ -267,5 +264,5 @@ For example `'{ doSomething(); getIntResult() }` will generate an `Expr[Int]` th
 [macros]: tutorial/macros.md
 [migration-status]: https://scalacenter.github.io/scala-3-migration-guide/docs/macros/migration-status.html
 [quotes]: tutorial/quotes.md
-[references]: references.md
+[references]: other-resources.md
 [tasty]: tutorial/tasty-reflection.md
