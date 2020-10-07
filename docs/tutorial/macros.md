@@ -206,38 +206,50 @@ But, if we try to match the argument of the call `sumNow(nums: _*)`, the extract
 We will see how this can be useful later.
 
 
-## Constructing Complex Expressions
+## Complex Expressions
+So far, we have only seen how to construct and destruct expressions that correspond to simple values.
+In order to work with more complex expressions, Scala 3 offers different metaprogramming facilities ranging from
+
+- additional constructors like `Expr.apply`,
+- over [quoted pattern matching][quotes],
+- to a full [reflection API][tasty];
+
+each increasing in complexity and potentially losing safety guarantees.
+It is generally recommended to prefer simple APIs over more advanced ones.
+In the remainder of this section, we introduce some more additional constructors and destructors,
+while subsequent chapters introduce the more advanced APIs.
 
 ### Collections
 
 We have seen how to convert a `List[Int]` into an `Expr[List[Int]]` using `Expr.apply`.
 How about converting a `List[Expr[Int]]` into `Expr[List[Int]]`?
-We mentioned that `Varargs.apply` can do this for sequences, but other methods are available.
+We mentioned that `Varargs.apply` can do this for sequences -- likewise for other collection types, corresponding methods are available:
 
 * `Expr.ofList`: Transform a `List[Expr[T]]` into `Expr[List[T]]`
-* `Expr.ofSeq`: Transform a `List[Expr[T]]` into `Expr[List[T]]` (just like `Varargs`)
+* `Expr.ofSeq`: Transform a `Seq[Expr[T]]` into `Expr[Seq[T]]` (just like `Varargs`)
 * `Expr.ofTupleFromSeq`: Transform a `Seq[Expr[T]]` into `Expr[Tuple]`
 * `Expr.ofTuple`: Transform a `(Expr[T1], ..., Expr[Tn])` into `Expr[(T1, ..., Tn)]`
 
 ### Simple Blocks
 
-`Expr.block` provides a simple way to create a block of code `{ stat1; ...; statn; expr }`.
-Its first arguments is a list with all the statements and the second argument is the expression at the ind of the block.
+The constructor `Expr.block` provides a simple way to create a block of code `{ stat1; ...; statn; expr }`.
+Its first arguments is a list with all the statements and the second argument is the expression at the end of the block.
 
 ```scala
 inline def test(inline ignore: Boolean, computation: => Unit): Boolean =
   ${ testCode('ignore, 'computation) }
 
-def testCode(ignore: Expr[Boolean], computation: Expr[Unit]): Expr[Boolean] =
+def testCode(ignore: Expr[Boolean], computation: Expr[Unit])(using QuoteContext) =
   if ignore.unliftOrError then Expr(false)
   else Expr.block(List(computation), Expr(true))
 ```
 
-This is useful when we want to generate code contanining several side effects.
+The `Expr.block` constructor is useful when we want to generate code contanining several side effects.
+The macro call `test(false, EXPRESSION)` will generate `{ EXPRESSION; true}`, while the call `test(true, EXPRESSION)` will result in `false`.
 
 ### Simple Matching
 
-`Expr.matches` can be used to check if an expression matches another.
+The method `Expr.matches` can be used to check if one expression is equal to another.
 With this method we could implement an `unlift` operation for `Expr[Boolean]` as follows.
 
 ```scala
@@ -247,13 +259,13 @@ def unlift(boolExpr: Expr[Boolean]): Option[Boolean] =
   else None
 ```
 
-It may also be used to compare two user written expression.
+It may also be used to compare two user written expression. Note, that `matches` only performs a limited amount of normalization and while for instance the Scala expression `2` matches the expression `{ 2 }`, this is _not the case_ for the expression `1 + 1`.
 
 ### Arbitrary Expressions
 
-Last but not least, it is possible to create an `Expr[T]` arbirtary code in it using quotes.
-The quote syntax `'{ ... }`  provides a way to write an arbitrary `Expr[T]`.
-For example `'{ doSomething(); getIntResult() }` will generate an `Expr[Int]` that will contain the code that is with the quoted block.
+Last but not least, it is possible to create an `Expr[T]` from arbitary Scala code by enclosing it in [quotes][quotes].
+For example `'{ ${expr}; true }` will generate an `Expr[Int]` equivalent to `Expr.block(List(expr), Expr(true))`.
+The subsequent section on [Quoted Code][quotes] presents quotes in more detail.
 
 
 
