@@ -257,7 +257,8 @@ def unlift(boolExpr: Expr[Boolean]): Option[Boolean] =
   else None
 ```
 
-It may also be used to compare two user written expression. Note, that `matches` only performs a limited amount of normalization and while for instance the Scala expression `2` matches the expression `{ 2 }`, this is _not the case_ for the expression `1 + 1`.
+It may also be used to compare two user written expression.
+Note, that `matches` only performs a limited amount of normalization and while for instance the Scala expression `2` matches the expression `{ 2 }`, this is _not the case_ for the expression `{ val x: Int = 2; x }`.
 
 ### Arbitrary Expressions
 
