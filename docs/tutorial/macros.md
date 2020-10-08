@@ -13,20 +13,20 @@ With a macro, we can treat programs as values, which allows us to analyze and ge
 A Scala expression with type `T` is represented by an instance of the type `scala.quoted.Expr[T]`.
 
 We will dig into the details of the type `Expr[T]`, as well as the different ways of analyzing and constructing instances, when talking about [Quoted Code][quotes] and [Reflection][tasty].
-For now, it suffices to know that macros are meta programs that manipulate expressions of type `Expr[T]`.
+For now, it suffices to know that macros are metaprograms that manipulate expressions of type `Expr[T]`.
 
 The following macro implementation simply prints the expression of the provided argument:
 ```scala
-def inspectCode(x: Expr[Any])(using QuoteContext): Expr[Unit] =
+def inspectCode(x: Expr[Any])(using QuoteContext): Expr[Any] =
   println(x.show)
-  '{ () }
+  x
 ```
-After printing the argument expression, we return a Scala expression of type `Expr[Unit]` by enclosing the unit literal in [quotes][quotes] `'{ () }`.
+After printing the argument expression, we return the original argument as a Scala expression of type `Expr[Any]`.
 
 As foreshadowed in the section on [Inline][inline], inline methods provide the entry point for macro definitions:
 
 ```scala
-inline def inspect(inline x: Any): Unit = ${ inspectCode('x) }
+inline def inspect(inline x: Any): Any = ${ inspectCode('x) }
 ```
 All macros are defined with an `inline def`.
 The implementation of this entry point always has the same shape:
@@ -41,7 +41,6 @@ Calling our `inspect` macro `inspect(sys error "abort")` prints a string represe
 ```
 scala.sys.error("abort")
 ```
-Since the macro simply returns a unit literal and discards the input expression, the call to `inspect` simply returns unit without actually raising an error.
 
 
 ### Macros and Type Parameters
