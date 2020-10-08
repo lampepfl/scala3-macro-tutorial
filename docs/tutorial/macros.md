@@ -79,10 +79,10 @@ However, it is possible to have the macro definition and its call in the **same 
 ### Example: Statically Evaluating `power` with Macros
 
 Let us recall our definition of `power` from the section on [Inline][inline] that specialized the computation of `xⁿ` for statically known values of `n`.
-```
+```scala
 inline def power(x: Double, inline n: Int): Double =
-  inline if (n == 0) 1.0
-  else inline if (n % 2 == 1) x * power(x, n - 1)
+  inline if n == 0 then 1.0
+  else inline if n % 2 == 1 then x * power(x, n - 1)
   else power(x * x, n / 2)
 ```
 In the remainder of this section, we will define a macro that computes `xⁿ` for a statically known values `x` and `n`.
@@ -118,8 +118,7 @@ The interesting part is how we create and look into the `Expr`s.
 
 ### Creating Expression From Values
 
-Let's first look at `Expr.apply(value)`. Given a value of type `T`,
-this call will return an expression containing the code representing the given value (that is, of type `Expr[T]`).
+Let's first look at `Expr.apply(value)`. Given a value of type `T`, this call will return an expression containing the code representing the given value (that is, of type `Expr[T]`).
 The argument value to `Expr` is computed at compile-time, at runtime we only need to instantiate this value.
 
 Creating expressions from values works for all _primitive types_, _tuples_ of any arity, `Class`, `Array`, `Seq`, `Set`, `List`, `Map`, `Option`, `Either`, `BigInt`, `BigDecimal`, `StringContext`.
@@ -156,7 +155,7 @@ Alternatively, we can also use the `Unlifted` extractor
     case (Unlifted(_), _) => ...
     case _ => ...
 ```
-The operations `unlift`, `unliftOrError`, and `Unlifted` will work for all _primitive types_, _tuples_ of any arity, , `Option` `Seq`, `Set`, `Map`, `Either` and `StringContext`.
+The operations `unlift`, `unliftOrError`, and `Unlifted` will work for all _primitive types_, _tuples_ of any arity, `Option`, `Seq`, `Set`, `Map`, `Either` and `StringContext`.
 Other types can also work if an `Unliftable` is implemented for it, we will [see this later][quotes].
 
 
