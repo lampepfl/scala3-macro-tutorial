@@ -4,7 +4,7 @@ title: Quoted Code
 ---
 
 ## Code blocks
-A quoted code block `'{ ... }` is syntactically similar to a string quote `" ... "` with the difference that the fist contains typed code.
+A quoted code block `'{ ... }` is syntactically similar to a string quote `" ... "` with the difference that the first contains typed code.
 To insert a code into other code we use the `$expr` or `${ expr }` where `expr` is of type `Expr[T]`.
 Intuitively, the code directly within the quote is not executed now, while the code within the splices is evaluated and their results are then spliced into the surrounding expression.
 
