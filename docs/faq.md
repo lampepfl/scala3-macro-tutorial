@@ -19,6 +19,6 @@ We can get the precise type (`Type`) of an `Expr` using the following pattern ma
 ```scala
 val x: Expr[X] = ...
 x match
-  case '{ $x: $t } =>
-    // `x: Expr[X & t.T]` where `t` is the precise type of `x`
+  case '{ $x: t } =>
+    // `x: Expr[X & t]` where `t` is the precise type of `x`
 ```
