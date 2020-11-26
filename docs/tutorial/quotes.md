@@ -322,8 +322,8 @@ def $[T](x: Quotes ?=> Expr[T]): T = ...
 
 When we have a splice within a quote, the inner quote context will depend on the outer one.
 This link is represented using the `Quotes.Nested` type.
-Users of this quotes will almost never need to use `Quotes.Nested`.
-These details are only useful for advanced macros that will inspect code and may encounted quotes and splices.
+Users of quotes will almost never need to use `Quotes.Nested`.
+These details are only useful for advanced macros that will inspect code and may encounter details of quotes and splices.
 
 ```scala
 def f(using q1: Quotes) = '{
