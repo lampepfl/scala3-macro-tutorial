@@ -284,8 +284,8 @@ given Unliftable[Boolean] = new Unliftable[Boolean] {
 
 given Unliftable[StringContext] = new Unliftable[StringContext] {
   def fromExpr(x: Expr[StringContext])(using Quotes): Option[StringContext] = x match {
-    case '{ new StringContext(${Varargs(Consts(args))}: _*) } => Some(StringContext(args: _*))
-    case '{     StringContext(${Varargs(Consts(args))}: _*) } => Some(StringContext(args: _*))
+    case '{ new StringContext(${Varargs(Unlifted(args))}: _*) } => Some(StringContext(args: _*))
+    case '{     StringContext(${Varargs(Unlifted(args))}: _*) } => Some(StringContext(args: _*))
     case _ => None
   }
 }
@@ -293,7 +293,7 @@ given Unliftable[StringContext] = new Unliftable[StringContext] {
 Note that we handled two cases for the `StringContext`.
 As it is a `case class` it can be created with the `new StringContext` or with the `StringContext.apply` in the companion object.
 We also used the `Varargs` extractor to match the arguments of type `Expr[Seq[String]]` into a `Seq[Expr[String]]`.
-Then we used the `Consts` to match known constants in the `Seq[Expr[String]]` to get a `Seq[String]`.
+Then we used the `Unlifted` to match known constants in the `Seq[Expr[String]]` to get a `Seq[String]`.
 
 
 ## The Quotes
