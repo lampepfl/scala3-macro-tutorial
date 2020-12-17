@@ -43,5 +43,5 @@ Additionally, we will include a cross-compilation/migration guide (M-A).
 [migration-status]: https://scalacenter.github.io/scala-3-migration-guide/docs/macros/migration-status.html
 [quotes]: tutorial/quotes.md
 [references]: references.md
-[tasty]: tutorial/tasty-reflection.md
+[tasty]: tutorial/reflection.md
 [reflection-api]: https://github.com/lampepfl/dotty/blob/master/library/src/scala/tasty/Reflection.scala

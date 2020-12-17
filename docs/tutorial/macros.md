@@ -109,7 +109,7 @@ def powerCode(
   x: Expr[Double],
   n: Expr[Int]
 )(using Quotes): Expr[Double] =
-  val value: Double = pow(x.unliftOrError, n.unliftOrError)
+  val value: Double = pow(x.valueOrError, n.valueOrError)
   Expr(value)
 ```
 Here, the `pow` operation is a simple Scala function that computes the value of `xⁿ`.
@@ -122,21 +122,21 @@ Let's first look at `Expr.apply(value)`. Given a value of type `T`, this call wi
 The argument value to `Expr` is computed at compile-time, at runtime we only need to instantiate this value.
 
 Creating expressions from values works for all _primitive types_, _tuples_ of any arity, `Class`, `Array`, `Seq`, `Set`, `List`, `Map`, `Option`, `Either`, `BigInt`, `BigDecimal`, `StringContext`.
-Other types can also work if a `Liftable` is implemented for it, we will [see this later][quotes].
+Other types can also work if a `ToExpr` is implemented for it, we will [see this later][quotes].
 
 
 ### Extracting Values from Expressions
 
-The second method we use in the implementation of `powerCode` is `Expr[T].unliftOrError`, which has an effect opposite to `Expr.apply`.
+The second method we use in the implementation of `powerCode` is `Expr[T].valueOrError`, which has an effect opposite to `Expr.apply`.
 It attempts to extract a value of type `T` from an expression of type `Expr[T]`.
 This can only succeed, if the expression directly contains the code of a value, otherwise, it will throw an exception that stops the macro expansion and reports that the expression did not correspond to a value.
 
-Instead of `unliftOrError`, we could also use the `unlift` operation, which will return an `Option`.
+Instead of `valueOrError`, we could also use the `value` operation, which will return an `Option`.
 This way we can report the error with a custom error message.
 
 ```scala
   ...
-  (x.unlift, n.unlift) match
+  (x.value, n.value) match
     case (Some(base), Some(exponent)) =>
       pow(base, exponent)
     case (Some(_), _) =>
@@ -145,18 +145,18 @@ This way we can report the error with a custom error message.
       report.error("Expected a known value for the base, but was " + x.show, x)
 ```
 
-Alternatively, we can also use the `Unlifted` extractor
+Alternatively, we can also use the `Expr.unapply` extractor
 
 ```scala
   ...
   (x, n) match
-    case (Unlifted(base), Unlifted(exponent)) =>
+    case (Expr(base), Expr(exponent)) =>
       pow(base, exponent)
-    case (Unlifted(_), _) => ...
+    case (Expr(_), _) => ...
     case _ => ...
 ```
-The operations `unlift`, `unliftOrError`, and `Unlifted` will work for all _primitive types_, _tuples_ of any arity, `Option`, `Seq`, `Set`, `Map`, `Either` and `StringContext`.
-Other types can also work if an `Unliftable` is implemented for it, we will [see this later][quotes].
+The operations `value`, `valueOrError`, and `Expr.unapply` will work for all _primitive types_, _tuples_ of any arity, `Option`, `Seq`, `Set`, `Map`, `Either` and `StringContext`.
+Other types can also work if an `FromExpr` is implemented for it, we will [see this later][quotes].
 
 
 ### Showing Expressions
@@ -190,7 +190,7 @@ inline def sumNow(inline nums: Int*): Int =
 def sumCode(nums: Expr[Seq[Int]])(using Quotes): Expr[Int] =
   nums match
     case  Varargs(numberExprs) => // numberExprs: Seq[Expr[Int]]
-      val numbers: Seq[Int] = numberExprs.map(_.unliftOrError)
+      val numbers: Seq[Int] = numberExprs.map(_.valueOrError)
       Expr(numbers.sum)
     case _ => report.error(
       "Expected explicit argument" +
@@ -238,7 +238,7 @@ inline def test(inline ignore: Boolean, computation: => Unit): Boolean =
   ${ testCode('ignore, 'computation) }
 
 def testCode(ignore: Expr[Boolean], computation: Expr[Unit])(using Quotes) =
-  if ignore.unliftOrError then Expr(false)
+  if ignore.valueOrError then Expr(false)
   else Expr.block(List(computation), Expr(true))
 ```
 
@@ -248,10 +248,10 @@ The macro call `test(false, EXPRESSION)` will generate `{ EXPRESSION; true}`, wh
 ### Simple Matching
 
 The method `Expr.matches` can be used to check if one expression is equal to another.
-With this method we could implement an `unlift` operation for `Expr[Boolean]` as follows.
+With this method we could implement an `value` operation for `Expr[Boolean]` as follows.
 
 ```scala
-def unlift(boolExpr: Expr[Boolean]): Option[Boolean] =
+def value(boolExpr: Expr[Boolean]): Option[Boolean] =
   if boolExpr.matches(Expr(true)) then Some(true)
   else if boolExpr.matches(Expr(false)) then Some(false)
   else None
@@ -276,4 +276,4 @@ The subsequent section on [Quoted Code][quotes] presents quotes in more detail.
 [migration-status]: https://scalacenter.github.io/scala-3-migration-guide/docs/macros/migration-status.html
 [quotes]: tutorial/quotes.md
 [references]: other-resources.md
-[tasty]: tutorial/tasty-reflection.md
+[tasty]: tutorial/reflection.md

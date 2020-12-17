@@ -1,6 +1,6 @@
 ---
-id: tasty-reflection
-title: TASTy Reflection
+id: reflection
+title: Reflection API 
 ---
 
 The reflection API provides a more complex and comprehensive view on the structure of the code.
@@ -13,14 +13,16 @@ We can use `scala.quoted.quotes` to import it.
 
 ```scala
 def pow(x: Expr[Int])(using Quotes): Expr[Int] = {
-  import quotes.tasty._ // Import Tree, Type, Symbol, Position, .....
+  import quotes.reflect._ // Import Tree, Type, Symbol, Position, .....
+  val term: Term = x.asTerm
+  val pos = term.pos
   ...
 }
 ```
 
 This will import all the types and modules (with extension methods) of the API.
 
-The full imported API can be found here: [Reflection](https://dotty.epfl.ch/api/scala/tasty/Reflection.html)
+The full imported API can be found here: [Reflection](http://dotty.epfl.ch/api/scala/quoted/Quotes$reflectModule.html)
 
 For example to find what is a `Term`, we can see in the hierarchy that it is a subtype of `Statement` which is a subtype of `Tree`.
 If we look into the [`TermMethods`](https://dotty.epfl.ch/api/scala/tasty/Reflection/TermMethods.html) we will find all the extension methods that are defined for `Term` such as `Term.tpe` which returns a `Type`.
