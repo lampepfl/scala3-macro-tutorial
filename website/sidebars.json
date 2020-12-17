@@ -6,7 +6,7 @@
       "tutorial/compile-time-operations",
       "tutorial/scala-3-macros",
       "tutorial/quoted-code",
-      "tutorial/tasty-reflection"
+      "tutorial/reflection"
     ],
     "Extra": [
       "faq",

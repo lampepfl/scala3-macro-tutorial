@@ -32,4 +32,4 @@ title: Other Recources
 [migration-status]: https://scalacenter.github.io/scala-3-migration-guide/docs/macros/migration-status.html
 [quotes]: tutorial/quotes.md
 [references]: references.md
-[tasty]: tutorial/tasty-reflection.md
+[tasty]: tutorial/reflection.md
