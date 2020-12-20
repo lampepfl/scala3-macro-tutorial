@@ -1,6 +1,6 @@
 ---
-id: other-recources
-title: Other Recources
+id: other-resources
+title: Other Resources
 ---
 
 ## Scala 2 migration
