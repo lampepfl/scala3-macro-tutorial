@@ -2,6 +2,7 @@
 id: scala-3-macros
 title: Scala 3 Macros
 ---
+> The macro tutorial has been moved to [docs.scala-lang.org][scala-lang] and this page is no longer updated.
 
 [Inline methods][inline] provide us with a elegant technique for metaprogramming by performing some operations at compile time.
 However, sometimes inlining is not enough and we need more powerful ways to analyze and synthesize programs at compile time.
@@ -277,3 +278,4 @@ The subsequent section on [Quoted Code][quotes] presents quotes in more detail.
 [quotes]: tutorial/quotes.md
 [references]: other-resources.md
 [tasty]: tutorial/reflection.md
+[scala-lang]: https://docs.scala-lang.org/scala3/guides/macros/
