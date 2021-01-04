@@ -2,7 +2,6 @@
 id: inline
 title: Inline
 ---
-
 Inlining is a common compile-time metaprogramming technique, typically used to achieve performance optimizations. As we will see, in Scala 3, the concept of inlining provides us with an entrypoint to programming with macros.
 
 1. It introduces inline as a [soft keyword][soft-modifier].

@@ -40,7 +40,7 @@ Additionally, we will include a cross-compilation/migration guide (M-A).
 [faq]: faq.md
 [inline]: tutorial/inline.md
 [macros]: tutorial/macros.md
-[migration-status]: https://scalacenter.github.io/scala-3-migration-guide/docs/macros/migration-status.html
+[migration-status]: https://scalacenter.github.io/scala-3-migration-guide/docs/macros/macro-libraries.html
 [quotes]: tutorial/quotes.md
 [references]: references.md
 [tasty]: tutorial/reflection.md
