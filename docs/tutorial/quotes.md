@@ -2,6 +2,7 @@
 id: quoted-code
 title: Quoted Code
 ---
+> The macro tutorial has been moved to [docs.scala-lang.org][scala-lang] and this page is no longer updated.
 
 ## Code blocks
 A quoted code block `'{ ... }` is syntactically similar to a string quote `" ... "` with the difference that the first contains typed code.
@@ -394,3 +395,4 @@ Here we used `HashSet` and another valid implementation that does not need the `
 [quotes]: tutorial/quotes.md
 [references]: references.md
 [tasty]: tutorial/reflection.md
+[scala-lang]: https://docs.scala-lang.org/scala3/guides/macros/

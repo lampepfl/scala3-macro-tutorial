@@ -83,6 +83,7 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle />
           <PromoSection>
+            <blockquote>The macro tutorial has been moved to <a href="https://docs.scala-lang.org/scala3/guides/macros/">docs.scala-lang.org</a> and this page is no longer updated.</blockquote>
             <Button href={docUrl("tutorial/introduction.html", language)}>
               Tutorial
             </Button>
