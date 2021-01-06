@@ -2,6 +2,7 @@
 id: faq
 title: FAQ
 ---
+> The macro tutorial has been moved to [docs.scala-lang.org][scala-lang] and this page is no longer updated.
 
 ## Which should I use `Expr(...)` or `'{...}`?
 If you can write your code using `Expr(...)`, you will evaluate more at compile time.
@@ -22,3 +23,4 @@ x match
   case '{ $x: t } =>
     // `x: Expr[X & t]` where `t` is the precise type of `x`
 ```
+[scala-lang]: https://docs.scala-lang.org/scala3/guides/macros/

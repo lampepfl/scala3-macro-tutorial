@@ -2,6 +2,7 @@
 id: contributing
 title: Contributing
 ---
+> The macro tutorial has been moved to [docs.scala-lang.org][scala-lang] and this page is no longer updated.
 
 We are starting to write the initial draft of the macro tutorial. 
 Help improving text that has been written so far would be helpful at this point.
@@ -40,8 +41,9 @@ Additionally, we will include a cross-compilation/migration guide (M-A).
 [faq]: faq.md
 [inline]: tutorial/inline.md
 [macros]: tutorial/macros.md
-[migration-status]: https://scalacenter.github.io/scala-3-migration-guide/docs/macros/migration-status.html
+[migration-status]: https://scalacenter.github.io/scala-3-migration-guide/docs/macros/macro-libraries.html
 [quotes]: tutorial/quotes.md
 [references]: references.md
 [tasty]: tutorial/reflection.md
 [reflection-api]: https://github.com/lampepfl/dotty/blob/master/library/src/scala/tasty/Reflection.scala
+[scala-lang]: https://docs.scala-lang.org/scala3/guides/macros/

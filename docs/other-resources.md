@@ -2,6 +2,7 @@
 id: other-resources
 title: Other Resources
 ---
+> The macro tutorial has been moved to [docs.scala-lang.org][scala-lang] and this page is no longer updated.
 
 ## Scala 2 migration
  * [Scala 2 migration and cross-compilation][migration]
@@ -33,3 +34,4 @@ title: Other Resources
 [quotes]: tutorial/quotes.md
 [references]: references.md
 [tasty]: tutorial/reflection.md
+[scala-lang]: https://docs.scala-lang.org/scala3/guides/macros/

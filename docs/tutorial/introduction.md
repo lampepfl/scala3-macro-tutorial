@@ -2,6 +2,7 @@
 id: introduction
 title: Introduction
 ---
+> The macro tutorial has been moved to [docs.scala-lang.org][scala-lang] and this page is no longer updated.
 
 This tutorial covers all the features involved in writing macros in Scala 3.
 
@@ -24,9 +25,7 @@ abstractions and offers more fine-grained control.
 
 > The tutorial uses the API of Scala 3.0.0-M3. The API had many small changes in this revision.
 
-> 🚧 We are still in the process of writing the tutorial. You can [help us improve it][contributing] 🚧
-
 [inline]: tutorial/inline.md
 [contributing]: contributing.md
 [compiletime]: tutorial/compiletime.md
-
+[scala-lang]: https://docs.scala-lang.org/scala3/guides/macros/

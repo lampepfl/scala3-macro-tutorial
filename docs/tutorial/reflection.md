@@ -1,7 +1,8 @@
 ---
 id: reflection
-title: Reflection API 
+title: Reflection API
 ---
+> The macro tutorial has been moved to [docs.scala-lang.org][scala-lang] and this page is no longer updated.
 
 The reflection API provides a more complex and comprehensive view on the structure of the code.
 It provides a view on the *Typed Abstract Syntax Trees* **TASTy** and their properties such as types, symbols, positions and comments.
@@ -38,3 +39,5 @@ Each type also a module with some _static-ish_ methods, for example in the [Type
 
 ## Examples
 *Coming soon*
+
+[scala-lang]: https://docs.scala-lang.org/scala3/guides/macros/

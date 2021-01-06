@@ -2,6 +2,7 @@
 id: inline
 title: Inline
 ---
+> The macro tutorial has been moved to [docs.scala-lang.org][scala-lang] and this page is no longer updated.
 
 Inlining is a common compile-time metaprogramming technique, typically used to achieve performance optimizations. As we will see, in Scala 3, the concept of inlining provides us with an entrypoint to programming with macros.
 
@@ -491,3 +492,4 @@ def powerCode(x: Expr[Double], n: Expr[Int])(using Quotes): Expr[Double] = ...
 [macros]: tutorial/macros.md
 [references]: references.md
 [soft-modifier]: https://dotty.epfl.ch/docs/reference/soft-modifier.html
+[scala-lang]: https://docs.scala-lang.org/scala3/guides/macros/
